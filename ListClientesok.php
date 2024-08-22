@@ -145,171 +145,117 @@ include 'componentes/sidebar.php';
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="nombreCliente" class="form-label">Nombre del Cliente</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                    <input type="text" class="form-control" id="nombreCliente" name="nombreCliente" required>
-                                </div>
+                                <input type="text" class="form-control" id="nombreCliente" name="nombreCliente" required>
                             </div>
                             <div class="mb-3">
                                 <label for="nombreFantasia" class="form-label">Nombre de Fantasía</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-stars"></i></span>
-                                    <input type="text" class="form-control" id="nombreFantasia" name="nombreFantasia">
-                                </div>
+                                <input type="text" class="form-control" id="nombreFantasia" name="nombreFantasia">
                             </div>
                             <div class="mb-3">
                                 <label for="id_tipoCliente" class="form-label">Tipo de Cliente</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-tags"></i></span>
-                                    <select class="form-select" id="id_tipoCliente" name="id_tipoCliente" required>
-                                        <?php foreach ($tiposCliente as $tipo): ?>
-                                            <option value="<?php echo $tipo['id_tyipoCliente']; ?>"><?php echo htmlspecialchars($tipo['nombreTipoCliente']); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
+                                <select class="form-select" id="id_tipoCliente" name="id_tipoCliente" required>
+                                <?php foreach ($tiposCliente as $tipo): ?>
+                                <option value="<?php echo $tipo['id_tyipoCliente']; ?>"><?php echo htmlspecialchars($tipo['nombreTipoCliente']); ?></option>
+                            <?php endforeach; ?>
+                                </select>
                             </div>
                             <div class="mb-3">
                                 <label for="razonSocial" class="form-label">Razón Social</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-building"></i></span>
-                                    <input type="text" class="form-control" id="razonSocial" name="razonSocial" required>
-                                </div>
+                                <input type="text" class="form-control" id="razonSocial" name="razonSocial" required>
                             </div>
                             <div class="mb-3">
                                 <label for="grupo" class="form-label">Grupo</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-people"></i></span>
-                                    <input type="text" class="form-control" id="grupo" name="grupo">
-                                </div>
+                                <input type="text" class="form-control" id="grupo" name="grupo">
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-3 input-wrapper">
-                                <label for="RUT" class="form-label">RUT Empresa</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-card-text"></i></span>
-                                    <input type="text" class="form-control" id="RUT" name="RUT" required>
-                                </div>
-                                <div class="custom-tooltip" id="RUT-tooltip"></div>
-                            </div>
+                        <div class="mb-3 input-wrapper">
+                        <label for="RUT" class="form-label">RUT Empresa</label>
+                        <input type="text" class="form-control" id="RUT" name="RUT" required>
+                        <div class="custom-tooltip" id="RUT-tooltip"></div>
+                    </div>
                             <div class="mb-3">
                                 <label for="giro" class="form-label">Giro</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-briefcase"></i></span>
-                                    <input type="text" class="form-control" id="giro" name="giro" required>
-                                </div>
+                                <input type="text" class="form-control" id="giro" name="giro" required>
                             </div>
                             <div class="mb-3">
                                 <label for="nombreRepresentanteLegal" class="form-label">Nombre Representante Legal</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
-                                    <input type="text" class="form-control" id="nombreRepresentanteLegal" name="nombreRepresentanteLegal" required>
-                                </div>
+                                <input type="text" class="form-control" id="nombreRepresentanteLegal" name="nombreRepresentanteLegal" required>
                             </div>
                             <div class="mb-3 input-wrapper">
-                                <label for="Rut_representante" class="form-label">RUT Representante</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-card-text"></i></span>
-                                    <input type="text" class="form-control" id="Rut_representante" name="Rut_representante" required>
-                                </div>
-                                <div class="custom-tooltip" id="Rut_representante-tooltip"></div>
-                            </div>
+                        <label for="Rut_representante" class="form-label">RUT Representante</label>
+                        <input type="text" class="form-control" id="Rut_representante" name="Rut_representante" required>
+                        <div class="custom-tooltip" id="Rut_representante-tooltip"></div>
+                    </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="direccionEmpresa" class="form-label">Dirección Empresa</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
-                                    <input type="text" class="form-control" id="direccionEmpresa" name="direccionEmpresa" required>
-                                </div>
+                                <input type="text" class="form-control" id="direccionEmpresa" name="direccionEmpresa" required>
                             </div>
                             <div class="mb-3">
                                 <label for="id_region" class="form-label">Región</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-map"></i></span>
-                                    <select class="form-select" id="id_region" name="id_region" required>
-                                        <?php foreach ($regiones as $region): ?>
-                                            <option value="<?php echo $region['id']; ?>"><?php echo $region['nombreRegion']; ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
+                                <select class="form-select" id="id_region" name="id_region" required>
+                                    <?php foreach ($regiones as $region): ?>
+                                        <option value="<?php echo $region['id']; ?>"><?php echo $region['nombreRegion']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
                             <div class="mb-3">
                                 <label for="id_comuna" class="form-label">Comuna</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-pin-map"></i></span>
-                                    <select class="form-select" id="id_comuna" name="id_comuna" required>
-                                        <?php foreach ($comunas as $comuna): ?>
-                                            <option value="<?php echo $comuna['id_comuna']; ?>" data-region="<?php echo $comuna['id_region']; ?>"><?php echo $comuna['nombreComuna']; ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
+                                <select class="form-select" id="id_comuna" name="id_comuna" required>
+                                    <?php foreach ($comunas as $comuna): ?>
+                                        <option value="<?php echo $comuna['id_comuna']; ?>" data-region="<?php echo $comuna['id_region']; ?>"><?php echo $comuna['nombreComuna']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">
+                        <div class="mb-3 input-wrapper">
+                        <label for="telCelular" class="form-label">Teléfono Celular</label>
+                        <input type="tel" class="form-control" id="telCelular" name="telCelular" required>
+                        <div class="custom-tooltip" id="telCelular-tooltip"></div>
+                    </div>
+                    <div class="mb-3 input-wrapper">
+                        <label for="telFijo" class="form-label">Teléfono Fijo</label>
+                        <input type="tel" class="form-control" id="telFijo" name="telFijo">
+                        <div class="custom-tooltip" id="telFijo-tooltip"></div>
+                    </div>
                             <div class="mb-3 input-wrapper">
-                                <label for="telCelular" class="form-label">Teléfono Celular</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-phone"></i></span>
-                                    <input type="tel" class="form-control" id="telCelular" name="telCelular" required>
-                                </div>
-                                <div class="custom-tooltip" id="telCelular-tooltip"></div>
-                            </div>
-                            <div class="mb-3 input-wrapper">
-                                <label for="telFijo" class="form-label">Teléfono Fijo</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                                    <input type="tel" class="form-control" id="telFijo" name="telFijo">
-                                </div>
-                                <div class="custom-tooltip" id="telFijo-tooltip"></div>
-                            </div>
-                            <div class="mb-3 input-wrapper">
-                                <label for="email" class="form-label">Email</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                    <input type="email" class="form-control" id="email" name="email" required>
-                                </div>
-                                <div class="custom-tooltip" id="email-tooltip"></div>
-                            </div>
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                        <div class="custom-tooltip" id="email-tooltip"></div>
+                    </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label for="formato" class="form-label">Formato</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-file-earmark-text"></i></span>
-                                    <select class="form-select" id="formato" name="formato">
-                                        <option value="">Seleccionar Formato</option>
-                                        <option value="Fee">Fee</option>
-                                        <option value="% Comisión Offline">% Comisión Offline</option>
-                                        <option value="% Comisión Online">% Comisión Online</option>
-                                    </select>
-                                </div>
+                                <select class="form-select" id="formato" name="formato">
+                                    <option value="">Seleccionar Formato</option>
+                                    <option value="Fee">Fee</option>
+                                    <option value="% Comisión Offline">% Comisión Offline</option>
+                                    <option value="% Comisión Online">% Comisión Online</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label for="nombreMoneda" class="form-label">Moneda</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-currency-exchange"></i></span>
-                                    <select class="form-select" id="nombreMoneda" name="nombreMoneda">
-                                        <option value="UF">UF</option>
-                                        <option value="Peso">Peso</option>
-                                        <option value="Dólar">Dólar</option>
-                                    </select>
-                                </div>
+                                <select class="form-select" id="nombreMoneda" name="nombreMoneda">
+                                    <option value="UF">UF</option>
+                                    <option value="Peso">Peso</option>
+                                    <option value="Dólar">Dólar</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label for="valor" class="form-label">Valor</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-cash"></i></span>
-                                    <input type="number" class="form-control" id="valor" name="valor">
-                                </div>
+                                <input type="number" class="form-control" id="valor" name="valor">
                             </div>
                         </div>
                     </div>
@@ -490,29 +436,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('id_region').addEventListener('change', function () {
-        var regionId = this.value;
-        var comunaSelect = document.getElementById('id_comuna');
-        var opcionesComunas = comunaSelect.querySelectorAll('option');
-
-        opcionesComunas.forEach(function (opcion) {
-            if (opcion.getAttribute('data-region') === regionId) {
-                opcion.style.display = 'block';
-            } else {
-                opcion.style.display = 'none';
-            }
-        });
-
-        var firstVisibleOption = comunaSelect.querySelector('option[data-region="' + regionId + '"]');
-        if (firstVisibleOption) {
-            firstVisibleOption.selected = true;
-        }
-    });
-
-    document.getElementById('id_region').dispatchEvent(new Event('change'));
-});</script>
 
 <?php include 'componentes/settings.php'; ?>
 <script src="assets/js/toggleClientes.js"></script>
