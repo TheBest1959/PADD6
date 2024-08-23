@@ -21,6 +21,7 @@
     }
     
     // Obtener datos+
+    $soportes = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Soportes?select=*');
     $agencias = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Agencias?select=*');
     $clientes = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Clientes?select=*');
     $tiposCliente = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/TipoCliente?select=*');
@@ -35,6 +36,10 @@
     $clientesMap = [];
 foreach ($clientes as $cliente) {
     $clientesMap[$cliente['id_cliente']] = $cliente;    
+}
+$soportesMap = [];
+foreach ($soportes as $soporte) {
+    $soportesMap[$soporte['id_soporte']] = $soporte;
 }
 
 $tipoclientesMap2 = [];
