@@ -59,8 +59,12 @@ $clienteData = [
     'id_comuna' => $data['id_comuna'],
     'telCelular' => $data['telCelular'],
     'telFijo' => $data['telFijo'],
-    'estado' => false,
-    'email' => $data['email']
+    'estado' => true,
+    'email' => $data['email'],
+    'formato' => $data['formato'],
+    'nombreMoneda' => $data['nombreMoneda'],
+    'valor' => $data['valor']
+
 ];
 
 // Realizar la petición a Supabase
