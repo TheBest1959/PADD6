@@ -84,9 +84,9 @@ async function submitForm3(event) {
         });
 
         if (response.ok) {
-            mostrarExito('¡Soporte actualizado exitosamente!');
+            mostrarExito('¡Soporte 7777actualizado exitosamente!');
             $('#actualizarsoporte22').modal('hide');
-            location.reload();
+            refreshTable(idsopor);
         } else {
             let errorData = await response.json();
             console.error("Error:", errorData);
@@ -97,6 +97,55 @@ async function submitForm3(event) {
         alert("Error de red, intentelo nuevamente");
     }
 }
+function refreshTable(proveedorId) {
+    if (proveedorId) {
+        fetch(`/get_soportes.php?proveedor_id=${proveedorId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                populateTable(data); // Actualiza la tabla con los datos recibidos
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }
+}
+
+function populateTable(soportes) {
+    const tbody = document.getElementById('soportes-tbody');
+    tbody.innerHTML = ''; // Clear existing rows
+
+    soportes.forEach(soporte => {
+        const row = document.createElement('tr');
+        row.className = 'soporte-row';
+        row.dataset.soporteId = soporte.id_soporte;
+
+        row.innerHTML = `
+            <td>${soporte.id_soporte}</td>
+            <td>${soporte.nombreIdentficiador}</td>
+            <td>${soporte.razonSocial}</td>
+            <td>${soporte.medios.length > 0 ? soporte.medios.join(", ") : "No hay medios asociados"}</td>
+            <td>
+                <a class="btn btn-primary micono" href="viewSoporte.php?id_soporte=${soporte.id_soporte}" data-toggle="tooltip" title="Ver Soporte"><i class="fas fa-eye"></i></a> 
+                <a class="btn btn-success micono" data-bs-toggle="modal" data-bs-target="#actualizarsoporte22" data-id-soporte="${soporte.id_soporte}" onclick="loadsoportepro(this)"><i class="fas fa-pencil-alt"></i></a>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+
+
+
+
+
+
+
+
 function mostrarExito(mensaje) {
     Swal.fire({
         icon: 'success',
@@ -106,6 +155,7 @@ function mostrarExito(mensaje) {
         timer: 1500
     });
 }
+
 
 
 
