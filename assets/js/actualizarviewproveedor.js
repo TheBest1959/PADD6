@@ -106,8 +106,11 @@
                     console.warn("No se recibió ningún dato actualizado en la respuesta.");
                 }
     
-                alert("Actualización correcta");
-    
+                mostrarExito('¡Actualización correcta!');
+                $('#actualizarProveedor').modal('hide');
+                $('#formualarioSoporteProv')[0].reset();
+                location.reload();
+
                 // Continuar con la actualización de medios si hay datos en formData.id_medios
                 if (formData.id_medios && formData.id_medios.length > 0) {
                     const proveedorMediosData = formData.id_medios.map(id_medio => ({

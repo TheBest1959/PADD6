@@ -335,7 +335,7 @@ include '../componentes/sidebar.php';
             <td>
               <input type="hidden" data-idproveedor="<?php echo $idProveedor ?>" value="<?php echo $idProveedor ?>">
                 <input type="hidden" class="id_contacto" value="<?php echo htmlspecialchars($contacto['id_contacto'] ?? 'No disponible'); ?>">
-                <button type="button" class="btn btn-success micono" 
+                <button type="button" class="btn btn-success miconoz" 
         data-bs-toggle="modal" 
         data-bs-target="#actualizarContactoModal"
         data-idcontacto="<?php echo htmlspecialchars($contacto['id_contacto']); ?>" 
@@ -347,7 +347,7 @@ include '../componentes/sidebar.php';
         title="Editar">
     <i class="fas fa-pencil-alt"></i>
 </button>
-                <button type="button" class="btn btn-danger micono eliminar-contacto"
+                <button type="button" class="btn btn-danger miconoz eliminar-contacto"
                         data-id-proveer="<?php echo $idProveedor; ?>" data-idcontacto="<?php echo htmlspecialchars($contacto['id_contacto'] ?? ''); ?>"
                         data-toggle="tooltip" title="Eliminar">
                     <i class="fas fa-trash-alt"></i>
