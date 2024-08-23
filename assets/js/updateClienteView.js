@@ -142,7 +142,7 @@ async function submitUpdateClienteForm(event) {
         });
 
         if (response.ok) {
-            cerrarModal();
+            //cerrarModal();
             
             // Mostrar SweetAlert de éxito con cierre automático
             Swal.fire({
@@ -153,7 +153,7 @@ async function submitUpdateClienteForm(event) {
                 showConfirmButton: false // No muestra el botón de confirmación
             }).then(() => {
                 // Recargar la página inmediatamente después de que se cierre el SweetAlert
-                window.location.reload();
+                $('#actualizarclienteView').modal('hide');
             });
         } else {
             const errorData = await response.json();

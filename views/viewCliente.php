@@ -108,7 +108,7 @@ include '../componentes/sidebar.php';
                         <div class="card-header">
                             <div class="cabeza">
                              <h4>Detalles del Cliente</h4> 
-                             <button type="button" class="btn btn-success micono" data-bs-toggle="modal" data-bs-target="#actualizarclienteView" data-id-cliente="<?php echo $datosCliente['id_cliente']; ?>" onclick="loadClienteDataView(this)" ><i class="fas fa-pencil-alt"></i></button>
+                             <button type="button" class="btn btn-danger micono" data-bs-toggle="modal" data-bs-target="#actualizarclienteView" data-id-cliente="<?php echo $datosCliente['id_cliente']; ?>" onclick="loadClienteDataView(this)" ><i class="fas fa-pencil-alt"></i> Editar datos</button>
                             </div>
                         </div>
                         <div class="card-body">

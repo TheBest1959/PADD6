@@ -890,14 +890,11 @@ function updateCliente() {
     var form = document.getElementById('updateClienteForm');
     var formData = new FormData(form);
 
-    // Asegúrate de que el id_cliente está en el formulario
     var idCliente = document.getElementById('id_cliente').value;
     formData.append('id_cliente', idCliente);
 
-    // Log para verificar que el id_cliente se está enviando
     console.log('ID Cliente:', formData.get('id_cliente'));
 
-    // Log de los datos que se están enviando
     for (var pair of formData.entries()) {
         console.log(pair[0] + ': ' + pair[1]);
     }
@@ -918,6 +915,10 @@ function updateCliente() {
     .then(data => {
         console.log('Datos de respuesta:', data);
         if (data.success) {
+            // Cerrar el modal antes de mostrar el Sweet Alert
+            var modal = bootstrap.Modal.getInstance(document.getElementById('actualizarcliente'));
+            modal.hide();
+
             Swal.fire({
                 title: data.alert.title,
                 text: data.alert.text,
@@ -942,6 +943,7 @@ function updateCliente() {
         });
     });
 }
+
 </script>
 
 
