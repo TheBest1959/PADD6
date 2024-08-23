@@ -343,3 +343,7 @@ body{
   display: flex;
   justify-content: space-between;
 }
+.btn.btn-danger.micono {
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+}
