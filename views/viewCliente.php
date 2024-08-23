@@ -108,7 +108,7 @@ include '../componentes/sidebar.php';
                         <div class="card-header">
                             <div class="cabeza">
                              <h4>Detalles del Cliente</h4> 
-                             <button type="button" class="btn btn-success micono" data-bs-toggle="modal" data-bs-target="#actualizarclienteView" data-idcliente="<?php echo $datosCliente['id_cliente']; ?>" onclick="loadClienteData(this)" ><i class="fas fa-pencil-alt"></i></button>
+                             <button type="button" class="btn btn-success micono" data-bs-toggle="modal" data-bs-target="#actualizarclienteView" data-id-cliente="<?php echo $datosCliente['id_cliente']; ?>" onclick="loadClienteDataView(this)" ><i class="fas fa-pencil-alt"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -1103,7 +1103,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="updateClienteForm">
+                <form id="updateClienteForm3">
                     <input type="hidden" id="id_cliente" name="id_cliente">
                     <div class="row">
                         <div class="col-md-6">
@@ -1171,12 +1171,12 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </div>
                             </div>
                             <div class="mb-3 input-wrapper">
-                                <label for="update_Rut_representante" class="form-label">RUT Representante</label>
+                                <label for="update_RUT_representante" class="form-label">RUT Representante</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-card-text"></i></span>
-                                    <input type="text" class="form-control" id="update_Rut_representante" name="Rut_representante" required>
+                                    <input type="text" class="form-control" id="update_RUT_representante" name="RUT_representante" required>
                                 </div>
-                                <div class="custom-tooltip" id="update_Rut_representante-tooltip"></div>
+                                <div class="custom-tooltip" id="update_RUT_representante-tooltip"></div>
                             </div>
                         </div>
                     </div>
@@ -1296,7 +1296,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-
+<script src="<?php echo $ruta; ?>assets/js/updateClienteView.js"></script>
 <script src="../assets/js/deleteComision.js"></script>
 <script src="../assets/js/deleteProducto.js"></script>
 <?php include '../componentes/settings.php'; ?>
