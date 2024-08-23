@@ -288,7 +288,7 @@ include '../componentes/sidebar.php';
                 <table class="table table-striped" id="tableExportadora">
     <thead>
         <tr>
-            <th></th>
+      
             <th>ID</th>
             <th>Medio</th>
             <th>Nombre Proveedores</th>
@@ -302,7 +302,7 @@ include '../componentes/sidebar.php';
     <tbody>
         <?php foreach ($proveedores_data as $proveedorll): ?>
         <tr class="proveedor-row" data-proveedor-id="<?php echo $proveedorll['id_proveedor']; ?>">
-            <td><i class="expand-icon fas fa-angle-right"></i></td>
+        
             <td><?php echo $proveedorll['id_proveedor']; ?></td>
             <td>
                                                                                                         <?php

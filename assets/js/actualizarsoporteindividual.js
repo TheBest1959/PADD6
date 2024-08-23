@@ -85,7 +85,9 @@ async function submitForm3(event) {
         });
 
         if (response.ok) {
-            alert("Actualización correcta");
+            $('#actualizarSoporte').modal('hide');
+            
+            mostrarExito('Actualizado correctamente');
             location.reload();
         } else {
             let errorData = await response.json();
@@ -97,6 +99,19 @@ async function submitForm3(event) {
         alert("Error de red, intentelo nuevamente");
     }
 }
+
+
+
+function mostrarExito(mensaje) {
+    Swal.fire({
+        icon: 'success',
+        title: 'Éxito',
+        text: mensaje,
+        showConfirmButton: false,
+        timer: 1500
+    });
+}
+
 
 // Asigna el evento de envío al formulario de actualizar proveedor
 document.getElementById('formularioactualizarSoporte').addEventListener('submit', submitForm3);
