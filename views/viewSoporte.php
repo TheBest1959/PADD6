@@ -473,6 +473,10 @@ include '../componentes/sidebar.php';
           
         </div>
       </div>
+      <script>function getProveedorData(idProveedor) {
+    var proveedoresMap = <?php echo json_encode($proveedoresMap); ?>;
+    return proveedoresMap[idProveedor] || null;
+}</script>
       <script src="../assets/js/toggleProveedor.js"></script>
 <?php include '../componentes/settings.php'; ?>
 <?php include '../componentes/footer.php'; ?>

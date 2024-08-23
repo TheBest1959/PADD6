@@ -41,6 +41,36 @@ include '../componentes/header.php';
 include '../componentes/sidebar.php';
 
 ?>
+<style>
+       .is-invalid {
+        border-color: #dc3545 !important;
+    }
+    .custom-tooltip {
+        position: absolute;
+        background-color: #dc3545;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+    }
+    .custom-tooltip::before {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #dc3545 transparent transparent transparent;
+    }
+    .input-wrapper {
+        position: relative;
+    }
+</style>
       <!-- Main Content -->
       <div class="main-content">
       
@@ -487,7 +517,7 @@ include '../componentes/sidebar.php';
                         <label for="nombre">Nombre</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-money-bill-alt"></i></span>
+                                <span class="input-group-text"><i class="fas fa-user-alt"></i></span>
                             </div>
                             <input type="text" class="form-control" id="nombre" name="nombre">
 
@@ -497,31 +527,32 @@ include '../componentes/sidebar.php';
                         <label for="apellido">Apellido</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-money-bill-alt"></i></span>
+                                <span class="input-group-text"><i class="fas fa-user-alt"></i></span>
                             </div>
                             <input type="text" class="form-control" id="apellido" name="apellido">
 
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="telefono">Teléfono</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-money-bill-alt"></i></span>
-                            </div>
-                            <input type="text" class="form-control" id="telefono" name="telefono">
-
-                        </div>
+                       
+                    <label for="telefonoxx" class="labelforms">Teléfono</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="text" class="phone-input form-control" id="telefonoxx" name="telefono" required>
+                                    <div class="custom-tooltip" id="telefonoxx-tooltip"></div>
+                                </div> 
                     </div>
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-money-bill-alt"></i></span>
-                            </div>
-                            <input type="text" class="form-control" id="email" name="email">
 
-                        </div>
+                    <label for="emailxxx" class="labelforms">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                    <input type="text" class="form-control email-input" id="emailxxx" name="email" required>
+                                    <div class="custom-tooltip" id="emailxxx-tooltip"></div>
+                                </div>  
+
+
+                      
                     </div>
                     <button type="submit" class="btn btn-primary">Guardar Contacto</button>
                 </form>
@@ -546,7 +577,7 @@ include '../componentes/sidebar.php';
                         <label for="nombre">Nombre</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <span class="input-group-text"><i class="fas fa-user-alt"></i></span>
                             </div>
                             <input type="text" class="form-control" id="nombre" name="nombre">
                         </div>
@@ -555,28 +586,31 @@ include '../componentes/sidebar.php';
                         <label for="apellido">Apellido</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <span class="input-group-text"><i class="fas fa-user-alt"></i></span>
                             </div>
                             <input type="text" class="form-control" id="apellido" name="apellido">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="telefono">Teléfono</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                            </div>
-                            <input type="text" class="form-control" id="telefono" name="telefono">
-                        </div>
+
+
+                    <label for="telefono" class="labelforms">Teléfono</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="text" class="phone-input form-control" id="telefono" name="telefono" required>
+                                    <div class="custom-tooltip" id="telefono-tooltip"></div>
+                                </div>  
+
+
                     </div>
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                            </div>
-                            <input type="text" class="form-control" id="email" name="email">
-                        </div>
+                        
+                    <label for="emailxx" class="labelforms">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                    <input type="text" class="form-control email-input" id="emailxx" name="email" required>
+                                    <div class="custom-tooltip" id="emailxx-tooltip"></div>
+                                </div>  
                     </div>
                     <button type="submit" class="btn btn-primary">Guardar Contacto</button>
                 </form>
@@ -613,7 +647,7 @@ include '../componentes/sidebar.php';
                                     <label class="labelforms" for="codigo">Nombre Representante</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-user"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-person"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Nombre Representante" name="nombreRepresentantex">
                                     </div>
@@ -623,7 +657,7 @@ include '../componentes/sidebar.php';
                                             <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                                         </div>
                                         <div class="selected-options" onclick="toggleDropdown()"></div>
-                                        <button type="button" class="dropdown-button" style="display:none;">Select Medios</button>
+                                        <button type="button" class="dropdown-button" style="font-size:14px; padding: 7px 20px !important; display:none;">Select Medios</button>
                                         <div class="dropdown-content">
                                             <?php foreach ($medios as $medio) : ?>
                                                 <label>
@@ -637,13 +671,14 @@ include '../componentes/sidebar.php';
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="codigo">Rut Soporte</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-address-card"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Rut Soporte" name="rutSoporte">
-                                    </div>
+
+                                <label for="rutSoporte" class="labelforms">Rut Soporte</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-address-card"></i></span>
+                                    <input type="text" class="form-control" placeholder="Rut Soporte" id="rutSoporte" name="rutSoporte" required>
+                                    <div class="custom-tooltip" id="rutSoporte-tooltip"></div>
+                                </div>
+
                                     <label class="labelforms" for="codigo">Giro Soporte</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
@@ -658,13 +693,14 @@ include '../componentes/sidebar.php';
                                         </div>
                                         <input class="form-control" placeholder="Nombre de Fantasía" name="nombreFantasiax">
                                     </div>
-                                    <label class="labelforms" for="codigo">Rut Representante</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-address-card"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Rut Representante" name="rutRepresentantex">
-                                    </div>
+
+                                    <label for="rutRepresentantex" class="labelforms">Rut Representante</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-address-card"></i></span>
+                                    <input type="text" class="form-control" placeholder="Rut Representante" id="rutRepresentantex" name="rutRepresentantex" required>
+                                    <div class="custom-tooltip" id="rutRepresentantex-tooltip"></div>
+                                </div>           
+
                                 </div>
                             </div>
                         </div>
@@ -686,26 +722,27 @@ include '../componentes/sidebar.php';
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
                                         </div>
-                                        <select class="sesel form-select" name="id_regionx" id="region" required>
+                                        <select class="sesel form-select" name="id_regionx" id="regionx" required>
                                             <?php foreach ($regiones as $regione) : ?>
                                                 <option value="<?php echo $regione['id']; ?>"><?php echo $regione['nombreRegion']; ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
-                                    <label class="labelforms" for="codigo">Teléfono celular</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Teléfono celular" name="telCelularx">
-                                    </div>
-                                    <label class="labelforms" for="codigo">Email</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-envelope"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Email" name="emailx">
-                                    </div>
+
+                                    <label for="telCelularx" class="labelforms">Teléfono celular</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="text" class="phone-input form-control" placeholder="Rut Soporte" id="telCelularx" name="telCelularx" required>
+                                    <div class="custom-tooltip" id="telCelularx-tooltip"></div>
+                                </div>   
+                                
+                                <label for="emailx" class="labelforms">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                    <input type="text" class="form-control email-input" placeholder="Email" id="emailx" name="emailx" required>
+                                    <div class="custom-tooltip" id="emailx-tooltip"></div>
+                                </div>    
+
                                 </div>
                             </div>
                             <div class="col-6">
@@ -722,7 +759,7 @@ include '../componentes/sidebar.php';
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
                                         </div>
-                                        <select class="sesel form-select" name="id_comunax" id="comuna" required>
+                                        <select class="sesel form-select" name="id_comunax" id="comunax" required>
                                             <?php foreach ($comunas as $comuna) : ?>
                                                 <option value="<?php echo $comuna['id_comuna']; ?>" data-region="<?php echo $comuna['id_region']; ?>">
                                                     <?php echo $comuna['nombreComuna']; ?>
@@ -730,13 +767,14 @@ include '../componentes/sidebar.php';
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
-                                    <label class="labelforms" for="codigo">Teléfono fijo</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Teléfono fijo" name="telFijox">
-                                    </div>
+
+                                    <label for="telFijox" class="labelforms">Teléfono Fijo</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="text" class="phone-input form-control" placeholder="Teléfono fijo" id="telFijox" name="telFijox" required>
+                                    <div class="custom-tooltip" id="telFijox-tooltip"></div>
+                                </div>               
+
                                 </div>
                             </div>
                         </div>
@@ -785,7 +823,7 @@ include '../componentes/sidebar.php';
                 <div id="updateAlert" class="alert" style="display:none;" role="alert"></div>
                 
                 <!-- Campo para mostrar el id_proveedor -->
-                <input  class="form-control" placeholder="Prueba de id " name="pruebaid" id="pruebaid">
+                <input type="hidden"  class="form-control" placeholder="Prueba de id " name="pruebaid" id="pruebaid">
                 
                 <form id="formagregarsoporte3">
                     <div class="form-group">
@@ -830,21 +868,21 @@ include '../componentes/sidebar.php';
                         <div class="col-6">
                         <div class="form-group">
                           <label  for="codigo">Medios</label>
-<div id="dropdown4" class="input-group dropdown" >
-    <div class="sell input-group-prepend">
-        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-    </div>
-    <div class="selected-options" onclick="toggleDropdown()"></div>
-    <button type="button" class="dropdown-button" style="display:none;">Select Medios</button>
-    <div class="dropdown-content">
-        <?php foreach ($medios as $medio) : ?>
-            <label>
-                <input type="checkbox" name="id_medios[]" value="<?php echo $medio['id']; ?>">
-                <?php echo $medio['NombredelMedio']; ?>
-            </label>
-        <?php endforeach; ?>
-    </div>
-</div>
+                                        <div id="dropdown4" class="input-group dropdown" >
+                                            <div class="sell input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                            </div>
+                                            <div class="selected-options" onclick="toggleDropdown()"></div>
+                                            <button type="button" class="dropdown-button" style="font-size:14px; padding: 7px 20px !important; display:none;">Select Medios</button>
+                                            <div class="dropdown-content">
+                                                <?php foreach ($medios as $medio) : ?>
+                                                    <label>
+                                                        <input type="checkbox" name="id_medios[]" value="<?php echo $medio['id']; ?>">
+                                                        <?php echo $medio['NombredelMedio']; ?>
+                                                    </label>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        </div>
 </div>
                     </div>
                     <div class="row"><label class="opeo"><input type="checkbox" name="revision"> <span>Usar los mismos datos del proveedor</span></label></div>
@@ -859,20 +897,23 @@ include '../componentes/sidebar.php';
                                         </div>
                                         <input class="form-control" placeholder="Razón Social" name="razonSocial">
                                     </div>
-                                    <label class="labelforms" for="codigo">Rut</label>
+                                   
+                                  
+                        <label for="rut_soporte" class="labelforms">Rut</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-address-card"></i></span>
+                                    <input type="text" class="form-control" placeholder="Ingresa el Rut" id="rut_soporte" name="rut_soporte" required>
+                                    <div class="custom-tooltip" id="rut_soporte-tooltip"></div>
+                                </div>
+                        <label class="labelforms" for="codigo">Nombre Representante Legal</label>
                                     <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-address-card"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Rut" name="rut_soporte" required>
-                                    </div>
-                                    <label class="labelforms" for="codigo">Nombre Representante Legal</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-user"></i></span>
-                                        </div>
+                                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                          
                                         <input class="form-control" placeholder="Nombre Representante Legal" name="nombreRepresentanteLegal" required>
-                                    </div>  
+                                    </div> 
+                          
+ 
+                              
                         </div>
                         </div>
                         <div class="col-6">
@@ -884,20 +925,24 @@ include '../componentes/sidebar.php';
                                         </div>
                                         <input class="form-control" placeholder="Nombre de Fantasía" name="nombreFantasia" required>
                                     </div>
-                                    <label class="labelforms"  for="codigo">Giro</label>
+                        <label class="labelforms"  for="codigo">Giro</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-suitcase"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Giro" name="giro" required>
                                     </div>
-                                    <label class="labelforms" for="codigo">Rut Representante</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-address-card"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Rut Representante" name="rutRepresentante" required>
-                                    </div>
+                        <label for="rut_soporte" class="labelforms">Rut Representante</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-address-card"></i></span>
+                                    <input type="text" class="form-control" id="rutRepresentante" name="rutRepresentante" required>
+                                    <div class="custom-tooltip" id="rutRepresentante-tooltip"></div>
+                                </div>
+
+
+
+
+                                    
                                 </div></div>
                     </div>
                     <div>
@@ -906,7 +951,7 @@ include '../componentes/sidebar.php';
                         <div class="col-6">
 
                         <div class="form-group">
-                        <label  for="codigo">Dirección Facturación</label>
+                        <label class="labelforms"  for="codigo">Dirección Facturación</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="far fa-building"></i></span>
@@ -918,36 +963,38 @@ include '../componentes/sidebar.php';
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
                                         </div>
-                                        <select class="sesel form-select" name="id_region" id="regionxx" required>
+                                        <select class="sesel form-select region-select" name="id_region"  required>
                                     <?php foreach ($regiones as $regione) : ?>
                                         <option value="<?php echo $regione['id']; ?>"><?php echo $regione['nombreRegion']; ?></option>
                                     <?php endforeach; ?>
                                 </select>
                                     </div>
-                                    <label class="labelforms" for="codigo">Teléfono celular</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Teléfono celular" name="telCelular" required>
-                                    </div>
+
+                                    <label for="telCelular" class="labelforms">Teléfono celular</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="text" class="phone-input form-control" id="telCelular" name="telCelular" required>
+                                    <div class="custom-tooltip" id="telCelular-tooltip"></div>
+                                </div>    
+
                                     </div></div>
                         <div class="col-6">
 
                         <div class="form-group">
-                        <label  for="codigo">Email</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-envelope"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Email" name="email">
-                                    </div>   
+
+                        <label for="email" class="labelforms">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                    <input type="text" class="form-control email-input" id="email" name="email" required>
+                                    <div class="custom-tooltip" id="email-tooltip"></div>
+                                </div>                  
+ 
                                     <label class="labelforms" for="codigo">Comuna</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
                                         </div>
-                                        <select class="sesel form-select" name="id_comuna" id="comunaxx" required>
+                                        <select class="sesel form-select comuna-select" name="id_comuna"  required>
                                 <?php foreach ($comunas as $comuna) : ?>
                                     <option value="<?php echo $comuna['id_comuna']; ?>" data-region="<?php echo $comuna['id_region']; ?>">
                                         <?php echo $comuna['nombreComuna']; ?>
@@ -955,19 +1002,15 @@ include '../componentes/sidebar.php';
                                 <?php endforeach; ?>
                             </select>
                                     </div> 
-                                    <label class="labelforms"  for="codigo">Teléfono fijo</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Teléfono fijo" name="telFijo" required>
-                                    </div>   
 
 
+                                    <label for="telFijo" class="labelforms">Teléfono fijo</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="text" class="phone-input form-control" id="telFijo" name="telFijo" required>
+                                    <div class="custom-tooltip" id="telFijo-tooltip"></div>
+                                </div>  
 
-                            
-                           
-                                
                         </div></div>
                     </div>
                    </div>
@@ -1023,7 +1066,98 @@ include '../componentes/sidebar.php';
     </div>
 </div>
 
+<script>
 
+document.addEventListener('DOMContentLoaded', function() { 
+    function showError(input, message) {
+        input.classList.add('is-invalid');
+        var tooltip = document.getElementById(input.id + '-tooltip');
+        tooltip.textContent = message;
+        tooltip.style.opacity = '1';
+        positionTooltip(input, tooltip);
+    }
+
+    function hideError(input) {
+        input.classList.remove('is-invalid');
+        var tooltip = document.getElementById(input.id + '-tooltip');
+        tooltip.style.opacity = '0';
+    }
+    function positionTooltip(input, tooltip) {
+        var rect = input.getBoundingClientRect();
+        tooltip.style.left = '10px';
+        tooltip.style.top = -(tooltip.offsetHeight + 5) + 'px';
+    }
+    var Fn = {
+        validaRut: function(rutCompleto) {
+            if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test(rutCompleto)) return false;
+            var tmp = rutCompleto.split('-');
+            var digv = tmp[1];
+            var rut = tmp[0];
+            if (digv == 'K') digv = 'k';
+            return (Fn.dv(rut) == digv);
+        },
+        dv: function(T) {
+            var M = 0, S = 1;
+            for (; T; T = Math.floor(T / 10)) S = (S + T % 10 * (9 - M++ % 6)) % 11;
+            return S ? S - 1 : 'k';
+        }
+    };
+    function validaPhoneChileno(phone) {
+        // Patrón para teléfonos chilenos
+        // Acepta formatos: +56912345678, 912345678, 221234567
+        var phonePattern = /^(\+?56|0)?([2-9]\d{8}|[2-9]\d{7})$/;
+        return phonePattern.test(phone);
+    }
+
+    // Validación en tiempo real para RUTs
+    var rutInputs = document.querySelectorAll('#rutRepresentantex, #rutSoporte, #rut_soporte, #rutRepresentante');
+    rutInputs.forEach(function(input) {
+        input.addEventListener('input', function() {
+            if (this.value === "") {
+                hideError(this);
+            } else if (!Fn.validaRut(this.value)) {
+                showError(this, "RUT INVALIDO - DEBES INGRESAR SIN PUNTOS Y CON GUIÓN");
+            } else {
+                hideError(this);
+            }
+        });
+    });
+ 
+
+   // Validación en tiempo real para Email
+   var emailInputs = document.querySelectorAll('.email-input');
+var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+emailInputs.forEach(function(emailInput) {
+    emailInput.addEventListener('input', function() {
+        if (this.value === "") {
+            hideError(this);
+        } else if (!emailPattern.test(this.value)) {
+            showError(this, "EMAIL INCORRECTO");
+        } else {
+            hideError(this);
+        }
+    });
+});
+
+      // Validación en tiempo real para teléfonos
+      var phoneInputs = document.querySelectorAll('.phone-input');
+phoneInputs.forEach(function(input) {
+    input.addEventListener('input', function() {
+        if (this.value === "") {
+            hideError(this);
+        } else if (!validaPhoneChileno(this.value)) {
+            showError(this, "NÚMERO DE TELÉFONO NO VÁLIDO");
+        } else {
+            hideError(this);
+        }
+    });
+});
+
+
+});
+
+</script>
 
 <script>
 function getSoporteData(idSoporte) {
@@ -1244,7 +1378,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Error fetching data:', error);
             });
     }
+    
 });
+
+
 
 </script>
 <script src="../assets/js/contactoprops.js"></script>

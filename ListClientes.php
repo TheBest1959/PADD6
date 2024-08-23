@@ -325,6 +325,27 @@ include 'componentes/sidebar.php';
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  
+    function showError(input, message) {
+        input.classList.add('is-invalid');
+        var tooltip = document.getElementById(input.id + '-tooltip');
+        tooltip.textContent = message;
+        tooltip.style.opacity = '1';
+        positionTooltip(input, tooltip);
+    }
+
+    function hideError(input) {
+        input.classList.remove('is-invalid');
+        var tooltip = document.getElementById(input.id + '-tooltip');
+        tooltip.style.opacity = '0';
+    }
+
+    function positionTooltip(input, tooltip) {
+        var rect = input.getBoundingClientRect();
+        tooltip.style.left = '10px';
+        tooltip.style.top = -(tooltip.offsetHeight + 5) + 'px';
+    }
+    
     var Fn = {
         validaRut: function(rutCompleto) {
             if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test(rutCompleto)) return false;
@@ -346,26 +367,6 @@ document.addEventListener('DOMContentLoaded', function() {
         var phonePattern = /^(\+?56|0)?([2-9]\d{8}|[2-9]\d{7})$/;
         return phonePattern.test(phone);
     }
-    function showError(input, message) {
-        input.classList.add('is-invalid');
-        var tooltip = document.getElementById(input.id + '-tooltip');
-        tooltip.textContent = message;
-        tooltip.style.opacity = '1';
-        positionTooltip(input, tooltip);
-    }
-
-    function hideError(input) {
-        input.classList.remove('is-invalid');
-        var tooltip = document.getElementById(input.id + '-tooltip');
-        tooltip.style.opacity = '0';
-    }
-
-    function positionTooltip(input, tooltip) {
-        var rect = input.getBoundingClientRect();
-        tooltip.style.left = '10px';
-        tooltip.style.top = -(tooltip.offsetHeight + 5) + 'px';
-    }
-    
 
     // Validación en tiempo real para RUTs
     var rutInputs = document.querySelectorAll('#RUT, #Rut_representante');

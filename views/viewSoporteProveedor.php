@@ -607,7 +607,7 @@ include '../componentes/sidebar.php';
                 <div id="updateAlert" class="alert" style="display:none;" role="alert"></div>
                 
                 <!-- Campo para mostrar el id_proveedor -->
-                <input  class="form-control" placeholder="Prueba de id " name="pruebaid" id="pruebaid">
+                <input type="hidden"  class="form-control" placeholder="Prueba de id " name="pruebaid" id="pruebaid">
                 
                 <form id="formagregarsoporte3">
                     <div class="form-group">
