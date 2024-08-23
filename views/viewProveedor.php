@@ -77,7 +77,7 @@ include '../componentes/sidebar.php';
       <nav aria-label="breadcrumb">
                       <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="<?php echo $ruta; ?>dashboard.php">Home</a></li>
-                        <li class="breadcrumb-item"><a href="<?php echo $ruta; ?>ListProveedores.php">Ver Proveedores</a></li>
+                        <li class="breadcrumb-item"><a href="<?php echo $ruta; ?>ListProveedores.php">Ver Proveedor</a></li>
                         <li class="breadcrumb-item active" aria-current="page"><?php echo $datosProveedor['nombreProveedor'] ; ?></li>
                       </ol>
                     </nav>
@@ -102,13 +102,13 @@ include '../componentes/sidebar.php';
                     <div class="text-center">
                       <div class="author-box-job">
                
-                        <?php
-    // Convertir la cadena de fecha y hora a un objeto DateTime
-    $fecha = new DateTime($datosProveedor['created_at']);
-    
-    // Formatear la fecha como deseas (en este caso, solo la fecha)
-    echo 'Registrado el: '.$fecha->format('d-m-Y'); // Esto mostrará la fecha en formato AAAA-MM-DD
-    ?>
+                                                        <?php
+                                    // Convertir la cadena de fecha y hora a un objeto DateTime
+                                    $fecha = new DateTime($datosProveedor['created_at']);
+                                    
+                                    // Formatear la fecha como deseas (en este caso, solo la fecha)
+                                    echo 'Registrado el: '.$fecha->format('d-m-Y'); // Esto mostrará la fecha en formato AAAA-MM-DD
+                                    ?>
                    
                       </div>
                       <div class="w-100 d-sm-none"></div>
@@ -116,55 +116,59 @@ include '../componentes/sidebar.php';
                   </div>
                 </div>
                 <div class="card">
-                  <div class="card-header">
+                  <div style="display: flex;
+    justify-content: space-between;" class="card-header">
+                  <?php
+                                                            // Paso 1: Obtener todos los id_medios para un id_proveedor específico
+                                                            $id_proveedor = $datosProveedor['id_proveedor'];
+
+                                                            // Realiza la solicitud para obtener los datos de la tabla proveedor_medios
+
+                                                            $id_medios_array = [];
+                                                            foreach ($proveedor_medios as $fila) {
+                                                                if ($fila['id_proveedor'] == $id_proveedor) {
+                                                                    $id_medios_array[] = $fila['id_medio'];
+                                                                }
+                                                            }                 
+
+                                                            $medios_nombres = [];
+                                                            foreach ($medios as $medio) {
+                                                                if (in_array($medio['id'], $id_medios_array)) {
+                                                                    $medios_nombres[] = $medio['NombredelMedio'];
+                                                                }
+                                                            }
+                                                            $id_medios_json = json_encode($id_medios_array);
+                                                                                                               
+                                                            // Paso 3: Mostrar los nombres en una lista tipo tooltip
+                                                            ?>   
                     <h4>Detalles del Proveedor</h4>
+                    <a class="btn btn-success micono"  data-bs-toggle="modal" data-bs-target="#actualizarProveedor" data-idmedios="<?php echo $id_medios_json; ?>" data-idproveedor="<?php echo $idProveedor ?>" onclick="loadProveedorData(this)" ><i class="fas fa-pencil-alt"></i></a>
+
                   </div>
                   <div class="card-body">
-                    <div class="py-4">
-                      <p class="clearfix">
-                        <span class="float-start">
-                        Nombre Proveedor
-                        </span>
-                        <span class="float-right text-muted">
-                          <?php echo $datosProveedor['nombreProveedor'] ; ?>
-                        </span>
-                      </p>
-                      <p class="clearfix">
-                        <span class="float-start">
-                          Nombre de Fantasía
-                        </span>
-                        <span class="float-right text-muted">
-                        <?php echo $datosProveedor['nombreFantasia'] ; ?>
-                        </span>
-                      </p>
-                      <p class="clearfix">
-                        <span class="float-start">
-                          Razón Social
-                        </span>
-                        <span class="float-right text-muted">
-                        <?php echo $datosProveedor['razonSocial'] ; ?>
-                        </span>
-                      </p>
-                      <p class="clearfix">
-                        <span class="float-start">
-                          Giro Proveedor
-                        </span>
-                        <span class="float-right text-muted">
-                        <?php echo $datosProveedor['giroProveedor'] ; ?>
-                        </span>
-                      </p>
-                      <p class="clearfix">
-                        <span class="float-start">
-                          Dirección
-                        </span>
-                        <span class="float-right text-muted">
-                        <?php echo $datosProveedor['direccionFacturacion'] ; ?>
-                        </span>
-                      </p>
-                      
-                   
-                    </div>
-                  </div>
+    <div class="py-4">
+        <p class="clearfix">
+            <span class="float-start">Nombre Proveedor</span>
+            <span class="float-right text-muted nombreProveedor"><?php echo $datosProveedor['nombreProveedor']; ?></span>
+        </p>
+        <p class="clearfix">
+            <span class="float-start">Nombre de Fantasía</span>
+            <span class="float-right text-muted nombreFantasia"><?php echo $datosProveedor['nombreFantasia']; ?></span>
+        </p>
+        <p class="clearfix">
+            <span class="float-start">Razón Social</span>
+            <span class="float-right text-muted razonSocial"><?php echo $datosProveedor['razonSocial']; ?></span>
+        </p>
+        <p class="clearfix">
+            <span class="float-start">Giro Proveedor</span>
+            <span class="float-right text-muted giroProveedor"><?php echo $datosProveedor['giroProveedor']; ?></span>
+        </p>
+        <p class="clearfix">
+            <span class="float-start">Dirección</span>
+            <span class="float-right text-muted direccionFacturacion"><?php echo $datosProveedor['direccionFacturacion']; ?></span>
+        </p>
+    </div>
+</div>
                 </div>
                
               </div>
@@ -618,7 +622,224 @@ include '../componentes/sidebar.php';
         </div>
     </div>
 </div>
+<div class="modal fade" id="actualizarProveedor" tabindex="-1" role="dialog" aria-labelledby="formModal" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+            
+              <div class="modal-body">
+                 <!-- Alerta para mostrar el resultado de la actualización -->
+                 <div id="updateAlert" class="alert" style="display:none;" role="alert"></div>
+                            
+                 
+                 <form id="formactualizarproveedor">
+                 <!-- Campos del formulario -->
+                    <div>
+                        <h3 class="titulo-registro mb-3">Actualizar Proveedor</h3>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="codigo">Nombre Identificador</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-user-circle"></i></span>
+                                        </div>
+                                        <input type="hidden" name="idprooo">
+                                        <input class="form-control" placeholder="Nombre Identificador" name="nombreIdentificadorp">
+                                    </div>
+                                    <label class="labelforms" for="codigo">Medios</label>
+                                    <div id="dropdown1" class="input-group dropdown" >
+                                        <div class="sell input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                        </div>
+                                        <div class="selected-options" onclick="toggleDropdown()"></div>
+                                        <button type="button" class="dropdown-button" style="font-size:14px; padding: 7px 20px !important; display:none;">Select Medios</button>
+                                        <div class="dropdown-content">
+                                            <?php foreach ($medios as $medio) : ?>
+                                                <label>
+                                                    <input type="checkbox" name="id_medios[]" value="<?php echo $medio['id']; ?>">
+                                                    <?php echo $medio['NombredelMedio']; ?>
+                                                </label>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                    <label class="labelforms" for="codigo">Nombre de Proveedor</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Nombre de Proveedor" name="nombreProveedorp">
+                                    </div>
+                                    <label class="labelforms" for="codigo">Nombre Representante</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Nombre Representante" name="nombreRepresentantep">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
 
+
+                        
+                                <label for="rutProveedorp" class="labelforms">Rut Proveedor</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-address-card"></i></span>
+                                    <input type="text" class="form-control" id="rutProveedorp" name="rutProveedorp" required>
+                                    <div class="custom-tooltip" id="rutProveedorp-tooltip"></div>
+                                </div>    
+
+                              
+
+
+
+                                    <label class="labelforms" for="codigo">Giro Proveedor</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-suitcase"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Giro Proveedor" name="giroProveedorp">
+                                    </div>
+                                    <label class="labelforms" for="codigo">Nombre de Fantasía</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-hand-spock"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Nombre de Fantasía" name="nombreFantasiap">
+                                    </div>
+                                 
+                                    <label for="rutRepresentantep" class="labelforms">Rut Representante</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-address-card"></i></span>
+                                    <input type="text" class="form-control" id="rutRepresentantep" name="rutRepresentantep" required>
+                                    <div class="custom-tooltip" id="rutRepresentantep-tooltip"></div>
+                                </div>       
+                                    
+                               
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="titulo-registro mb-3">Datos de facturación</h3>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="codigo">Razón Social</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-bullseye"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Razón Social" name="razonSocialp">
+                                    </div>
+                                    <label class="labelforms" for="codigo">Región</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
+                                        </div>
+                                        <select class="sesel region-select form-select" name="id_regionp" id="region" required>
+                                            <?php foreach ($regiones as $regione) : ?>
+                                                <option value="<?php echo $regione['id']; ?>"><?php echo $regione['nombreRegion']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+
+
+                                    <label for="telCelularp" class="labelforms">Teléfono celular</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="text" class="phone-input form-control" placeholder="Teléfono Celular" id="telCelularp" name="telCelularp" required>
+                                    <div class="custom-tooltip" id="telCelularp-tooltip"></div>
+                                </div>     
+
+                                <label for="emailp" class="labelforms">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                    <input type="text" class="form-control email-input" id="emailp" name="emailp" required>
+                                    <div class="custom-tooltip" id="emailp-tooltip"></div>
+                                </div>  
+                                
+                           
+                                   
+                                  
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="codigo">Dirección Facturación</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-building"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Dirección Facturación" name="direccionFacturacionp">
+                                    </div>
+                                    <label class="labelforms" for="codigo">Comuna</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
+                                        </div>
+                                        <select class="sesel comuna-select form-select" name="id_comunap" id="comuna" required>
+                                            <?php foreach ($comunas as $comuna) : ?>
+                                                <option value="<?php echo $comuna['id_comuna']; ?>" data-region="<?php echo $comuna['id_region']; ?>">
+                                                    <?php echo $comuna['nombreComuna']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+
+
+                                    <label for="telFijop" class="labelforms">Teléfono Fijo</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="text" class="phone-input form-control" placeholder="Teléfono fijo" id="telFijop" name="telFijop" required>
+                                    <div class="custom-tooltip" id="telFijop-tooltip"></div>
+                                </div>
+
+
+
+
+                                  
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="titulo-registro mb-3">Otros datos</h3>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="codigo">Bonifiación por año %</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Bonifiación por año %" name="bonificacion_anop">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col" id="moneda-container">
+                                <div class="form-group">
+                                    <label for="codigo">Escala de rango</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-chart-bar"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Escala de rango" name="escala_rangop">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button class="btn btn-primary btn-lg rounded-pill" type="submit" id="actualizarProveedor">
+                            <span class="btn-txt">Guardar Proveedor</span>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none;"></span>
+                        </button>
+                    </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
 
 <div class="modal fade" id="actualizarsoporte22" tabindex="-1" role="dialog"  aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -1067,7 +1288,10 @@ include '../componentes/sidebar.php';
 </div>
 
 <script>
-
+function getProveedorData(idProveedor) {
+    var proveedoresMap = <?php echo json_encode($proveedoresMap); ?>;
+    return proveedoresMap[idProveedor] || null;
+}
 document.addEventListener('DOMContentLoaded', function() { 
     function showError(input, message) {
         input.classList.add('is-invalid');
@@ -1110,7 +1334,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Validación en tiempo real para RUTs
-    var rutInputs = document.querySelectorAll('#rutRepresentantex, #rutSoporte, #rut_soporte, #rutRepresentante');
+    var rutInputs = document.querySelectorAll('#rutProveedorp, #rutRepresentantep, #rutRepresentantex, #rutSoporte, #rut_soporte, #rutRepresentante');
     rutInputs.forEach(function(input) {
         input.addEventListener('input', function() {
             if (this.value === "") {
@@ -1361,6 +1585,7 @@ function refreshContactTable(idProveedor = null) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    
     const proveedorId = <?php echo json_encode($idProveedor); ?>;
     if (proveedorId) {
         fetch(`/get_soportes.php?proveedor_id=${proveedorId}`)
@@ -1384,6 +1609,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 </script>
+<script src="<?php echo $ruta; ?>assets/js/actualizarviewproveedor.js"></script>
 <script src="../assets/js/contactoprops.js"></script>
 <script src="../assets/js/getregiones.js"></script>
 <script src="../assets/js/actualizarsoporteprov.js"></script>
