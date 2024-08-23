@@ -97,7 +97,7 @@ include '../componentes/sidebar.php';
                             <div class="text-center">
                                 <div class="author-box-job">
 
-                                    <?php echo 'Sitio Web: ' .$datosCliente['web_cliente'] ; ?>
+                                    <?php echo 'Representante Legal: ' .$datosCliente['nombreRepresentanteLegal'] ; ?>
 
                                 </div>
                                 <div class="w-100 d-sm-none"></div>
@@ -106,7 +106,10 @@ include '../componentes/sidebar.php';
                     </div>
                     <div class="card">
                         <div class="card-header">
-                            <h4>Detalles del Cliente</h4>
+                            <div class="cabeza">
+                             <h4>Detalles del Cliente</h4> 
+                             <button type="button" class="btn btn-success micono" data-bs-toggle="modal" data-bs-target="#actualizarclienteView" data-idcliente="<?php echo $datosCliente['id_cliente']; ?>" onclick="loadClienteData(this)" ><i class="fas fa-pencil-alt"></i></button>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="py-4">
@@ -243,24 +246,19 @@ include '../componentes/sidebar.php';
 
                                 <div class="tab-pane fade" id="contacto" role="tabpanel" aria-labelledby="profile-tab2">
                                     <div class="row">
-                                        <div class="col-md-2 col-6 b-r">
-                                            <strong>Nombre</strong>
+                                        <div class="col-md-4 col-6 b-r">
+                                            <strong>Nombre Representante Legal</strong>
                                             <br>
                                             <p class="text-muted">
                                                 <?php echo $datosCliente['nombreRepresentanteLegal'] ; ?></p>
                                         </div>
-                                        <div class="col-md-2 col-6 b-r">
-                                            <strong>Apellido</strong>
-                                            <br>
-                                            <p class="text-muted"><?php echo $datosCliente['apellidoRepresentante'] ; ?>
-                                            </p>
-                                        </div>
-                                        <div class="col-md-2 col-6 b-r">
+                                        
+                                        <div class="col-md-3 col-6 b-r">
                                             <strong>Teléfono Celular</strong>
                                             <br>
                                             <p class="text-muted"><?php echo $datosCliente['telCelular'] ; ?></p>
                                         </div>
-                                        <div class="col-md-2 col-6 b-r">
+                                        <div class="col-md-3 col-6 b-r">
                                             <strong>Teléfono Fijo</strong>
                                             <br>
                                             <p class="text-muted"><?php echo $datosCliente['telFijo'] ; ?></p>
@@ -270,11 +268,7 @@ include '../componentes/sidebar.php';
                                             <br>
                                             <p class="text-muted"><?php echo $datosCliente['email'] ; ?></p>
                                         </div>
-                                        <div class="col-md-2 col-6 b-r">
-                                            <strong>Sitio Web</strong>
-                                            <br>
-                                            <p class="text-muted"><?php echo $datosCliente['web_cliente'] ; ?></p>
-                                        </div>
+                                       
                                     </div>
                                 </div>
 
@@ -1096,6 +1090,209 @@ document.addEventListener('DOMContentLoaded', function() {
     cargarYMostrarComisiones();
 });
 </script>
+
+
+
+
+<!-- Modal para Actualizar Cliente -->
+<div class="modal fade" id="actualizarclienteView" tabindex="-1" aria-labelledby="actualizarclienteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="actualizarclienteLabel">Actualizar Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="updateClienteForm">
+                    <input type="hidden" id="id_cliente" name="id_cliente">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="update_nombreCliente" class="form-label">Nombre del Cliente</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                    <input type="text" class="form-control" id="update_nombreCliente" name="nombreCliente" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="update_nombreFantasia" class="form-label">Nombre de Fantasía</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-stars"></i></span>
+                                    <input type="text" class="form-control" id="update_nombreFantasia" name="nombreFantasia">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="update_id_tipoCliente" class="form-label">Tipo de Cliente</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-tags"></i></span>
+                                    <select class="form-select" id="update_id_tipoCliente" name="id_tipoCliente" required>
+                                        <?php foreach ($tiposCliente as $tipo): ?>
+                                            <option value="<?php echo $tipo['id_tyipoCliente']; ?>"><?php echo htmlspecialchars($tipo['nombreTipoCliente']); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="update_razonSocial" class="form-label">Razón Social</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-building"></i></span>
+                                    <input type="text" class="form-control" id="update_razonSocial" name="razonSocial" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="update_grupo" class="form-label">Grupo</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-people"></i></span>
+                                    <input type="text" class="form-control" id="update_grupo" name="grupo">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3 input-wrapper">
+                                <label for="update_RUT" class="form-label">RUT Empresa</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-card-text"></i></span>
+                                    <input type="text" class="form-control" id="update_RUT" name="RUT" required>
+                                </div>
+                                <div class="custom-tooltip" id="update_RUT-tooltip"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="update_giro" class="form-label">Giro</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-briefcase"></i></span>
+                                    <input type="text" class="form-control" id="update_giro" name="giro" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="update_nombreRepresentanteLegal" class="form-label">Nombre Representante Legal</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+                                    <input type="text" class="form-control" id="update_nombreRepresentanteLegal" name="nombreRepresentanteLegal" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 input-wrapper">
+                                <label for="update_Rut_representante" class="form-label">RUT Representante</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-card-text"></i></span>
+                                    <input type="text" class="form-control" id="update_Rut_representante" name="Rut_representante" required>
+                                </div>
+                                <div class="custom-tooltip" id="update_Rut_representante-tooltip"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="update_direccionEmpresa" class="form-label">Dirección Empresa</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                                    <input type="text" class="form-control" id="update_direccionEmpresa" name="direccionEmpresa" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="update_id_region" class="form-label">Región</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-map"></i></span>
+                                    <select class="form-select" id="update_id_region" name="id_region" required>
+                                        <?php foreach ($regiones as $region): ?>
+                                            <option value="<?php echo $region['id']; ?>"><?php echo $region['nombreRegion']; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="update_id_comuna" class="form-label">Comuna</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-pin-map"></i></span>
+                                    <select class="form-select" id="update_id_comuna" name="id_comuna" required>
+                                        <?php foreach ($comunas as $comuna): ?>
+                                            <option value="<?php echo $comuna['id_comuna']; ?>" data-region="<?php echo $comuna['id_region']; ?>"><?php echo $comuna['nombreComuna']; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3 input-wrapper">
+                                <label for="update_telCelular" class="form-label">Teléfono Celular</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-phone"></i></span>
+                                    <input type="tel" class="form-control" id="update_telCelular" name="telCelular" required>
+                                </div>
+                                <div class="custom-tooltip" id="update_telCelular-tooltip"></div>
+                            </div>
+                            <div class="mb-3 input-wrapper">
+                                <label for="update_telFijo" class="form-label">Teléfono Fijo</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                    <input type="tel" class="form-control" id="update_telFijo" name="telFijo">
+                                </div>
+                                <div class="custom-tooltip" id="update_telFijo-tooltip"></div>
+                            </div>
+                            <div class="mb-3 input-wrapper">
+                                <label for="update_email" class="form-label">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                    <input type="email" class="form-control" id="update_email" name="email" required>
+                                </div>
+                                <div class="custom-tooltip" id="update_email-tooltip"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="update_formato" class="form-label">Formato</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-file-earmark-text"></i></span>
+                                    <select class="form-select" id="update_formato" name="formato">
+                                    <?php foreach ($formatoComisionMap as $id => $comision): ?>
+        <option value="<?php echo htmlspecialchars($id); ?>">
+            <?php echo htmlspecialchars($comision['nombreFormato']); ?>
+        </option>
+    <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="update_nombreMoneda" class="form-label">Moneda</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-currency-exchange"></i></span>
+                                    <select class="form-select" id="update_nombreMoneda" name="nombreMoneda">
+                                    <?php foreach ($tipoMonedaMap as $id => $tipozMoneda): ?>
+        <option value="<?php echo htmlspecialchars($id); ?>">
+            <?php echo htmlspecialchars($tipozMoneda['nombreMoneda']); ?>
+        </option>
+    <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="update_valor" class="form-label">Valor</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-cash"></i></span>
+                                    <input type="number" class="form-control" id="update_valor" name="valor">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="updateClienteBtn">Actualizar Cliente</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 
 
 

@@ -281,12 +281,15 @@ include 'componentes/sidebar.php';
                                 <label for="formato" class="form-label">Formato</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-file-earmark-text"></i></span>
-                                    <select class="form-select" id="formato" name="formato">
-                                        <option value="">Seleccionar Formato</option>
-                                        <option value="Fee">Fee</option>
-                                        <option value="% Comisión Offline">% Comisión Offline</option>
-                                        <option value="% Comisión Online">% Comisión Online</option>
-                                    </select>
+                                    <select class="form-select" id="update_formato" name="formato">
+    
+    <?php foreach ($formatoComisionMap as $id => $comision): ?>
+        <option value="<?php echo htmlspecialchars($id); ?>">
+            <?php echo htmlspecialchars($comision['nombreFormato']); ?>
+        </option>
+    <?php endforeach; ?>
+</select>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -295,11 +298,14 @@ include 'componentes/sidebar.php';
                                 <label for="nombreMoneda" class="form-label">Moneda</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-currency-exchange"></i></span>
-                                    <select class="form-select" id="nombreMoneda" name="nombreMoneda">
-                                        <option value="UF">UF</option>
-                                        <option value="Peso">Peso</option>
-                                        <option value="Dólar">Dólar</option>
-                                    </select>
+                                    <select class="form-select" id="update_nombreMoneda" name="nombreMoneda">
+  
+    <?php foreach ($tipoMonedaMap as $id => $tipozMoneda): ?>
+        <option value="<?php echo htmlspecialchars($id); ?>">
+            <?php echo htmlspecialchars($tipozMoneda['nombreMoneda']); ?>
+        </option>
+    <?php endforeach; ?>
+</select>
                                 </div>
                             </div>
                         </div>
@@ -322,6 +328,215 @@ include 'componentes/sidebar.php';
         </div>
     </div>
 </div>
+
+
+
+
+
+<!-- Modal para Actualizar Cliente -->
+<div class="modal fade" id="actualizarcliente" tabindex="-1" aria-labelledby="actualizarclienteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="actualizarclienteLabel">Actualizar Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="updateClienteForm">
+                    <input type="hidden" id="id_cliente" name="id_cliente">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="update_nombreCliente" class="form-label">Nombre del Cliente</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                    <input type="text" class="form-control" id="update_nombreCliente" name="nombreCliente" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="update_nombreFantasia" class="form-label">Nombre de Fantasía</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-stars"></i></span>
+                                    <input type="text" class="form-control" id="update_nombreFantasia" name="nombreFantasia">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="update_id_tipoCliente" class="form-label">Tipo de Cliente</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-tags"></i></span>
+                                    <select class="form-select" id="update_id_tipoCliente" name="id_tipoCliente" required>
+                                        <?php foreach ($tiposCliente as $tipo): ?>
+                                            <option value="<?php echo $tipo['id_tyipoCliente']; ?>"><?php echo htmlspecialchars($tipo['nombreTipoCliente']); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="update_razonSocial" class="form-label">Razón Social</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-building"></i></span>
+                                    <input type="text" class="form-control" id="update_razonSocial" name="razonSocial" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="update_grupo" class="form-label">Grupo</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-people"></i></span>
+                                    <input type="text" class="form-control" id="update_grupo" name="grupo">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3 input-wrapper">
+                                <label for="update_RUT" class="form-label">RUT Empresa</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-card-text"></i></span>
+                                    <input type="text" class="form-control" id="update_RUT" name="RUT" required>
+                                </div>
+                                <div class="custom-tooltip" id="update_RUT-tooltip"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="update_giro" class="form-label">Giro</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-briefcase"></i></span>
+                                    <input type="text" class="form-control" id="update_giro" name="giro" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="update_nombreRepresentanteLegal" class="form-label">Nombre Representante Legal</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+                                    <input type="text" class="form-control" id="update_nombreRepresentanteLegal" name="nombreRepresentanteLegal" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 input-wrapper">
+                                <label for="update_Rut_representante" class="form-label">RUT Representante</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-card-text"></i></span>
+                                    <input type="text" class="form-control" id="update_Rut_representante" name="Rut_representante" required>
+                                </div>
+                                <div class="custom-tooltip" id="update_Rut_representante-tooltip"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="update_direccionEmpresa" class="form-label">Dirección Empresa</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                                    <input type="text" class="form-control" id="update_direccionEmpresa" name="direccionEmpresa" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="update_id_region" class="form-label">Región</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-map"></i></span>
+                                    <select class="form-select" id="update_id_region" name="id_region" required>
+                                        <?php foreach ($regiones as $region): ?>
+                                            <option value="<?php echo $region['id']; ?>"><?php echo $region['nombreRegion']; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="update_id_comuna" class="form-label">Comuna</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-pin-map"></i></span>
+                                    <select class="form-select" id="update_id_comuna" name="id_comuna" required>
+                                        <?php foreach ($comunas as $comuna): ?>
+                                            <option value="<?php echo $comuna['id_comuna']; ?>" data-region="<?php echo $comuna['id_region']; ?>"><?php echo $comuna['nombreComuna']; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3 input-wrapper">
+                                <label for="update_telCelular" class="form-label">Teléfono Celular</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-phone"></i></span>
+                                    <input type="tel" class="form-control" id="update_telCelular" name="telCelular" required>
+                                </div>
+                                <div class="custom-tooltip" id="update_telCelular-tooltip"></div>
+                            </div>
+                            <div class="mb-3 input-wrapper">
+                                <label for="update_telFijo" class="form-label">Teléfono Fijo</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                    <input type="tel" class="form-control" id="update_telFijo" name="telFijo">
+                                </div>
+                                <div class="custom-tooltip" id="update_telFijo-tooltip"></div>
+                            </div>
+                            <div class="mb-3 input-wrapper">
+                                <label for="update_email" class="form-label">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                    <input type="email" class="form-control" id="update_email" name="email" required>
+                                </div>
+                                <div class="custom-tooltip" id="update_email-tooltip"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="update_formato" class="form-label">Formato</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-file-earmark-text"></i></span>
+                                    <select class="form-select" id="update_formato" name="formato">
+                                    <?php foreach ($formatoComisionMap as $id => $comision): ?>
+        <option value="<?php echo htmlspecialchars($id); ?>">
+            <?php echo htmlspecialchars($comision['nombreFormato']); ?>
+        </option>
+    <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="update_nombreMoneda" class="form-label">Moneda</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-currency-exchange"></i></span>
+                                    <select class="form-select" id="update_nombreMoneda" name="nombreMoneda">
+                                    <?php foreach ($tipoMonedaMap as $id => $tipozMoneda): ?>
+        <option value="<?php echo htmlspecialchars($id); ?>">
+            <?php echo htmlspecialchars($tipozMoneda['nombreMoneda']); ?>
+        </option>
+    <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="update_valor" class="form-label">Valor</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-cash"></i></span>
+                                    <input type="number" class="form-control" id="update_valor" name="valor">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="updateClienteBtn">Actualizar Cliente</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -512,7 +727,225 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.getElementById('id_region').dispatchEvent(new Event('change'));
-});</script>
+});
+</script>
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Asociar la función loadClienteData a todos los botones de edición
+    var editButtons = document.querySelectorAll('[data-bs-toggle="modal"][data-bs-target="#actualizarcliente"]');
+    editButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            loadClienteData(this);
+        });
+    });
+
+    // Asociar el evento click al botón de actualizar cliente
+    var updateClienteBtn = document.getElementById('updateClienteBtn');
+    if (updateClienteBtn) {
+        updateClienteBtn.addEventListener('click', updateCliente);
+    } else {
+        console.error('Botón de actualizar cliente no encontrado');
+    }
+});
+
+function loadClienteData(button) {
+    const id_cliente = button.getAttribute('data-idcliente');
+    console.log('ID del cliente obtenido del botón:', id_cliente);
+
+    if (!id_cliente) {
+        console.error('Error: No se pudo obtener el ID del cliente del botón');
+        Swal.fire({
+            title: 'Error',
+            text: 'No se pudo obtener el ID del cliente',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
+    // Establecer el ID del cliente en el campo oculto del formulario
+    document.getElementById('id_cliente').value = id_cliente;
+    console.log('ID del cliente establecido en el formulario:', document.getElementById('id_cliente').value);
+
+    fetch('querys/qget_cliente.php?id_cliente=' + id_cliente)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('HTTP error ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                const cliente = data.cliente;
+                console.log('Datos del cliente recibidos:', cliente);
+                
+                // Mapeo de campos
+                const campos = [
+                    'nombreCliente', 'nombreFantasia', 'id_tipoCliente',
+                    'razonSocial', 'grupo', 'RUT', 'giro', 'nombreRepresentanteLegal',
+                    'direccionEmpresa', 'id_region', 'telCelular',
+                    'telFijo', 'email', 'formato', 'nombreMoneda', 'valor'
+                ];
+
+                campos.forEach(campo => {
+                    const valor = cliente[campo] || cliente[campo.toUpperCase()] || '';
+                    setValueSafely('update_' + campo, valor);
+                    console.log(`Campo ${campo} establecido:`, valor);
+                });
+
+                // Manejo específico para Rut_representante
+                const rutRepresentante = cliente.Rut_representante || 
+                                         cliente.RUT_representante || 
+                                         cliente.rut_representante || 
+                                         cliente.RUT_REPRESENTANTE || 
+                                         '';
+                setValueSafely('update_Rut_representante', rutRepresentante);
+                console.log('RUT representante establecido:', rutRepresentante);
+
+                // Actualizar las comunas basadas en la región seleccionada
+                const regionSelect = document.getElementById('update_id_region');
+                if (regionSelect) {
+                    regionSelect.dispatchEvent(new Event('change'));
+                
+                    // Esperar un momento para que las comunas se actualicen y luego seleccionar la comuna correcta
+                    setTimeout(() => {
+                        const idComuna = cliente.id_comuna || cliente.ID_COMUNA || '';
+                        setValueSafely('update_id_comuna', idComuna);
+                        console.log('ID Comuna establecido:', idComuna);
+                    }, 100);
+                }
+
+                // Actualizar campos adicionales si es necesario
+                updateSelectField('update_id_tipoCliente', cliente.id_tipoCliente || cliente.ID_TIPOCLIENTE);
+                updateSelectField('update_id_region', cliente.id_region || cliente.ID_REGION);
+
+                console.log('Datos del cliente cargados correctamente');
+            } else {
+                throw new Error(data.error || 'Error desconocido al cargar los datos del cliente');
+            }
+        })
+        .catch(error => {
+            console.error('Error en loadClienteData:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al cargar los datos del cliente: ' + error.message,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        });
+}
+
+function setValueSafely(id, value) {
+    const element = document.getElementById(id);
+    if (element) {
+        element.value = value;
+        console.log(`Valor establecido para ${id}:`, value);
+    } else {
+        console.warn(`Elemento no encontrado: ${id}`);
+    }
+}
+
+function updateSelectField(id, value) {
+    var select = document.getElementById(id);
+    if (select && select.tagName === 'SELECT') {
+        var option = select.querySelector(`option[value="${value}"]`);
+        if (option) {
+            option.selected = true;
+            console.log(`Opción seleccionada para ${id}:`, value);
+        } else {
+            console.warn(`Opción no encontrada para ${id} con valor ${value}`);
+        }
+    } else {
+        console.warn(`Elemento select no encontrado: ${id}`);
+    }
+}
+
+function setValueSafely(id, value) {
+    var element = document.getElementById(id);
+    if (element) {
+        element.value = value !== undefined && value !== null ? value : '';
+    } else {
+        console.warn('Elemento no encontrado:', id);
+    }
+}
+
+function updateSelectField(id, value) {
+    var select = document.getElementById(id);
+    if (select && select.tagName === 'SELECT') {
+        var option = select.querySelector(`option[value="${value}"]`);
+        if (option) {
+            option.selected = true;
+        } else {
+            console.warn(`Opción no encontrada para ${id} con valor ${value}`);
+        }
+    }
+}
+
+function updateCliente() {
+    console.log('Función updateCliente iniciada');
+    var form = document.getElementById('updateClienteForm');
+    var formData = new FormData(form);
+
+    // Asegúrate de que el id_cliente está en el formulario
+    var idCliente = document.getElementById('id_cliente').value;
+    formData.append('id_cliente', idCliente);
+
+    // Log para verificar que el id_cliente se está enviando
+    console.log('ID Cliente:', formData.get('id_cliente'));
+
+    // Log de los datos que se están enviando
+    for (var pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
+
+    fetch('querys/qupdate_cliente.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        console.log('Respuesta del servidor recibida');
+        if (!response.ok) {
+            return response.text().then(text => {
+                throw new Error('HTTP error ' + response.status + ': ' + text);
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Datos de respuesta:', data);
+        if (data.success) {
+            Swal.fire({
+                title: data.alert.title,
+                text: data.alert.text,
+                icon: data.alert.icon,
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.reload();
+                }
+            });
+        } else {
+            throw new Error(data.error || 'Error desconocido al actualizar el cliente');
+        }
+    })
+    .catch(error => {
+        console.error('Error completo:', error);
+        Swal.fire({
+            title: 'Error',
+            text: 'Hubo un problema al actualizar el cliente: ' + error.message,
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    });
+}
+</script>
+
+
+
 
 <?php include 'componentes/settings.php'; ?>
 <script src="assets/js/toggleClientes.js"></script>

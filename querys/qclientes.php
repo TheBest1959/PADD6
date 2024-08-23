@@ -26,6 +26,8 @@
     $tiposCliente = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/TipoCliente?select=*');
     $regiones = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Region?select=*');
     $comunas = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Comunas?select=*');
+    $formatoComision = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/formatoComision?select=*');
+    $tipoMoneda = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/TipoMoneda?select=*');
        
     // Crear arrays asociativos para búsqueda rápida
     $tiposClienteMap = array_column($tiposCliente, 'nombreTipoCliente', 'id_tyipoCliente');
@@ -41,4 +43,13 @@ $tipoclientesMap2 = [];
 foreach ($tiposCliente as $tipocliente) {
     $tipoclientesMap[$tipocliente['id_tyipoCliente']] = $tipocliente;
 }
+$formatoComisionMap = [];
+foreach ($formatoComision as $comisionFormato) {
+    $formatoComisionMap[$comisionFormato['id_formatoComision']] = $comisionFormato;
+}
+$tipoMonedaMap = [];
+foreach ($tipoMoneda as $tipozMoneda) {
+    $tipoMonedaMap[$tipozMoneda['id_moneda']] = $tipozMoneda;
+}
+
 
