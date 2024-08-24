@@ -14,7 +14,7 @@ $nombre = $_SESSION['user_name'];
 
 
 
-$ruta = 'https://ideal-fiesta-v6g9xpwprvwj2w57j-3000.app.github.dev/';
+$ruta = 'https://refactored-space-guacamole-r4rqv4jjq7wxfwpvx-3000.app.github.dev/';
 
 
 
