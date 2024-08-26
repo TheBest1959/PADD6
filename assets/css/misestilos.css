@@ -350,3 +350,10 @@ body{
 .btn.btn-success.micono {
   margin-top: -2px;
 }
+.theditar {
+  margin-top: 10px;
+  text-align: right;
+}
+.btn.btn-danger.micono.ver-agencia-btn.novedad {
+  border-radius: 30px;
+}
