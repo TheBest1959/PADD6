@@ -335,3 +335,9 @@ body{
   color: #6777ef;
   font-size: 13px !important;
 }
+
+.cabeza {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}

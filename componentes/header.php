@@ -14,7 +14,8 @@ $nombre = $_SESSION['user_name'];
 
 
 
-$ruta = 'https://supreme-space-winner-w5pxq5j446q3p74-3000.app.github.dev/';
+$ruta = 'http://localhost:3000/';
+
 
 
 
@@ -38,7 +39,7 @@ $current_file = basename($_SERVER['PHP_SELF']);
   <link rel="stylesheet" href="<?php echo $ruta; ?>assets/css/app.min.css">
   <!-- Template CSS -->
   <link rel="stylesheet" href="<?php echo $ruta; ?>assets/css/formulario.css">
-  <link rel="stylesheet" href="<?php echo $ruta; ?>assets/bundles&/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="<?php echo $ruta; ?>assets/bundles/bootstrap/css/bootstrap.min.css">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/fontawesome.min.css">
 
