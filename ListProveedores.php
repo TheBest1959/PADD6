@@ -423,7 +423,7 @@ include 'componentes/sidebar.php';
                                         <div class="sell input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                                         </div>
-                                        <div class="selected-options" onclick="toggleDropdown()"><span class="selected-option" data-value="3">INTERNET<button>x</button></span></div>
+                                        <div class="selected-options" onclick="toggleDropdown()"></div>
                                         <button type="button" class="dropdown-button" style="font-size:14px; padding: 7px 20px !important; display:none;">Select Medios</button>
                                         <div class="dropdown-content">
                                             <?php foreach ($medios as $medio) : ?>
