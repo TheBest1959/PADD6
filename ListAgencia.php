@@ -633,7 +633,7 @@ phoneInputs.forEach(function(input) {
 
 
 
-<script src="<?php echo $ruta; ?>assets/js/actualizaragenciaup.js"></script>
+<script src="<?php echo $ruta; ?>assets/js/updateAgenciaUp.js"></script>
 <script src="<?php echo $ruta; ?>assets/js/addAgencia.js"></script>
 <script src="assets/js/toggleAgenciaEstado.js"></script>
 <?php include 'componentes/settings.php'; ?>
