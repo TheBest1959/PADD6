@@ -99,6 +99,36 @@ if (!empty($id_provedoresxx)) {
 include '../componentes/header.php';
 include '../componentes/sidebar.php';
 ?>
+<style>
+       .is-invalid {
+        border-color: #dc3545 !important;
+    }
+    .custom-tooltip {
+        position: absolute;
+        background-color: #dc3545;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+    }
+    .custom-tooltip::before {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #dc3545 transparent transparent transparent;
+    }
+    .input-wrapper {
+        position: relative;
+    }
+</style>
       <!-- Main Content -->
       <div class="main-content">
       
@@ -140,7 +170,36 @@ include '../componentes/sidebar.php';
     justify-content: space-between;" class="card-header">
      
                     <h4>Detalles del Soporte</h4>
-                    <a class="btn btn-success micono"  data-bs-toggle="modal" data-bs-target="#actualizarSoporte" data-id-soporte="<?php echo $idCliente ?>" data-idproveedor="${proveedor.id_proveedor}" onclick="loadProveedorDataSoporte(this)"><i class="fas fa-pencil-alt"></i></a>
+                    <?php
+                                                            // Paso 1: Obtener todos los id_medios para un id_proveedor específico
+                                                            $id_sopor = $datosCliente['id_soporte'];
+
+                                                            // Realiza la solicitud para obtener los datos de la tabla proveedor_medios
+
+                                                            $id_medios_array = [];
+                                                            foreach ($soporte_medios as $fila) {
+                                                                if ($fila['id_soporte'] == $id_sopor) {
+                                                                    $id_medios_array[] = $fila['id_medio'];
+                                                                }
+                                                            }                 
+
+                                                            $medios_nombres = [];
+                                                            foreach ($medios as $medio) {
+                                                                if (in_array($medio['id'], $id_medios_array)) {
+                                                                    $medios_nombres[] = $medio['NombredelMedio'];
+                                                                }
+                                                            }
+                                                            $id_medios_json = json_encode($id_medios_array);
+                                                            if (!empty($medios_nombres)) {
+                                                                $medios_list = implode(", ", $medios_nombres);
+                                                                $tooltip_content =  $medios_list;
+                                                            } else {
+                                                                $tooltip_content = ""; // Puedes dejarlo vacío o agregar un mensaje como "No hay medios disponibles"
+                                                            }
+                                                            
+                                                            // Paso 3: Mostrar los nombres en una lista tipo tooltip
+                                                            ?> 
+                    <a class="btn btn-danger micono"  data-bs-toggle="modal" data-bs-target="#actualizarSoporte" data-idmedios="<?php echo $id_medios_json; ?>" data-id-soporte="<?php echo $idCliente ?>" data-idproveedor="${proveedor.id_proveedor}" onclick="loadProveedorDataSoporte(this)"><i class="fas fa-pencil-alt"></i> Editar datos</a>
 
                   </div>
                   <div class="card-body">
@@ -305,7 +364,7 @@ include '../componentes/sidebar.php';
         
             <td><?php echo $proveedorll['id_proveedor']; ?></td>
             <td>
-                                                                                                        <?php
+            <?php
                                                             // Paso 1: Obtener todos los id_medios para un id_proveedor específico
                                                             $id_proveedor = $proveedorll['id_proveedor'];
 
@@ -324,7 +383,7 @@ include '../componentes/sidebar.php';
                                                                     $medios_nombres[] = $medio['NombredelMedio'];
                                                                 }
                                                             }
-
+                                                            $id_medios_json = json_encode($id_medios_array);
                                                             if (!empty($medios_nombres)) {
                                                                 $medios_list = implode(", ", $medios_nombres);
                                                                 $tooltip_content =  $medios_list;
@@ -370,7 +429,7 @@ include '../componentes/sidebar.php';
             <td>
                 <!-- Acciones -->
                 <a class="btn btn-primary " href="viewProveedor.php?id_proveedor=<?php echo $proveedorll['id_proveedor']; ?>" data-toggle="tooltip" title="Ver Proveedor"><i class="fas fa-eye "></i></a>  
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#actualizarProveedor" data-idproveedor="<?php echo $proveedorll['id_proveedor']; ?>" onclick="loadProveedorData(this)"><i class="fas fa-pencil-alt"></i></button>
+                <button type="button" class="btn btn-success" data-idmedios="<?php echo $id_medios_json; ?>" data-bs-toggle="modal" data-bs-target="#actualizarProveedor" data-idproveedor="<?php echo $proveedorll['id_proveedor']; ?>" onclick="loadProveedorData(this)"><i class="fas fa-pencil-alt"></i> </button>
 
             </td>
         </tr>
@@ -477,6 +536,229 @@ include '../componentes/sidebar.php';
           
         </div>
       </div>
+
+
+      <div class="modal fade" id="actualizarProveedor" tabindex="-1" role="dialog" aria-labelledby="formModal" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+            
+              <div class="modal-body">
+                 <!-- Alerta para mostrar el resultado de la actualización -->
+                 <div id="updateAlert" class="alert" style="display:none;" role="alert"></div>
+                            
+                 
+                 <form id="formactualizarproveedor">
+                 <!-- Campos del formulario -->
+                    <div>
+                        <h3 class="titulo-registro mb-3">Actualizar Proveedor</h3>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label class="labelforms" for="codigo">Nombre Identificador</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-user-circle"></i></span>
+                                        </div>
+                                        <input type="hidden" name="idprooo">
+                                        <input type="hidden"  name="idmedios">
+                                        <input class="form-control" placeholder="Nombre Identificador" name="nombreIdentificadorp">
+                                    </div>
+                                    <label class="labelforms" for="codigo">Medios</label>
+                                    <div id="dropdown4" class="dropdown-medios input-group dropdown" >
+                                        <div class="sell input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                        </div>
+                                        <div class="selected-options" onclick="toggleDropdown()"></div>
+                                        <button type="button" class="dropdown-button" style="font-size:14px; padding: 7px 20px !important; display:none;">Select Medios</button>
+                                        <div class="dropdown-content">
+                                            <?php foreach ($medios as $medio) : ?>
+                                                <label>
+                                                    <input type="checkbox" name="id_medios[]" value="<?php echo $medio['id']; ?>">
+                                                    <?php echo $medio['NombredelMedio']; ?>
+                                                </label>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                    <label class="labelforms" for="codigo">Nombre de Proveedor</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Nombre de Proveedor" name="nombreProveedorp">
+                                    </div>
+                                    <label class="labelforms" for="codigo">Nombre Representante</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Nombre Representante" name="nombreRepresentantep">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+
+
+                        
+                                <label for="rutProveedorp" class="labelforms">Rut Proveedor</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-address-card"></i></span>
+                                    <input type="text" class="form-control" id="rutProveedorp" name="rutProveedorp" required>
+                                    <div class="custom-tooltip" id="rutProveedorp-tooltip"></div>
+                                </div>    
+
+                              
+
+
+
+                                    <label class="labelforms" for="codigo">Giro Proveedor</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-suitcase"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Giro Proveedor" name="giroProveedorp">
+                                    </div>
+                                    <label class="labelforms" for="codigo">Nombre de Fantasía</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-hand-spock"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Nombre de Fantasía" name="nombreFantasiap">
+                                    </div>
+                                 
+                                    <label for="rutRepresentantep" class="labelforms">Rut Representante</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-address-card"></i></span>
+                                    <input type="text" class="form-control" id="rutRepresentantep" name="rutRepresentantep" required>
+                                    <div class="custom-tooltip" id="rutRepresentantep-tooltip"></div>
+                                </div>       
+                                    
+                               
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="titulo-registro mb-3">Datos de facturación</h3>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="codigo">Razón Social</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-bullseye"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Razón Social" name="razonSocialp">
+                                    </div>
+                                    <label class="labelforms" for="codigo">Región</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
+                                        </div>
+                                        <select class="sesel region-select form-select" name="id_regionp" id="region" required>
+                                            <?php foreach ($regiones as $regione) : ?>
+                                                <option value="<?php echo $regione['id']; ?>"><?php echo $regione['nombreRegion']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+
+
+                                    <label for="telCelularp" class="labelforms">Teléfono celular</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="text" class="phone-input form-control" placeholder="Teléfono Celular" id="telCelularp" name="telCelularp" required>
+                                    <div class="custom-tooltip" id="telCelularp-tooltip"></div>
+                                </div>     
+
+                                <label for="emailp" class="labelforms">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                    <input type="text" class="form-control email-input" id="emailp" name="emailp" required>
+                                    <div class="custom-tooltip" id="emailp-tooltip"></div>
+                                </div>  
+                                
+                           
+                                   
+                                  
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="codigo">Dirección Facturación</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-building"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Dirección Facturación" name="direccionFacturacionp">
+                                    </div>
+                                    <label class="labelforms" for="codigo">Comuna</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
+                                        </div>
+                                        <select class="sesel comuna-select form-select" name="id_comunap" id="comuna" required>
+                                            <?php foreach ($comunas as $comuna) : ?>
+                                                <option value="<?php echo $comuna['id_comuna']; ?>" data-region="<?php echo $comuna['id_region']; ?>">
+                                                    <?php echo $comuna['nombreComuna']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+
+
+                                    <label for="telFijop" class="labelforms">Teléfono Fijo</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="text" class="phone-input form-control" placeholder="Teléfono fijo" id="telFijop" name="telFijop" required>
+                                    <div class="custom-tooltip" id="telFijop-tooltip"></div>
+                                </div>
+
+
+
+
+                                  
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="titulo-registro mb-3">Otros datos</h3>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="codigo">Bonifiación por año %</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Bonifiación por año %" name="bonificacion_anop">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col" id="moneda-container">
+                                <div class="form-group">
+                                    <label for="codigo">Escala de rango</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-chart-bar"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Escala de rango" name="escala_rangop">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button class="btn btn-primary btn-lg rounded-pill" type="submit" id="actualizarProveedor">
+                            <span class="btn-txt">Guardar Proveedor</span>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none;"></span>
+                        </button>
+                    </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
       <div class="modal fade" id="actualizarSoporte" tabindex="-1" role="dialog"  aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -491,13 +773,14 @@ include '../componentes/sidebar.php';
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="codigo">Nombre Identificador</label>
+                                    <label class="labelforms" for="codigo">Nombre Identificador</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="far fa-user-circle"></i></span>
                                         </div>
                                         <input type="hidden" name="idSoporteHidden" id="idSoporteHidden">
                                         <input type="hidden" name="rutProveedorx">
+                                        <input type="hidden"  name="idmedios">
                                         <input class="form-control" placeholder="Nombre Identificador" name="nombreIdentificadorx">
                                     </div>
                                    
@@ -510,7 +793,7 @@ include '../componentes/sidebar.php';
                                         <input class="form-control" placeholder="Nombre Representante" name="nombreRepresentantex">
                                     </div>
                                     <label class="labelforms" for="codigo">Medios</label>
-                                    <div class="input-group dropdown" id="dropdown2">
+                                    <div id="dropdown3" class="dropdown-medios input-group dropdown" >
                                         <div class="sell input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                                         </div>
@@ -674,15 +957,114 @@ include '../componentes/sidebar.php';
     </div>
 </div>
 <script>
+
+document.addEventListener('DOMContentLoaded', function() { 
+    function showError(input, message) {
+        input.classList.add('is-invalid');
+        var tooltip = document.getElementById(input.id + '-tooltip');
+        tooltip.textContent = message;
+        tooltip.style.opacity = '1';
+        positionTooltip(input, tooltip);
+    }
+
+    function hideError(input) {
+        input.classList.remove('is-invalid');
+        var tooltip = document.getElementById(input.id + '-tooltip');
+        tooltip.style.opacity = '0';
+    }
+    function positionTooltip(input, tooltip) {
+        var rect = input.getBoundingClientRect();
+        tooltip.style.left = '10px';
+        tooltip.style.top = -(tooltip.offsetHeight + 5) + 'px';
+    }
+    var Fn = {
+        validaRut: function(rutCompleto) {
+            if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test(rutCompleto)) return false;
+            var tmp = rutCompleto.split('-');
+            var digv = tmp[1];
+            var rut = tmp[0];
+            if (digv == 'K') digv = 'k';
+            return (Fn.dv(rut) == digv);
+        },
+        dv: function(T) {
+            var M = 0, S = 1;
+            for (; T; T = Math.floor(T / 10)) S = (S + T % 10 * (9 - M++ % 6)) % 11;
+            return S ? S - 1 : 'k';
+        }
+    };
+    function validaPhoneChileno(phone) {
+        // Patrón para teléfonos chilenos
+        // Acepta formatos: +56912345678, 912345678, 221234567
+        var phonePattern = /^(\+?56|0)?([2-9]\d{8}|[2-9]\d{7})$/;
+        return phonePattern.test(phone);
+    }
+
+    // Validación en tiempo real para RUTs
+    var rutInputs = document.querySelectorAll('#rutProveedorp, #rutRepresentantep, #rutRepresentantex, #rutSoporte, #rut_soporte, #rutRepresentante');
+    rutInputs.forEach(function(input) {
+        input.addEventListener('input', function() {
+            if (this.value === "") {
+                hideError(this);
+            } else if (!Fn.validaRut(this.value)) {
+                showError(this, "RUT INVALIDO - DEBES INGRESAR SIN PUNTOS Y CON GUIÓN");
+            } else {
+                hideError(this);
+            }
+        });
+    });
+ 
+
+   // Validación en tiempo real para Email
+   var emailInputs = document.querySelectorAll('.email-input');
+var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+emailInputs.forEach(function(emailInput) {
+    emailInput.addEventListener('input', function() {
+        if (this.value === "") {
+            hideError(this);
+        } else if (!emailPattern.test(this.value)) {
+            showError(this, "EMAIL INCORRECTO");
+        } else {
+            hideError(this);
+        }
+    });
+});
+
+      // Validación en tiempo real para teléfonos
+      var phoneInputs = document.querySelectorAll('.phone-input');
+phoneInputs.forEach(function(input) {
+    input.addEventListener('input', function() {
+        if (this.value === "") {
+            hideError(this);
+        } else if (!validaPhoneChileno(this.value)) {
+            showError(this, "NÚMERO DE TELÉFONO NO VÁLIDO");
+        } else {
+            hideError(this);
+        }
+    });
+});
+
+
+});
+
+</script>
+<script>
 function getSoporteData(idSoporte) {
     var soportesMap = <?php echo json_encode($soportesMap); ?>;
     return soportesMap[idSoporte] || null;
 }
 </script>
-      <script>function getProveedorData(idProveedor) {
+      <script>
+      
+      
+      function getProveedorData(idProveedor) {
     var proveedoresMap = <?php echo json_encode($proveedoresMap); ?>;
     return proveedoresMap[idProveedor] || null;
-}</script>
+}
+  </script>
+<script src="<?php echo $ruta; ?>assets/js/actualizarviewproveedor.js"></script>
+<script src="../assets/js/getmedios.js"></script>
+<script src="../assets/js/getregiones.js"></script>
 <script src="../assets/js/actualizarsoporteindividual.js"></script>
       <script src="../assets/js/toggleProveedor.js"></script>
 <?php include '../componentes/settings.php'; ?>
