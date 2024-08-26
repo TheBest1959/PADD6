@@ -138,34 +138,64 @@ include '../componentes/sidebar.php';
                                                                 }
                                                             }
                                                             $id_medios_json = json_encode($id_medios_array);
-                                                                                                               
+                                                            if (!empty($medios_nombres)) {
+                                                                $medios_list = implode(", ", $medios_nombres);
+                                                                $tooltip_content =  $medios_list;
+                                                            } else {
+                                                                $tooltip_content = ""; // Puedes dejarlo vacío o agregar un mensaje como "No hay medios disponibles"
+                                                            }
+                                                            
                                                             // Paso 3: Mostrar los nombres en una lista tipo tooltip
-                                                            ?>   
+                                                            ?>    
                     <h4>Detalles del Proveedor</h4>
-                    <a class="btn btn-success micono"  data-bs-toggle="modal" data-bs-target="#actualizarProveedor" data-idmedios="<?php echo $id_medios_json; ?>" data-idproveedor="<?php echo $idProveedor ?>" onclick="loadProveedorData(this)" ><i class="fas fa-pencil-alt"></i></a>
+                    <a class="btn btn-danger micono"  data-bs-toggle="modal" data-bs-target="#actualizarProveedor" data-idmedios="<?php echo $id_medios_json; ?>" data-idproveedor="<?php echo $idProveedor ?>" onclick="loadProveedorData(this)" ><i class="fas fa-pencil-alt"></i> Editar datos</a>
 
                   </div>
                   <div class="card-body">
     <div class="py-4">
         <p class="clearfix">
             <span class="float-start">Nombre Proveedor</span>
-            <span class="float-right text-muted nombreProveedor"><?php echo $datosProveedor['nombreProveedor']; ?></span>
+            <span class="float-right text-muted "><?php echo $datosProveedor['nombreProveedor']; ?></span>
         </p>
         <p class="clearfix">
             <span class="float-start">Nombre de Fantasía</span>
-            <span class="float-right text-muted nombreFantasia"><?php echo $datosProveedor['nombreFantasia']; ?></span>
+            <span class="float-right text-muted "><?php echo $datosProveedor['nombreFantasia']; ?></span>
         </p>
         <p class="clearfix">
             <span class="float-start">Razón Social</span>
-            <span class="float-right text-muted razonSocial"><?php echo $datosProveedor['razonSocial']; ?></span>
+            <span class="float-right text-muted "><?php echo $datosProveedor['razonSocial']; ?></span>
         </p>
         <p class="clearfix">
             <span class="float-start">Giro Proveedor</span>
-            <span class="float-right text-muted giroProveedor"><?php echo $datosProveedor['giroProveedor']; ?></span>
+            <span class="float-right text-muted "><?php echo $datosProveedor['giroProveedor']; ?></span>
         </p>
         <p class="clearfix">
             <span class="float-start">Dirección</span>
-            <span class="float-right text-muted direccionFacturacion"><?php echo $datosProveedor['direccionFacturacion']; ?></span>
+            <span class="float-right text-muted "><?php echo $datosProveedor['direccionFacturacion']; ?></span>
+        </p>
+        <p class="clearfix">
+            <span class="float-start">Representante</span>
+            <span class="float-right text-muted "><?php echo $datosProveedor['nombreRepresentante']; ?></span>
+        </p>
+        <p class="clearfix">
+            <span class="float-start">Rut Representante</span>
+            <span class="float-right text-muted "><?php echo $datosProveedor['rutRepresentante']; ?></span>
+        </p>
+        <p class="clearfix">
+            <span class="float-start">Teléfono Celular</span>
+            <span class="float-right text-muted "><?php echo $datosProveedor['telCelular']; ?></span>
+        </p>
+        <p class="clearfix">
+            <span class="float-start">Teléfono Fijo</span>
+            <span class="float-right text-muted "><?php echo $datosProveedor['telFijo']; ?></span>
+        </p>
+        <p class="clearfix">
+            <span class="float-start">Correo</span>
+            <span class="float-right text-muted "><?php echo $datosProveedor['email']; ?></span>
+        </p>
+        <p class="clearfix">
+            <span class="float-start">Medios</span>
+            <span class="float-right text-muted "><?php echo $tooltip_content?></span>
         </p>
     </div>
 </div>
@@ -638,16 +668,17 @@ include '../componentes/sidebar.php';
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="codigo">Nombre Identificador</label>
+                                    <label class="labelforms" for="codigo">Nombre Identificador</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="far fa-user-circle"></i></span>
                                         </div>
                                         <input type="hidden" name="idprooo">
+                                        <input type="hidden"  name="idmedios">
                                         <input class="form-control" placeholder="Nombre Identificador" name="nombreIdentificadorp">
                                     </div>
                                     <label class="labelforms" for="codigo">Medios</label>
-                                    <div id="dropdown1" class="input-group dropdown" >
+                                    <div id="dropdown1" class="dropdown-medios input-group dropdown" >
                                         <div class="sell input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                                         </div>
@@ -855,12 +886,13 @@ include '../componentes/sidebar.php';
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="codigo">Nombre Identificador</label>
+                                    <label class="labelforms" for="codigo">Nombre Identificador</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="far fa-user-circle"></i></span>
                                         </div>
                                         <input type="hidden" name="rutProveedorx">
+                                        <input type="hidden"  name="idmedios">
                                         <input class="form-control" placeholder="Nombre Identificador" name="nombreIdentificadorx">
                                     </div>
                                    
@@ -873,7 +905,7 @@ include '../componentes/sidebar.php';
                                         <input class="form-control" placeholder="Nombre Representante" name="nombreRepresentantex">
                                     </div>
                                     <label class="labelforms" for="codigo">Medios</label>
-                                    <div class="input-group dropdown" id="dropdown2">
+                                    <div id="dropdown2" class="dropdown-medios input-group dropdown" >
                                         <div class="sell input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                                         </div>

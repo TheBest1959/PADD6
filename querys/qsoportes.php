@@ -25,6 +25,14 @@ function makeRequest($url) {
 $soportes = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Soportes?select=*');
 $proveedores = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Proveedores?select=*');
 
+$regiones = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Region?select=*');
+$comunas = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Comunas?select=*');
+
+$medios = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Medios?select=*');
+
+$soportes_medios = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/soporte_medios?select=*');
+
+
 // Debug: Imprimir los datos de proveedores para verificar la estructura
 // var_dump($proveedores);
 
@@ -33,3 +41,11 @@ $proveedoresMap = [];
 foreach ($proveedores as $proveedor) {
     $proveedoresMap[$proveedor['id_proveedor']] = $proveedor;
 }
+
+$soportesMap = [];
+foreach ($soportes as $soporte) {
+    $soportesMap[$soporte['id_soporte']] = $soporte;
+}
+
+$regionesMap = array_column($regiones, 'nombreRegion', 'id');
+$comunasMap = array_column($comunas, 'nombreComuna', 'id_comuna');

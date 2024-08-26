@@ -1,7 +1,7 @@
 function loadProveedorDataSoporte(button) {
     var idSoporte = button.getAttribute('data-id-soporte');
     var soporte = getSoporteData(idSoporte);
-
+    var idMedios = JSON.parse(button.getAttribute('data-idmedios'));
     if (soporte) {
         console.log('Datos del soporte:', soporte);
         console.log(soporte.nombreIdentficiador,"Holaa");
@@ -22,7 +22,12 @@ function loadProveedorDataSoporte(button) {
         document.querySelector('input[name="emailx"]').value = soporte.email;
         document.querySelector('input[name="bonificacion_anox"]').value = soporte.bonificacion_ano;
         document.querySelector('input[name="escala_rangox"]').value = soporte.escala;
-
+        if (idMedios && Array.isArray(idMedios)) {
+            // Concatenar los idMedios en una cadena separada por comas
+            var idMediosString = idMedios.join(',');
+            document.querySelector('input[name="idmedios"]').value = idMediosString;
+            updateMediosDropdown(idMedios);
+        }
        
     } else {
         console.log("No se encontró el proveedor con ID:", idSoporte);
@@ -32,16 +37,23 @@ function loadProveedorDataSoporte(button) {
 function getFormData4() {
     const formData = new FormData(document.getElementById('formularioactualizarSoporte'));
 
-    // Convertir FormData a objeto para imprimirlo
+    // Convertir FormData a objeto para facilitar la manipulación
     const dataObject = {};
     formData.forEach((value, key) => {
-        dataObject[key] = value;
+        if (key === 'id_medios[]') {
+            if (!dataObject[key]) {
+                dataObject[key] = [];
+            }
+            dataObject[key].push(value);
+        } else {
+            dataObject[key] = value;
+        }
     });
 
     console.log(dataObject, "aqui el actualizar señores"); // Imprime el objeto con los datos del formulario
 
     return {
-        id_proveedor:dataObject.rutProveedorx,
+        id_proveedor: dataObject.rutProveedorx,
         nombreIdentficiador: dataObject.nombreIdentificadorx,
         nombreFantasia: dataObject.nombreFantasianombreFantasiax,
         rut_soporte: dataObject.rutSoporte,
@@ -50,7 +62,7 @@ function getFormData4() {
         rutRepresentante: dataObject.rutRepresentantex,
         razonSocial: dataObject.razonSocialx,
         direccion: dataObject.direccionx,
-        id_medios: dataObject.id_medios,
+        id_medios: dataObject['id_medios[]'],
         id_region: dataObject.id_regionx,
         id_comuna: dataObject.id_comunax,
         telCelular: dataObject.telCelularx,
@@ -58,7 +70,6 @@ function getFormData4() {
         email: dataObject.emailx || null,
         bonificacion_ano: dataObject.bonificacion_anox,
         escala: dataObject.escala_rangox,
-  
     };
 }
 
@@ -66,40 +77,92 @@ function getFormData4() {
 async function submitForm3(event) {
     event.preventDefault(); // Evita la recarga de la página
 
-    let bodyContent = JSON.stringify(getFormData4());
-    console.log(bodyContent, "holacon");
+    const formData = getFormData4();
+    const idSoporte = document.querySelector('input[name="idSoporteHidden"]').value;
 
-    let idSoporte = document.querySelector('input[name="idSoporteHidden"]').value;
-
-    let headersList = {
+    const headersList = {
         "Content-Type": "application/json",
         "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc",
         "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc"
     };
 
     try {
-        let response = await fetch(`https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Soportes?id_soporte=eq.${idSoporte}`, {
+        // Actualizar el soporte
+        const response = await fetch(`https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Soportes?id_soporte=eq.${idSoporte}`, {
             method: "PATCH",
-            body: bodyContent,
+            body: JSON.stringify({
+                id_proveedor: formData.id_proveedor,
+                nombreIdentficiador: formData.nombreIdentficiador,
+                nombreFantasia: formData.nombreFantasia,
+                rut_soporte: formData.rut_soporte,
+                giro: formData.giro,
+                nombreRepresentanteLegal: formData.nombreRepresentanteLegal,
+                rutRepresentante: formData.rutRepresentante,
+                razonSocial: formData.razonSocial,
+                direccion: formData.direccion,
+                id_region: formData.id_region,
+                id_comuna: formData.id_comuna,
+                telCelular: formData.telCelular,
+                telFijo: formData.telFijo,
+                email: formData.email,
+                bonificacion_ano: formData.bonificacion_ano,
+                escala: formData.escala,
+            }),
             headers: headersList
         });
 
         if (response.ok) {
-            $('#actualizarSoporte').modal('hide');
-            
-            mostrarExito('Actualizado correctamente');
-            location.reload();
+            // Eliminar registros antiguos de soporte_medios asociados al id_soporte
+            const deleteResponse = await fetch(`https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/soporte_medios?id_soporte=eq.${idSoporte}`, {
+                method: "DELETE",
+                headers: headersList
+            });
+
+            if (deleteResponse.ok) {
+                // Registrar los nuevos medios asociados
+                if (formData.id_medios.length > 0) {
+                    const soporteMediosData = formData.id_medios.map(id_medio => ({
+                        id_soporte: idSoporte,
+                        id_medio: id_medio
+                    }));
+
+                    const insertResponse = await fetch("https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/soporte_medios", {
+                        method: "POST",
+                        body: JSON.stringify(soporteMediosData),
+                        headers: headersList
+                    });
+
+                    if (insertResponse.ok) {
+                        mostrarExito('Soporte actualizado correctamente');
+                        $('#actualizarSoporte').modal('hide');
+                        $('#formularioactualizarSoporte')[0].reset();
+                        location.reload();
+                    } else {
+                        const errorData = await insertResponse.text();
+                        console.error("Error en soporte_medios:", errorData);
+                        alert("Error al registrar los medios, intente nuevamente");
+                    }
+                } else {
+                    mostrarExito('Soporte actualizado correctamente');
+                    $('#actualizarSoporte').modal('hide');
+                    $('#formularioactualizarSoporte')[0].reset();
+                    location.reload();
+                }
+            } else {
+                const errorData = await deleteResponse.text();
+                console.error("Error al eliminar soporte_medios:", errorData);
+                alert("Error al eliminar los medios antiguos, intente nuevamente");
+            }
         } else {
-            let errorData = await response.json();
+            const errorData = await response.json();
             console.error("Error:", errorData);
-            alert("Error, intentelo nuevamente");
+            alert("Error al actualizar el soporte, intente nuevamente");
         }
     } catch (error) {
         console.error("Error de red:", error);
         alert("Error de red, intentelo nuevamente");
     }
 }
-
 
 
 function mostrarExito(mensaje) {
