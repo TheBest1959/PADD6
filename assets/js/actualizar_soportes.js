@@ -39,46 +39,9 @@ function obtenerDatos(id) {
         .catch(error => console.error('Error al obtener los datos:', error));
 }
 
-// Función para mostrar los medios seleccionados
-function mostrarMediosSeleccionados(mediosIds) {
-    const urlMediosDetalles = `${baseUrl}/Medios?select=*`;
 
-    fetch(urlMediosDetalles, { method: 'GET', headers })
-        .then(response => response.json())
-        .then(mediosDetalles => {
-            const medioSoporteContainer = document.querySelector('.medio-soporte');
-            medioSoporteContainer.innerHTML = '';
 
-            mediosDetalles.forEach(detalle => {
-                if (mediosIds.includes(detalle.id)) {
-                    const span = document.createElement('span');
-                    span.classList.add('selected-option');
-                    span.textContent = detalle.NombredelMedio;
-                    span.setAttribute('data-medio-id', detalle.id);
-                    span.onclick = () => {
-                        medioSoporteContainer.removeChild(span);
-                        const checkbox = document.querySelector(`input[name="id_medios[]"][value="${detalle.id}"]`);
-                        if (checkbox) checkbox.checked = false;
-                    };
-                    medioSoporteContainer.appendChild(span);
-                }
-            });
-        })
-        .catch(error => console.error('Error al mostrar los medios seleccionados:', error));
-}
 
-// Función para actualizar los medios seleccionados en los checkboxes
-function actualizarMediosSeleccionados(mediosIds) {
-    const mediosCheckboxes = document.querySelectorAll('input[name="id_medios[]"]');
-    mediosCheckboxes.forEach(checkbox => {
-        const isChecked = mediosIds.includes(parseInt(checkbox.value));
-        checkbox.checked = isChecked;
-        if (isChecked) {
-            const medioDetalle = checkbox.parentElement.textContent.trim();
-            actualizarMedioSoporte(medioDetalle, checkbox.value, true);
-        }
-    });
-}
 
 // Función para actualizar el formulario con los datos obtenidos
 function actualizarFormulario(soporte) {
@@ -124,33 +87,7 @@ function actualizarFormulario(soporte) {
     }
 }
 
-// Función para obtener todos los medios y mostrar el listado de selección
-function obtenerTodosLosMedios() {
-    const urlMediosDetalles = `${baseUrl}/Medios?select=*`;
 
-    fetch(urlMediosDetalles, { method: 'GET', headers })
-        .then(response => response.json())
-        .then(mediosDetalles => {
-            const selectMediosContainer = document.getElementById('select-medios');
-            selectMediosContainer.innerHTML = '';
-
-            mediosDetalles.forEach(detalle => {
-                const label = document.createElement('label');
-                label.classList.add('medio-item');
-
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.name = 'id_medios[]';
-                checkbox.value = detalle.id;
-                checkbox.addEventListener('change', () => actualizarMedioSoporte(detalle.NombredelMedio, detalle.id, checkbox.checked));
-
-                label.appendChild(checkbox);
-                label.appendChild(document.createTextNode(detalle.NombredelMedio));
-                selectMediosContainer.appendChild(label);
-            });
-        })
-        .catch(error => console.error('Error al obtener los medios:', error));
-}
 
 // Función para agregar o eliminar medios seleccionados dinámicamente
 function actualizarMedioSoporte(nombreMedio, idMedio, isChecked) {

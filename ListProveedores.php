@@ -204,7 +204,7 @@ include 'componentes/sidebar.php';
                                     <label class="labelforms" for="codigo">Nombre Identificador</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-user-circle"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-person"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Nombre Identificador" name="nombreIdentificador">
                                     </div>
@@ -227,14 +227,14 @@ include 'componentes/sidebar.php';
                                     <label class="labelforms" for="codigo">Nombre de Proveedor</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-user"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-person"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Nombre de Proveedor" name="nombreProveedor">
                                     </div>
                                     <label class="labelforms" for="codigo">Nombre Representante</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-user"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-person"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Nombre Representante" name="nombreRepresentante">
                                     </div>
@@ -247,7 +247,7 @@ include 'componentes/sidebar.php';
                                 
                                 <label for="rutProveedor" class="labelforms">Rut Proveedor</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="far fa-address-card"></i></span>
+                                    <span class="input-group-text"><i class="bi bi-card-text"></i></span>
                                     <input type="text" class="form-control" id="rutProveedor" name="rutProveedor" required>
                                     <div class="custom-tooltip" id="rutProveedor-tooltip"></div>
                                 </div>        
@@ -255,21 +255,21 @@ include 'componentes/sidebar.php';
                                     <label class="labelforms" for="codigo">Giro Proveedor</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-suitcase"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-briefcase"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Giro Proveedor" name="giroProveedor">
                                     </div>
                                     <label class="labelforms" for="codigo">Nombre de Fantasía</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-hand-spock"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-shop"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Nombre de Fantasía" name="nombreFantasia">
                                     </div>
 
                                     <label for="rut_soporte" class="labelforms">Rut Representante</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="far fa-address-card"></i></span>
+                                    <span class="input-group-text"><i class="bi bi-card-text"></i></span>
                                     <input type="text" class="form-control" id="rutRepresentante" name="rutRepresentante" required>
                                     <div class="custom-tooltip" id="rutRepresentante-tooltip"></div>
                                 </div>            
@@ -286,14 +286,14 @@ include 'componentes/sidebar.php';
                                     <label for="codigo">Razón Social</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-bullseye"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-building"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Razón Social" name="razonSocial">
                                     </div>
                                     <label class="labelforms" for="codigo">Región</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-map"></i></span>
                                         </div>
                                         <select class="sesel form-select" name="id_region" id="regionx" required>
                                             <?php foreach ($regiones as $regione) : ?>
@@ -304,14 +304,14 @@ include 'componentes/sidebar.php';
 
                                     <label for="telCelular" class="labelforms">Teléfono celular</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <span class="input-group-text"><i class="bi bi-phone"></i></span>
                                     <input type="text" class="phone-input form-control" placeholder="Teléfono Celular" id="telCelular" name="telCelular" required>
                                     <div class="custom-tooltip" id="telCelular-tooltip"></div>
                                 </div>                  
 
                                 <label for="email" class="labelforms">Email</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                                     <input type="text" class="form-control email-input" id="email" name="email" required>
                                     <div class="custom-tooltip" id="email-tooltip"></div>
                                 </div>  
@@ -324,14 +324,14 @@ include 'componentes/sidebar.php';
                                     <label for="codigo">Dirección Facturación</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-building"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Dirección Facturación" name="direccionFacturacion">
                                     </div>
                                     <label class="labelforms" for="codigo">Comuna</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-pin-map"></i></span>
                                         </div>
                                         <select class="sesel form-select" name="id_comuna" id="comunax" required>
                                             <?php foreach ($comunas as $comuna) : ?>
@@ -344,7 +344,7 @@ include 'componentes/sidebar.php';
 
                                     <label for="telFijo" class="labelforms">Teléfono Fijo</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
                                     <input type="text" class="phone-input form-control" placeholder="Teléfono fijo" id="telFijo" name="telFijo" required>
                                     <div class="custom-tooltip" id="telFijo-tooltip"></div>
                                 </div>
@@ -412,7 +412,7 @@ include 'componentes/sidebar.php';
                                     <label for="codigo" class="labelforms">Nombre Identificador</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-user-circle"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-person"></i></span>
                                         </div>
                                         <input type="hidden" name="idprooo">
                                         <input type="hidden"  name="idmedios">
@@ -423,7 +423,7 @@ include 'componentes/sidebar.php';
                                         <div class="sell input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                                         </div>
-                                        <div class="selected-options" onclick="toggleDropdown()"><span class="selected-option" data-value="3">INTERNET<button>x</button></span></div>
+                                        <div class="selected-options" onclick="toggleDropdown()"></div>
                                         <button type="button" class="dropdown-button" style="font-size:14px; padding: 7px 20px !important; display:none;">Select Medios</button>
                                         <div class="dropdown-content">
                                             <?php foreach ($medios as $medio) : ?>
@@ -456,7 +456,7 @@ include 'componentes/sidebar.php';
 
                                 <label for="rutProveedorp" class="labelforms">Rut Proveedor</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="far fa-address-card"></i></span>
+                                    <span class="input-group-text"><i class="bi bi-card-text"></i></span>
                                     <input type="text" class="form-control" id="rutProveedorp" name="rutProveedorp" required>
                                     <div class="custom-tooltip" id="rutProveedorp-tooltip"></div>
                                 </div>
@@ -468,14 +468,14 @@ include 'componentes/sidebar.php';
                                     <label class="labelforms" for="codigo">Giro Proveedor</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-suitcase"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-briefcase"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Giro Proveedor" name="giroProveedorp">
                                     </div>
                                     <label class="labelforms" for="codigo">Nombre de Fantasía</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-hand-spock"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-shop"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Nombre de Fantasía" name="nombreFantasiap">
                                     </div>
@@ -483,7 +483,7 @@ include 'componentes/sidebar.php';
                                     
                                 <label for="rutRepresentantep" class="labelforms">Rut Representante</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="far fa-address-card"></i></span>
+                                    <span class="input-group-text"><i class="bi bi-card-text"></i></span>
                                     <input type="text" class="form-control" id="rutRepresentantep" name="rutRepresentantep" required>
                                     <div class="custom-tooltip" id="rutRepresentantep-tooltip"></div>
                                 </div>
@@ -499,14 +499,14 @@ include 'componentes/sidebar.php';
                                     <label for="codigo">Razón Social</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-bullseye"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-building"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Razón Social" name="razonSocialp">
                                     </div>
                                     <label class="labelforms" for="codigo">Región</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-map"></i></span>
                                         </div>
                                         <select class="sesel region-select form-select" name="id_regionp" id="region" required>
                                             <?php foreach ($regiones as $regione) : ?>
@@ -517,14 +517,14 @@ include 'componentes/sidebar.php';
 
                                     <label for="telCelularp" class="labelforms">Teléfono celular</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <span class="input-group-text"><i class="bi bi-phone"></i></span>
                                     <input type="text" class="phone-input form-control" id="telCelularp" name="telCelularp" required>
                                     <div class="custom-tooltip" id="telCelularp-tooltip"></div>
                                 </div>        
 
                                 <label for="emailp" class="labelforms">Email</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                                     <input type="text" class="form-control email-input" id="emailp" name="emailp" required>
                                     <div class="custom-tooltip" id="emailp-tooltip"></div>
                                 </div>  
@@ -537,14 +537,14 @@ include 'componentes/sidebar.php';
                                     <label for="codigo">Dirección Facturación</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-building"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Dirección Facturación" name="direccionFacturacionp">
                                     </div>
                                     <label class="labelforms" for="codigo">Comuna</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-pin-map"></i></span>
                                         </div>
                                         <select class="sesel comuna-select form-select" name="id_comunap" id="comuna" required>
                                             <?php foreach ($comunas as $comuna) : ?>
@@ -556,7 +556,7 @@ include 'componentes/sidebar.php';
                                     </div>
                                     <label for="telFijop" class="labelforms">Teléfono Fijo</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
                                     <input type="text" class="phone-input form-control" id="telFijop" name="telFijop" required>
                                     <div class="custom-tooltip" id="telFijop-tooltip"></div>
                                 </div>    
