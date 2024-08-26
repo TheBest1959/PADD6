@@ -41,13 +41,43 @@ include '../componentes/header.php';
 include '../componentes/sidebar.php';
 
 ?>
+<style>
+       .is-invalid {
+        border-color: #dc3545 !important;
+    }
+    .custom-tooltip {
+        position: absolute;
+        background-color: #dc3545;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+    }
+    .custom-tooltip::before {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #dc3545 transparent transparent transparent;
+    }
+    .input-wrapper {
+        position: relative;
+    }
+</style>
       <!-- Main Content -->
       <div class="main-content">
       
       <nav aria-label="breadcrumb">
                       <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="<?php echo $ruta; ?>dashboard.php">Home</a></li>
-                        <li class="breadcrumb-item"><a href="<?php echo $ruta; ?>ListProveedores.php">Ver Proveedores</a></li>
+                        <li class="breadcrumb-item"><a href="<?php echo $ruta; ?>ListProveedores.php">Ver Proveedor</a></li>
                         <li class="breadcrumb-item active" aria-current="page"><?php echo $datosProveedor['nombreProveedor'] ; ?></li>
                       </ol>
                     </nav>
@@ -72,13 +102,13 @@ include '../componentes/sidebar.php';
                     <div class="text-center">
                       <div class="author-box-job">
                
-                        <?php
-    // Convertir la cadena de fecha y hora a un objeto DateTime
-    $fecha = new DateTime($datosProveedor['created_at']);
-    
-    // Formatear la fecha como deseas (en este caso, solo la fecha)
-    echo 'Registrado el: '.$fecha->format('d-m-Y'); // Esto mostrará la fecha en formato AAAA-MM-DD
-    ?>
+                                                        <?php
+                                    // Convertir la cadena de fecha y hora a un objeto DateTime
+                                    $fecha = new DateTime($datosProveedor['created_at']);
+                                    
+                                    // Formatear la fecha como deseas (en este caso, solo la fecha)
+                                    echo 'Registrado el: '.$fecha->format('d-m-Y'); // Esto mostrará la fecha en formato AAAA-MM-DD
+                                    ?>
                    
                       </div>
                       <div class="w-100 d-sm-none"></div>
@@ -86,55 +116,89 @@ include '../componentes/sidebar.php';
                   </div>
                 </div>
                 <div class="card">
-                  <div class="card-header">
+                  <div style="display: flex;
+    justify-content: space-between;" class="card-header">
+                  <?php
+                                                            // Paso 1: Obtener todos los id_medios para un id_proveedor específico
+                                                            $id_proveedor = $datosProveedor['id_proveedor'];
+
+                                                            // Realiza la solicitud para obtener los datos de la tabla proveedor_medios
+
+                                                            $id_medios_array = [];
+                                                            foreach ($proveedor_medios as $fila) {
+                                                                if ($fila['id_proveedor'] == $id_proveedor) {
+                                                                    $id_medios_array[] = $fila['id_medio'];
+                                                                }
+                                                            }                 
+
+                                                            $medios_nombres = [];
+                                                            foreach ($medios as $medio) {
+                                                                if (in_array($medio['id'], $id_medios_array)) {
+                                                                    $medios_nombres[] = $medio['NombredelMedio'];
+                                                                }
+                                                            }
+                                                            $id_medios_json = json_encode($id_medios_array);
+                                                            if (!empty($medios_nombres)) {
+                                                                $medios_list = implode(", ", $medios_nombres);
+                                                                $tooltip_content =  $medios_list;
+                                                            } else {
+                                                                $tooltip_content = ""; // Puedes dejarlo vacío o agregar un mensaje como "No hay medios disponibles"
+                                                            }
+                                                            
+                                                            // Paso 3: Mostrar los nombres en una lista tipo tooltip
+                                                            ?>    
                     <h4>Detalles del Proveedor</h4>
+                    <a class="btn btn-danger micono"  data-bs-toggle="modal" data-bs-target="#actualizarProveedor" data-idmedios="<?php echo $id_medios_json; ?>" data-idproveedor="<?php echo $idProveedor ?>" onclick="loadProveedorData(this)" ><i class="fas fa-pencil-alt"></i> Editar datos</a>
+
                   </div>
                   <div class="card-body">
-                    <div class="py-4">
-                      <p class="clearfix">
-                        <span class="float-start">
-                        Nombre Proveedor
-                        </span>
-                        <span class="float-right text-muted">
-                          <?php echo $datosProveedor['nombreProveedor'] ; ?>
-                        </span>
-                      </p>
-                      <p class="clearfix">
-                        <span class="float-start">
-                          Nombre de Fantasía
-                        </span>
-                        <span class="float-right text-muted">
-                        <?php echo $datosProveedor['nombreFantasia'] ; ?>
-                        </span>
-                      </p>
-                      <p class="clearfix">
-                        <span class="float-start">
-                          Razón Social
-                        </span>
-                        <span class="float-right text-muted">
-                        <?php echo $datosProveedor['razonSocial'] ; ?>
-                        </span>
-                      </p>
-                      <p class="clearfix">
-                        <span class="float-start">
-                          Giro Proveedor
-                        </span>
-                        <span class="float-right text-muted">
-                        <?php echo $datosProveedor['giroProveedor'] ; ?>
-                        </span>
-                      </p>
-                      <p class="clearfix">
-                        <span class="float-start">
-                          Dirección
-                        </span>
-                        <span class="float-right text-muted">
-                        <?php echo $datosProveedor['direccionFacturacion'] ; ?>
-                        </span>
-                      </p>
-                      
-                   
-                    </div>
-                  </div>
+    <div class="py-4">
+        <p class="clearfix">
+            <span class="float-start">Nombre Proveedor</span>
+            <span class="float-right text-muted "><?php echo $datosProveedor['nombreProveedor']; ?></span>
+        </p>
+        <p class="clearfix">
+            <span class="float-start">Nombre de Fantasía</span>
+            <span class="float-right text-muted "><?php echo $datosProveedor['nombreFantasia']; ?></span>
+        </p>
+        <p class="clearfix">
+            <span class="float-start">Razón Social</span>
+            <span class="float-right text-muted "><?php echo $datosProveedor['razonSocial']; ?></span>
+        </p>
+        <p class="clearfix">
+            <span class="float-start">Giro Proveedor</span>
+            <span class="float-right text-muted "><?php echo $datosProveedor['giroProveedor']; ?></span>
+        </p>
+        <p class="clearfix">
+            <span class="float-start">Dirección</span>
+            <span class="float-right text-muted "><?php echo $datosProveedor['direccionFacturacion']; ?></span>
+        </p>
+        <p class="clearfix">
+            <span class="float-start">Representante</span>
+            <span class="float-right text-muted "><?php echo $datosProveedor['nombreRepresentante']; ?></span>
+        </p>
+        <p class="clearfix">
+            <span class="float-start">Rut Representante</span>
+            <span class="float-right text-muted "><?php echo $datosProveedor['rutRepresentante']; ?></span>
+        </p>
+        <p class="clearfix">
+            <span class="float-start">Teléfono Celular</span>
+            <span class="float-right text-muted "><?php echo $datosProveedor['telCelular']; ?></span>
+        </p>
+        <p class="clearfix">
+            <span class="float-start">Teléfono Fijo</span>
+            <span class="float-right text-muted "><?php echo $datosProveedor['telFijo']; ?></span>
+        </p>
+        <p class="clearfix">
+            <span class="float-start">Correo</span>
+            <span class="float-right text-muted "><?php echo $datosProveedor['email']; ?></span>
+        </p>
+        <p class="clearfix">
+            <span class="float-start">Medios</span>
+            <span class="float-right text-muted "><?php echo $tooltip_content?></span>
+        </p>
+    </div>
+</div>
                 </div>
                
               </div>
@@ -142,29 +206,197 @@ include '../componentes/sidebar.php';
                 <div class="card">
                   <div class="padding-20">
                     <ul class="nav nav-tabs" id="myTab2" role="tablist">
+                    
+                      
+
                       <li class="nav-item">
                         <a class="nav-link active" id="profile-tab4" data-bs-toggle="tab" href="#soportes" role="tab"
-                          aria-selected="false">Listado de Soportes
-                          </a>
+                          aria-selected="false">Soportes</a>
                       </li>
+
+             
+                    
+
                     </ul>
                     <div class="tab-content tab-bordered" id="myTab3Content">
-                     
-              
+                      <div class="tab-pane fade " id="generales" role="tabpanel" aria-labelledby="home-tab2">
+                        <div class="row">
+                          <div class="col-md-4 col-6 b-r">
+                            <strong>Razón Social</strong>
+                            <br>
+                            <p class="text-muted"><?php echo $datosProveedor['razonSocial'] ; ?></p>
+                          </div>
+                          <div class="col-md-4 col-6 b-r">
+                            <strong>Nombre de Fantasía</strong>
+                            <br>
+                            <p class="text-muted"><?php echo $datosProveedor['nombreFantasia'] ; ?></p>
+                          </div>
+                          <div class="col-md-4 col-6 b-r">
+                            <strong>Nombre Identificador</strong>
+                            <br>
+                            <p class="text-muted"><?php echo $datosProveedor['nombreIdentificador'] ; ?></p>
+                          </div>
+                          <div class="col-md-4 col-6">
+                            <strong>Giro Proveedor</strong>
+                            <br>
+                            <p class="text-muted"><?php echo $datosProveedor['giroProveedor']; ?></p>
+                          </div>
+                          <div class="col-md-4 col-6">
+                            <strong>Representante Legal</strong>
+                            <br>
+                            <p class="text-muted"><?php echo $datosProveedor['nombreRepresentante'] ; ?></p>
+                          </div>
+                          <div class="col-md-4 col-6">
+                            <strong>RUT Representante</strong>
+                            <br>
+                            <p class="text-muted"><?php echo $datosProveedor['rutRepresentante'] ; ?></p>
+                          </div>
+                           <div class="col-md-4 col-6">
+                            <strong>N° de Soportes</strong>
+                            <br>
+                            <p class="text-muted">
+                             <?php
+                                                 
+                            $contador = 0;
+                            foreach ($soportes as $soporte) {
+                                if ($datosProveedor['id_proveedor'] == $soporte['id_proveedor']) {
+                                    $contador++;
+                                }
+                            }
+                            echo $contador;
+                          ?>
+                            </p>
+                          </div>
+
+                           <div class="col-md-4 col-6">
+                            <strong>N° de Medios</strong>
+                            <br>
+                            <p class="text-muted">Acá data</p>
+                          </div>
+
+                          <div class="col-md-4 col-6">
+                            <strong>Clientes</strong>
+                            <br>
+                            <p class="text-muted">Acá data</p>
+                          </div>
+
+                        </div>
+                      
+                      </div>
+
+
+                      
+                      <div class="tab-pane fade" id="facturacion" role="tabpanel" aria-labelledby="profile-tab2">
+                      <div class="row">
+                      <div class="col-md-4 col-6 b-r">
+                            <strong>Región</strong>
+                            <br>
+                            <p class="text-muted"><?php echo $regionesMap[$datosProveedor['id_region']] ?? ''; ?></p>
+                          </div>
+                          <div class="col-md-4 col-6 b-r">
+                            <strong>Comuna</strong>
+                            <br>
+                            <p class="text-muted"><?php echo $comunasMap[$datosProveedor['id_comuna']] ?? ''; ?></p>
+                          </div>
+                          <div class="col-md-4 col-6 b-r">
+                            <strong>Dirección</strong>
+                            <br>
+                            <p class="text-muted"><?php echo $datosProveedor['direccionFacturacion'] ; ?></p>
+                          </div>
+                          <div class="col-md-4 col-6 b-r">
+                            <strong>Teléfono Fijo</strong>
+                            <br>
+                            <p class="text-muted"><?php echo $datosProveedor['telFijo'] ; ?></p>
+                          </div>
+                          <div class="col-md-4 col-6 b-r">
+                            <strong>Teléfono Celular</strong>
+                            <br>
+                            <p class="text-muted"><?php echo $datosProveedor['telCelular'] ; ?></p>
+                          </div>
+                          <div class="col-md-4 col-6 b-r">
+                            <strong>Email</strong>
+                            <br>
+                            <p class="text-muted"><?php echo $datosProveedor['email'] ; ?></p>
+                          </div>
+                      </div>
+                      </div>
+
+                      <div class="tab-pane fade  " id="contactos" role="tabpanel" aria-labelledby="profile-tab3">
+                                    <div class="card-header milinea">
+                                        <div class="titulox am">Listado de Contactos</div>
+                                        <div class="agregar">
+                                            <a href="#" class="btn btn-primary open-modal"  data-bs-toggle="modal"
+                                                data-bs-target="#contactoProveedor">
+                                                <i class="fas fa-plus-circle"></i> Agregar Contacto
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive">
+                                    <table class="table table-striped" id="tablecontactos">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (!empty($contactosFiltrados) && isset($contactosFiltrados[0])): ?>
+        <?php foreach ($contactosFiltrados as $contacto): ?>
+        <tr>
+            <td><?php echo htmlspecialchars($contacto['id_contacto'] ?? 'No disponible'); ?></td>
+            <td><?php echo htmlspecialchars($contacto['nombres'] ?? 'No disponible'); ?></td>
+            <td><?php echo htmlspecialchars($contacto['apellidos'] ?? 'No disponible'); ?></td>
+            <td><?php echo htmlspecialchars($contacto['telefono'] ?? 'No disponible'); ?></td>
+            <td><?php echo htmlspecialchars($contacto['email'] ?? 'No disponible'); ?></td>
+            <td>
+              <input type="hidden" data-idproveedor="<?php echo $idProveedor ?>" value="<?php echo $idProveedor ?>">
+                <input type="hidden" class="id_contacto" value="<?php echo htmlspecialchars($contacto['id_contacto'] ?? 'No disponible'); ?>">
+                <button type="button" class="btn btn-success miconoz" 
+        data-bs-toggle="modal" 
+        data-bs-target="#actualizarContactoModal"
+        data-idcontacto="<?php echo htmlspecialchars($contacto['id_contacto']); ?>" 
+        data-nombre="<?php echo htmlspecialchars($contacto['nombres']); ?>"
+        data-apellido="<?php echo htmlspecialchars($contacto['apellidos']); ?>"
+        data-telefono="<?php echo htmlspecialchars($contacto['telefono']); ?>"
+        data-email="<?php echo htmlspecialchars($contacto['email']); ?>"
+        data-toggle="tooltip" 
+        title="Editar">
+    <i class="fas fa-pencil-alt"></i>
+</button>
+                <button type="button" class="btn btn-danger miconoz eliminar-contacto"
+                        data-id-proveer="<?php echo $idProveedor; ?>" data-idcontacto="<?php echo htmlspecialchars($contacto['id_contacto'] ?? ''); ?>"
+                        data-toggle="tooltip" title="Eliminar">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+        <?php else: ?>
+        <tr>
+            <td colspan="6">No hay datos disponibles</td>
+        </tr>
+        <?php endif; ?>
+    </tbody>
+</table></div>
+                      </div>
 
   <div class="tab-pane fade show active" id="soportes" role="tabpanel" aria-labelledby="profile-tab4">
   <div class="conshan milinea">
-            <div class="titulox"></div>
+            <div class="titulox"><h4>Listado de Soportes</h4></div>
             <div class="agregar">
                 <button style="border-radius:25px;" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarSoportessss"
-                    data-rso="<?php echo $datosProveedor['razonSocial'] ; ?>" data-nfo="<?php echo $datosProveedor['nombreFantasia'] ; ?>" data-rpo="${proveedor.rutProveedor}" data-gpo="${proveedor.giroProveedor}"
+                    data-rso="<?php echo $datosProveedor['razonSocial'] ; ?>" data-nfo="<?php echo $datosProveedor['nombreFantasia'] ; ?>" data-rpo="<?php echo $datosProveedor['rutProveedor'] ; ?>" data-gpo="<?php echo $datosProveedor['giroProveedor'] ; ?>"
                     data-nro="<?php echo $datosProveedor['nombreRepresentante'] ; ?>" data-rpoo="<?php echo $datosProveedor['rutRepresentante'] ; ?>" data-dfo="<?php echo $datosProveedor['direccionFacturacion'] ; ?>"
                     data-iro="<?php echo $datosProveedor['id_region'] ; ?>" data-ico="<?php echo $datosProveedor['id_comuna'] ; ?>" data-tco="<?php echo $datosProveedor['telCelular'] ; ?>" data-tfo="<?php echo $datosProveedor['telFijo'] ; ?>" 
                     data-elo="<?php echo $datosProveedor['email'] ; ?>" data-id="<?php echo $datosProveedor['id_proveedor'] ; ?>">
-                    <i class="fas fa-plus-circle"></i> Crear Soporte
+                    <i class="fas fa-plus-circle"></i> Crear Soporte 
                 </button>
                 <button style="border-radius:25px;" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarsoporteprov"
-                    data-id-proveedor="<?php echo $datosProveedor['id_proveedor'] ; ?>">
+                    data-id-proveedor="<?php echo $datosProveedor['id_proveedor'] ; ?>" >
                     <i class="fas fa-plus-circle"></i> Agregar Soporte
                 </button>
             </div>
@@ -309,7 +541,7 @@ include '../componentes/sidebar.php';
                         <label for="nombre">Nombre</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-money-bill-alt"></i></span>
+                                <span class="input-group-text"><i class="fas fa-user-alt"></i></span>
                             </div>
                             <input type="text" class="form-control" id="nombre" name="nombre">
 
@@ -319,31 +551,32 @@ include '../componentes/sidebar.php';
                         <label for="apellido">Apellido</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-money-bill-alt"></i></span>
+                                <span class="input-group-text"><i class="fas fa-user-alt"></i></span>
                             </div>
                             <input type="text" class="form-control" id="apellido" name="apellido">
 
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="telefono">Teléfono</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-money-bill-alt"></i></span>
-                            </div>
-                            <input type="text" class="form-control" id="telefono" name="telefono">
-
-                        </div>
+                       
+                    <label for="telefonoxx" class="labelforms">Teléfono</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="text" class="phone-input form-control" id="telefonoxx" name="telefono" required>
+                                    <div class="custom-tooltip" id="telefonoxx-tooltip"></div>
+                                </div> 
                     </div>
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-money-bill-alt"></i></span>
-                            </div>
-                            <input type="text" class="form-control" id="email" name="email">
 
-                        </div>
+                    <label for="emailxxx" class="labelforms">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                    <input type="text" class="form-control email-input" id="emailxxx" name="email" required>
+                                    <div class="custom-tooltip" id="emailxxx-tooltip"></div>
+                                </div>  
+
+
+                      
                     </div>
                     <button type="submit" class="btn btn-primary">Guardar Contacto</button>
                 </form>
@@ -368,7 +601,7 @@ include '../componentes/sidebar.php';
                         <label for="nombre">Nombre</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <span class="input-group-text"><i class="fas fa-user-alt"></i></span>
                             </div>
                             <input type="text" class="form-control" id="nombre" name="nombre">
                         </div>
@@ -377,28 +610,31 @@ include '../componentes/sidebar.php';
                         <label for="apellido">Apellido</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <span class="input-group-text"><i class="fas fa-user-alt"></i></span>
                             </div>
                             <input type="text" class="form-control" id="apellido" name="apellido">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="telefono">Teléfono</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                            </div>
-                            <input type="text" class="form-control" id="telefono" name="telefono">
-                        </div>
+
+
+                    <label for="telefono" class="labelforms">Teléfono</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="text" class="phone-input form-control" id="telefono" name="telefono" required>
+                                    <div class="custom-tooltip" id="telefono-tooltip"></div>
+                                </div>  
+
+
                     </div>
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                            </div>
-                            <input type="text" class="form-control" id="email" name="email">
-                        </div>
+                        
+                    <label for="emailxx" class="labelforms">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                    <input type="text" class="form-control email-input" id="emailxx" name="email" required>
+                                    <div class="custom-tooltip" id="emailxx-tooltip"></div>
+                                </div>  
                     </div>
                     <button type="submit" class="btn btn-primary">Guardar Contacto</button>
                 </form>
@@ -406,7 +642,225 @@ include '../componentes/sidebar.php';
         </div>
     </div>
 </div>
+<div class="modal fade" id="actualizarProveedor" tabindex="-1" role="dialog" aria-labelledby="formModal" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+            
+              <div class="modal-body">
+                 <!-- Alerta para mostrar el resultado de la actualización -->
+                 <div id="updateAlert" class="alert" style="display:none;" role="alert"></div>
+                            
+                 
+                 <form id="formactualizarproveedor">
+                 <!-- Campos del formulario -->
+                    <div>
+                        <h3 class="titulo-registro mb-3">Actualizar Proveedor</h3>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label class="labelforms" for="codigo">Nombre Identificador</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-user-circle"></i></span>
+                                        </div>
+                                        <input type="hidden" name="idprooo">
+                                        <input type="hidden"  name="idmedios">
+                                        <input class="form-control" placeholder="Nombre Identificador" name="nombreIdentificadorp">
+                                    </div>
+                                    <label class="labelforms" for="codigo">Medios</label>
+                                    <div id="dropdown1" class="dropdown-medios input-group dropdown" >
+                                        <div class="sell input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                        </div>
+                                        <div class="selected-options" onclick="toggleDropdown()"></div>
+                                        <button type="button" class="dropdown-button" style="font-size:14px; padding: 7px 20px !important; display:none;">Select Medios</button>
+                                        <div class="dropdown-content">
+                                            <?php foreach ($medios as $medio) : ?>
+                                                <label>
+                                                    <input type="checkbox" name="id_medios[]" value="<?php echo $medio['id']; ?>">
+                                                    <?php echo $medio['NombredelMedio']; ?>
+                                                </label>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                    <label class="labelforms" for="codigo">Nombre de Proveedor</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Nombre de Proveedor" name="nombreProveedorp">
+                                    </div>
+                                    <label class="labelforms" for="codigo">Nombre Representante</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Nombre Representante" name="nombreRepresentantep">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
 
+
+                        
+                                <label for="rutProveedorp" class="labelforms">Rut Proveedor</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-address-card"></i></span>
+                                    <input type="text" class="form-control" id="rutProveedorp" name="rutProveedorp" required>
+                                    <div class="custom-tooltip" id="rutProveedorp-tooltip"></div>
+                                </div>    
+
+                              
+
+
+
+                                    <label class="labelforms" for="codigo">Giro Proveedor</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-suitcase"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Giro Proveedor" name="giroProveedorp">
+                                    </div>
+                                    <label class="labelforms" for="codigo">Nombre de Fantasía</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-hand-spock"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Nombre de Fantasía" name="nombreFantasiap">
+                                    </div>
+                                 
+                                    <label for="rutRepresentantep" class="labelforms">Rut Representante</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-address-card"></i></span>
+                                    <input type="text" class="form-control" id="rutRepresentantep" name="rutRepresentantep" required>
+                                    <div class="custom-tooltip" id="rutRepresentantep-tooltip"></div>
+                                </div>       
+                                    
+                               
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="titulo-registro mb-3">Datos de facturación</h3>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="codigo">Razón Social</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-bullseye"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Razón Social" name="razonSocialp">
+                                    </div>
+                                    <label class="labelforms" for="codigo">Región</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
+                                        </div>
+                                        <select class="sesel region-select form-select" name="id_regionp" id="region" required>
+                                            <?php foreach ($regiones as $regione) : ?>
+                                                <option value="<?php echo $regione['id']; ?>"><?php echo $regione['nombreRegion']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+
+
+                                    <label for="telCelularp" class="labelforms">Teléfono celular</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="text" class="phone-input form-control" placeholder="Teléfono Celular" id="telCelularp" name="telCelularp" required>
+                                    <div class="custom-tooltip" id="telCelularp-tooltip"></div>
+                                </div>     
+
+                                <label for="emailp" class="labelforms">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                    <input type="text" class="form-control email-input" id="emailp" name="emailp" required>
+                                    <div class="custom-tooltip" id="emailp-tooltip"></div>
+                                </div>  
+                                
+                           
+                                   
+                                  
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="codigo">Dirección Facturación</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-building"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Dirección Facturación" name="direccionFacturacionp">
+                                    </div>
+                                    <label class="labelforms" for="codigo">Comuna</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
+                                        </div>
+                                        <select class="sesel comuna-select form-select" name="id_comunap" id="comuna" required>
+                                            <?php foreach ($comunas as $comuna) : ?>
+                                                <option value="<?php echo $comuna['id_comuna']; ?>" data-region="<?php echo $comuna['id_region']; ?>">
+                                                    <?php echo $comuna['nombreComuna']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+
+
+                                    <label for="telFijop" class="labelforms">Teléfono Fijo</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="text" class="phone-input form-control" placeholder="Teléfono fijo" id="telFijop" name="telFijop" required>
+                                    <div class="custom-tooltip" id="telFijop-tooltip"></div>
+                                </div>
+
+
+
+
+                                  
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="titulo-registro mb-3">Otros datos</h3>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="codigo">Bonifiación por año %</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Bonifiación por año %" name="bonificacion_anop">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col" id="moneda-container">
+                                <div class="form-group">
+                                    <label for="codigo">Escala de rango</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-chart-bar"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Escala de rango" name="escala_rangop">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button class="btn btn-primary btn-lg rounded-pill" type="submit" id="actualizarProveedor">
+                            <span class="btn-txt">Guardar Proveedor</span>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none;"></span>
+                        </button>
+                    </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
 
 <div class="modal fade" id="actualizarsoporte22" tabindex="-1" role="dialog"  aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -422,12 +876,13 @@ include '../componentes/sidebar.php';
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="codigo">Nombre Identificador</label>
+                                    <label class="labelforms" for="codigo">Nombre Identificador</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="far fa-user-circle"></i></span>
                                         </div>
                                         <input type="hidden" name="rutProveedorx">
+                                        <input type="hidden"  name="idmedios">
                                         <input class="form-control" placeholder="Nombre Identificador" name="nombreIdentificadorx">
                                     </div>
                                    
@@ -435,17 +890,17 @@ include '../componentes/sidebar.php';
                                     <label class="labelforms" for="codigo">Nombre Representante</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-user"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-person"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Nombre Representante" name="nombreRepresentantex">
                                     </div>
                                     <label class="labelforms" for="codigo">Medios</label>
-                                    <div class="input-group dropdown" id="dropdown2">
+                                    <div id="dropdown2" class="dropdown-medios input-group dropdown" >
                                         <div class="sell input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                                         </div>
                                         <div class="selected-options" onclick="toggleDropdown()"></div>
-                                        <button type="button" class="dropdown-button" style="display:none;">Select Medios</button>
+                                        <button type="button" class="dropdown-button" style="font-size:14px; padding: 7px 20px !important; display:none;">Select Medios</button>
                                         <div class="dropdown-content">
                                             <?php foreach ($medios as $medio) : ?>
                                                 <label>
@@ -459,13 +914,14 @@ include '../componentes/sidebar.php';
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="codigo">Rut Soporte</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-address-card"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Rut Soporte" name="rutSoporte">
-                                    </div>
+
+                                <label for="rutSoporte" class="labelforms">Rut Soporte</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-address-card"></i></span>
+                                    <input type="text" class="form-control" placeholder="Rut Soporte" id="rutSoporte" name="rutSoporte" required>
+                                    <div class="custom-tooltip" id="rutSoporte-tooltip"></div>
+                                </div>
+
                                     <label class="labelforms" for="codigo">Giro Soporte</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
@@ -480,13 +936,14 @@ include '../componentes/sidebar.php';
                                         </div>
                                         <input class="form-control" placeholder="Nombre de Fantasía" name="nombreFantasiax">
                                     </div>
-                                    <label class="labelforms" for="codigo">Rut Representante</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-address-card"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Rut Representante" name="rutRepresentantex">
-                                    </div>
+
+                                    <label for="rutRepresentantex" class="labelforms">Rut Representante</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-address-card"></i></span>
+                                    <input type="text" class="form-control" placeholder="Rut Representante" id="rutRepresentantex" name="rutRepresentantex" required>
+                                    <div class="custom-tooltip" id="rutRepresentantex-tooltip"></div>
+                                </div>           
+
                                 </div>
                             </div>
                         </div>
@@ -508,26 +965,27 @@ include '../componentes/sidebar.php';
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
                                         </div>
-                                        <select class="sesel form-select" name="id_regionx" id="region" required>
+                                        <select class="sesel form-select" name="id_regionx" id="regionx" required>
                                             <?php foreach ($regiones as $regione) : ?>
                                                 <option value="<?php echo $regione['id']; ?>"><?php echo $regione['nombreRegion']; ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
-                                    <label class="labelforms" for="codigo">Teléfono celular</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Teléfono celular" name="telCelularx">
-                                    </div>
-                                    <label class="labelforms" for="codigo">Email</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-envelope"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Email" name="emailx">
-                                    </div>
+
+                                    <label for="telCelularx" class="labelforms">Teléfono celular</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="text" class="phone-input form-control" placeholder="Rut Soporte" id="telCelularx" name="telCelularx" required>
+                                    <div class="custom-tooltip" id="telCelularx-tooltip"></div>
+                                </div>   
+                                
+                                <label for="emailx" class="labelforms">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                    <input type="text" class="form-control email-input" placeholder="Email" id="emailx" name="emailx" required>
+                                    <div class="custom-tooltip" id="emailx-tooltip"></div>
+                                </div>    
+
                                 </div>
                             </div>
                             <div class="col-6">
@@ -544,7 +1002,7 @@ include '../componentes/sidebar.php';
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
                                         </div>
-                                        <select class="sesel form-select" name="id_comunax" id="comuna" required>
+                                        <select class="sesel form-select" name="id_comunax" id="comunax" required>
                                             <?php foreach ($comunas as $comuna) : ?>
                                                 <option value="<?php echo $comuna['id_comuna']; ?>" data-region="<?php echo $comuna['id_region']; ?>">
                                                     <?php echo $comuna['nombreComuna']; ?>
@@ -552,13 +1010,14 @@ include '../componentes/sidebar.php';
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
-                                    <label class="labelforms" for="codigo">Teléfono fijo</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Teléfono fijo" name="telFijox">
-                                    </div>
+
+                                    <label for="telFijox" class="labelforms">Teléfono Fijo</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="text" class="phone-input form-control" placeholder="Teléfono fijo" id="telFijox" name="telFijox" required>
+                                    <div class="custom-tooltip" id="telFijox-tooltip"></div>
+                                </div>               
+
                                 </div>
                             </div>
                         </div>
@@ -631,6 +1090,8 @@ include '../componentes/sidebar.php';
                 <form id="formualarioSoporteProv">
                     <!-- Campo oculto para el ID -->
                     <input type="hidden"  name="id_proveedor" value="<?php echo $datosProveedor['id_proveedor'] ; ?>" id="id_proveedor">
+           
+          
                     <!-- Campos del formulario -->
                     <h3 class="titulo-registro mb-3">Agregar Soporte</h3>
                     <div class="row">
@@ -650,22 +1111,22 @@ include '../componentes/sidebar.php';
                         <div class="col-6">
                         <div class="form-group">
                           <label  for="codigo">Medios</label>
-                            <div class="input-group dropdown" id="dropdown5">
-                                <div class="sell input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                                </div>
-                                <div class="selected-options" onclick="toggleDropdown()"></div>
-                                <button type="button" class="dropdown-button" style="display:none;">Select Medios</button>
-                                <div class="dropdown-content">
-                                    <?php foreach ($medios as $medio) : ?>
-                                        <label>
-                                            <input type="checkbox" name="id_medios[]" value="<?php echo $medio['id']; ?>">
-                                            <?php echo $medio['NombredelMedio']; ?>
-                                        </label>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                            </div>
+                                        <div id="dropdown4" class="input-group dropdown" >
+                                            <div class="sell input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                            </div>
+                                            <div class="selected-options" onclick="toggleDropdown()"></div>
+                                            <button type="button" class="dropdown-button" style="font-size:14px; padding: 7px 20px !important; display:none;">Select Medios</button>
+                                            <div class="dropdown-content">
+                                                <?php foreach ($medios as $medio) : ?>
+                                                    <label>
+                                                        <input type="checkbox" name="id_medios[]" value="<?php echo $medio['id']; ?>">
+                                                        <?php echo $medio['NombredelMedio']; ?>
+                                                    </label>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        </div>
+</div>
                     </div>
                     <div class="row"><label class="opeo"><input type="checkbox" name="revision"> <span>Usar los mismos datos del proveedor</span></label></div>
                    <div class="checklust">
@@ -679,20 +1140,23 @@ include '../componentes/sidebar.php';
                                         </div>
                                         <input class="form-control" placeholder="Razón Social" name="razonSocial">
                                     </div>
-                                    <label class="labelforms" for="codigo">Rut</label>
+                                   
+                                  
+                        <label for="rut_soporte" class="labelforms">Rut</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-address-card"></i></span>
+                                    <input type="text" class="form-control" placeholder="Ingresa el Rut" id="rut_soporte" name="rut_soporte" required>
+                                    <div class="custom-tooltip" id="rut_soporte-tooltip"></div>
+                                </div>
+                        <label class="labelforms" for="codigo">Nombre Representante Legal</label>
                                     <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-address-card"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Rut" name="rut_soporte" required>
-                                    </div>
-                                    <label class="labelforms" for="codigo">Nombre Representante Legal</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-user"></i></span>
-                                        </div>
+                                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                          
                                         <input class="form-control" placeholder="Nombre Representante Legal" name="nombreRepresentanteLegal" required>
-                                    </div>  
+                                    </div> 
+                          
+ 
+                              
                         </div>
                         </div>
                         <div class="col-6">
@@ -704,20 +1168,24 @@ include '../componentes/sidebar.php';
                                         </div>
                                         <input class="form-control" placeholder="Nombre de Fantasía" name="nombreFantasia" required>
                                     </div>
-                                    <label class="labelforms"  for="codigo">Giro</label>
+                        <label class="labelforms"  for="codigo">Giro</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-suitcase"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Giro" name="giro" required>
                                     </div>
-                                    <label class="labelforms" for="codigo">Rut Representante</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-address-card"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Rut Representante" name="rutRepresentante" required>
-                                    </div>
+                        <label for="rut_soporte" class="labelforms">Rut Representante</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-address-card"></i></span>
+                                    <input type="text" class="form-control" id="rutRepresentante" name="rutRepresentante" required>
+                                    <div class="custom-tooltip" id="rutRepresentante-tooltip"></div>
+                                </div>
+
+
+
+
+                                    
                                 </div></div>
                     </div>
                     <div>
@@ -726,7 +1194,7 @@ include '../componentes/sidebar.php';
                         <div class="col-6">
 
                         <div class="form-group">
-                        <label  for="codigo">Dirección Facturación</label>
+                        <label class="labelforms"  for="codigo">Dirección Facturación</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="far fa-building"></i></span>
@@ -738,56 +1206,54 @@ include '../componentes/sidebar.php';
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
                                         </div>
-                                        <select class="sesel form-select" name="id_region" id="regionx" required>
-                                            <?php foreach ($regiones as $regione) : ?>
-                                                <option value="<?php echo $regione['id']; ?>"><?php echo $regione['nombreRegion']; ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
+                                        <select class="sesel form-select region-select" name="id_region"  required>
+                                    <?php foreach ($regiones as $regione) : ?>
+                                        <option value="<?php echo $regione['id']; ?>"><?php echo $regione['nombreRegion']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
                                     </div>
-                                    <label class="labelforms" for="codigo">Teléfono celular</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Teléfono celular" name="telCelular" required>
-                                    </div>
+
+                                    <label for="telCelular" class="labelforms">Teléfono celular</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="text" class="phone-input form-control" id="telCelular" name="telCelular" required>
+                                    <div class="custom-tooltip" id="telCelular-tooltip"></div>
+                                </div>    
+
                                     </div></div>
                         <div class="col-6">
 
                         <div class="form-group">
-                        <label  for="codigo">Email</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-envelope"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Email" name="email">
-                                    </div>   
+
+                        <label for="email" class="labelforms">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                    <input type="text" class="form-control email-input" id="email" name="email" required>
+                                    <div class="custom-tooltip" id="email-tooltip"></div>
+                                </div>                  
+ 
                                     <label class="labelforms" for="codigo">Comuna</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
                                         </div>
-                                        <select class="sesel form-select" name="id_comuna" id="comunax" required>
-                                            <?php foreach ($comunas as $comuna) : ?>
-                                                <option value="<?php echo $comuna['id_comuna']; ?>" data-region="<?php echo $comuna['id_region']; ?>">
-                                                    <?php echo $comuna['nombreComuna']; ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
+                                        <select class="sesel form-select comuna-select" name="id_comuna"  required>
+                                <?php foreach ($comunas as $comuna) : ?>
+                                    <option value="<?php echo $comuna['id_comuna']; ?>" data-region="<?php echo $comuna['id_region']; ?>">
+                                        <?php echo $comuna['nombreComuna']; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
                                     </div> 
-                                    <label class="labelforms"  for="codigo">Teléfono fijo</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Teléfono fijo" name="telFijo" required>
-                                    </div>   
 
 
+                                    <label for="telFijo" class="labelforms">Teléfono fijo</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="text" class="phone-input form-control" id="telFijo" name="telFijo" required>
+                                    <div class="custom-tooltip" id="telFijo-tooltip"></div>
+                                </div>  
 
-                            
-                           
-                                
                         </div></div>
                     </div>
                    </div>
@@ -800,17 +1266,17 @@ include '../componentes/sidebar.php';
                                   
 
                         <input name="razonsoculto" type="hidden">
-                        <input name="nombref" type="hidden">
-                        <input name="rutt" type="hidden">
-                        <input name="giroo" type="hidden">
-                        <input name="nombreRepesentanteO" type="hidden">
-                        <input name="rutRepresent" type="hidden">
-                        <input name="direcciono" type="hidden">
-                        <input name="regiono" type="hidden">
-                        <input name="comunao" type="hidden">
-                        <input name="telCelularo" type="hidden">
-                        <input name="telFijoo" type="hidden">
-                        <input name="emailO" type="hidden">
+                        <input name="nombref" type="hidden" >
+                        <input name="rutt" type="hidden" >
+                        <input name="giroo" type="hidden" >
+                        <input name="nombreRepesentanteO" type="hidden" >
+                        <input name="rutRepresent" type="hidden" >
+                        <input name="direcciono" type="hidden" >
+                        <input name="regiono" type="hidden" >
+                        <input name="comunao" type="hidden" >
+                        <input name="telCelularo" type="hidden" >
+                        <input name="telFijoo" type="hidden" >
+                        <input name="emailO" type="hidden" >
                         <div class="row">
                             <div class="col">
                             <div class="form-group">
@@ -843,7 +1309,101 @@ include '../componentes/sidebar.php';
     </div>
 </div>
 
+<script>
+function getProveedorData(idProveedor) {
+    var proveedoresMap = <?php echo json_encode($proveedoresMap); ?>;
+    return proveedoresMap[idProveedor] || null;
+}
+document.addEventListener('DOMContentLoaded', function() { 
+    function showError(input, message) {
+        input.classList.add('is-invalid');
+        var tooltip = document.getElementById(input.id + '-tooltip');
+        tooltip.textContent = message;
+        tooltip.style.opacity = '1';
+        positionTooltip(input, tooltip);
+    }
 
+    function hideError(input) {
+        input.classList.remove('is-invalid');
+        var tooltip = document.getElementById(input.id + '-tooltip');
+        tooltip.style.opacity = '0';
+    }
+    function positionTooltip(input, tooltip) {
+        var rect = input.getBoundingClientRect();
+        tooltip.style.left = '10px';
+        tooltip.style.top = -(tooltip.offsetHeight + 5) + 'px';
+    }
+    var Fn = {
+        validaRut: function(rutCompleto) {
+            if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test(rutCompleto)) return false;
+            var tmp = rutCompleto.split('-');
+            var digv = tmp[1];
+            var rut = tmp[0];
+            if (digv == 'K') digv = 'k';
+            return (Fn.dv(rut) == digv);
+        },
+        dv: function(T) {
+            var M = 0, S = 1;
+            for (; T; T = Math.floor(T / 10)) S = (S + T % 10 * (9 - M++ % 6)) % 11;
+            return S ? S - 1 : 'k';
+        }
+    };
+    function validaPhoneChileno(phone) {
+        // Patrón para teléfonos chilenos
+        // Acepta formatos: +56912345678, 912345678, 221234567
+        var phonePattern = /^(\+?56|0)?([2-9]\d{8}|[2-9]\d{7})$/;
+        return phonePattern.test(phone);
+    }
+
+    // Validación en tiempo real para RUTs
+    var rutInputs = document.querySelectorAll('#rutProveedorp, #rutRepresentantep, #rutRepresentantex, #rutSoporte, #rut_soporte, #rutRepresentante');
+    rutInputs.forEach(function(input) {
+        input.addEventListener('input', function() {
+            if (this.value === "") {
+                hideError(this);
+            } else if (!Fn.validaRut(this.value)) {
+                showError(this, "RUT INVALIDO - DEBES INGRESAR SIN PUNTOS Y CON GUIÓN");
+            } else {
+                hideError(this);
+            }
+        });
+    });
+ 
+
+   // Validación en tiempo real para Email
+   var emailInputs = document.querySelectorAll('.email-input');
+var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+emailInputs.forEach(function(emailInput) {
+    emailInput.addEventListener('input', function() {
+        if (this.value === "") {
+            hideError(this);
+        } else if (!emailPattern.test(this.value)) {
+            showError(this, "EMAIL INCORRECTO");
+        } else {
+            hideError(this);
+        }
+    });
+});
+
+      // Validación en tiempo real para teléfonos
+      var phoneInputs = document.querySelectorAll('.phone-input');
+phoneInputs.forEach(function(input) {
+    input.addEventListener('input', function() {
+        if (this.value === "") {
+            hideError(this);
+        } else if (!validaPhoneChileno(this.value)) {
+            showError(this, "NÚMERO DE TELÉFONO NO VÁLIDO");
+        } else {
+            hideError(this);
+        }
+    });
+});
+
+
+});
+
+</script>
 
 <script>
 function getSoporteData(idSoporte) {
@@ -851,7 +1411,60 @@ function getSoporteData(idSoporte) {
     return soportesMap[idSoporte] || null;
 }
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('agregarSoportessss');
 
+    modal.addEventListener('show.bs.modal', (event) => {
+        // Obtener el botón que abrió el modal
+        const button = event.relatedTarget;
+
+        // Asignar el ID del proveedor al input oculto en el modal
+    
+        // Asignar los valores de los atributos data-* a los inputs ocultos en el modal
+        modal.querySelector('input[name="id_proveedor"]').value = button.getAttribute('data-id');
+        modal.querySelector('input[name="razonsoculto"]').value = button.getAttribute('data-rso');
+        modal.querySelector('input[name="nombref"]').value = button.getAttribute('data-nfo');
+        modal.querySelector('input[name="rutt"]').value = button.getAttribute('data-rpo');
+        modal.querySelector('input[name="giroo"]').value = button.getAttribute('data-gpo');
+        modal.querySelector('input[name="nombreRepesentanteO"]').value = button.getAttribute('data-nro');
+        modal.querySelector('input[name="rutRepresent"]').value = button.getAttribute('data-rpoo');
+        modal.querySelector('input[name="direcciono"]').value = button.getAttribute('data-dfo');
+        modal.querySelector('input[name="regiono"]').value = button.getAttribute('data-iro');
+        modal.querySelector('input[name="comunao"]').value = button.getAttribute('data-ico');
+        modal.querySelector('input[name="telCelularo"]').value = button.getAttribute('data-tco');
+        modal.querySelector('input[name="telFijoo"]').value = button.getAttribute('data-tfo');
+        modal.querySelector('input[name="emailO"]').value = button.getAttribute('data-elo');
+    });
+    const checkbox = modal.querySelector('input[name="revision"]');
+    const checklustElements = modal.querySelectorAll('.checklust');
+    const form = document.getElementById('formualarioSoporteProv');
+
+    const toggleChecklustVisibility = () => {
+        checklustElements.forEach(element => {
+            element.style.display = checkbox.checked ? 'none' : 'grid';
+        });
+    };
+
+    // Escuchar el evento 'change' en el checkbox
+    checkbox.addEventListener('change', toggleChecklustVisibility);
+   checkbox.addEventListener('change', function() {
+        if (this.checked) {
+            checklustElements.forEach(el => el.style.display = 'none');
+            form.querySelectorAll('.form-control').forEach(input => input.removeAttribute('required'));
+        } else {
+            checklustElements.forEach(el => el.style.display = '');
+            form.querySelectorAll('.form-control').forEach(input => input.setAttribute('required', 'required'));
+        }
+    });
+
+    form.addEventListener('submit', submitFormSoporte);
+    // Inicializar la visibilidad al cargar el modal
+    modal.addEventListener('show.bs.modal', () => {
+        toggleChecklustVisibility();
+    });
+});
+</script>
 
 <script>
    
@@ -994,6 +1607,7 @@ function refreshContactTable(idProveedor = null) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    
     const proveedorId = <?php echo json_encode($idProveedor); ?>;
     if (proveedorId) {
         fetch(`/get_soportes.php?proveedor_id=${proveedorId}`)
@@ -1011,9 +1625,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Error fetching data:', error);
             });
     }
+    
 });
 
+
+
 </script>
+<script src="<?php echo $ruta; ?>assets/js/actualizarviewproveedor.js"></script>
 <script src="../assets/js/contactoprops.js"></script>
 <script src="../assets/js/getregiones.js"></script>
 <script src="../assets/js/actualizarsoporteprov.js"></script>
