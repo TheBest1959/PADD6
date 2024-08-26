@@ -1,45 +1,57 @@
+function loadProveedorData(button) {
+    var idProveedor = button.getAttribute('data-idproveedor');
+    var proveedor = getProveedorData(idProveedor);
+    var idMedios = JSON.parse(button.getAttribute('data-idmedios'));
 
-    function loadProveedorData(button) {
-        var idProveedor = button.getAttribute('data-idproveedor');
-        var proveedor = getProveedorData(idProveedor);
-        var idMedios = JSON.parse(button.getAttribute('data-idmedios'));
-        if (proveedor) {
-            console.log('Datos del proveedor:', proveedor);
-            document.querySelector('input[name="idprooo"]').value = proveedor.id_proveedor;
-            document.querySelector('input[name="nombreIdentificadorp"]').value = proveedor.nombreIdentificador;
-            document.querySelector('input[name="nombreProveedorp"]').value = proveedor.nombreProveedor;
-            document.querySelector('input[name="nombreFantasiap"]').value = proveedor.nombreFantasia;
-            document.querySelector('input[name="rutProveedorp"]').value = proveedor.rutProveedor;
-            document.querySelector('input[name="giroProveedorp"]').value = proveedor.giroProveedor;
-            document.querySelector('input[name="nombreRepresentantep"]').value = proveedor.nombreRepresentante;
-            document.querySelector('input[name="rutRepresentantep"]').value = proveedor.rutRepresentante;
-            document.querySelector('input[name="razonSocialp"]').value = proveedor.razonSocial;
-            document.querySelector('input[name="direccionFacturacionp"]').value = proveedor.direccionFacturacion;
-            document.querySelector('select[name="id_regionp"]').value = proveedor.id_region;
-            document.querySelector('select[name="id_comunap"]').value = proveedor.id_comuna;
-            document.querySelector('input[name="telCelularp"]').value = proveedor.telCelular;
-            document.querySelector('input[name="telFijop"]').value = proveedor.telFijo;
-            document.querySelector('input[name="emailp"]').value = proveedor.email;
-            document.querySelector('input[name="bonificacion_anop"]').value = proveedor.bonificacion_ano;
-            document.querySelector('input[name="escala_rangop"]').value = proveedor.escala_rango;
- if (idMedios && Array.isArray(idMedios)) {
+    if (proveedor) {
+        console.log('Datos del proveedor:', proveedor);
+        document.querySelector('input[name="idprooo"]').value = proveedor.id_proveedor;
+        document.querySelector('input[name="nombreIdentificadorp"]').value = proveedor.nombreIdentificador;
+        document.querySelector('input[name="nombreProveedorp"]').value = proveedor.nombreProveedor;
+        document.querySelector('input[name="nombreFantasiap"]').value = proveedor.nombreFantasia;
+        document.querySelector('input[name="rutProveedorp"]').value = proveedor.rutProveedor;
+        document.querySelector('input[name="giroProveedorp"]').value = proveedor.giroProveedor;
+        document.querySelector('input[name="nombreRepresentantep"]').value = proveedor.nombreRepresentante;
+        document.querySelector('input[name="rutRepresentantep"]').value = proveedor.rutRepresentante;
+        document.querySelector('input[name="razonSocialp"]').value = proveedor.razonSocial;
+        document.querySelector('input[name="direccionFacturacionp"]').value = proveedor.direccionFacturacion;
+        document.querySelector('select[name="id_regionp"]').value = proveedor.id_region;
+        document.querySelector('select[name="id_comunap"]').value = proveedor.id_comuna;
+        document.querySelector('input[name="telCelularp"]').value = proveedor.telCelular;
+        document.querySelector('input[name="telFijop"]').value = proveedor.telFijo;
+        document.querySelector('input[name="emailp"]').value = proveedor.email;
+        document.querySelector('input[name="bonificacion_anop"]').value = proveedor.bonificacion_ano;
+        document.querySelector('input[name="escala_rangop"]').value = proveedor.escala_rango;
+
+        if (idMedios && Array.isArray(idMedios)) {
+            // Concatenar los idMedios en una cadena separada por comas
+            var idMediosString = idMedios.join(',');
+            document.querySelector('input[name="idmedios"]').value = idMediosString;
             updateMediosDropdown(idMedios);
         }
         
-        } else {
-            console.log("No se encontró el proveedor con ID:", idProveedor);
-        }
+    } else {
+        console.log("No se encontró el proveedor con ID:", idProveedor);
     }
+}
 
 
-    function getFormData3() {
+    function getFormData6() {
         const formData = new FormData(document.getElementById('formactualizarproveedor'));
-
-        // Convertir FormData a objeto para imprimirlo
         const dataObject = {};
         formData.forEach((value, key) => {
-            dataObject[key] = value;
+            if (key === 'id_medios[]') {
+                if (!dataObject[key]) {
+                    dataObject[key] = [];
+                }
+                dataObject[key].push(value);
+            } else {
+                dataObject[key] = value;
+            }
         });
+
+
+
 
         console.log(dataObject, "aqui el actualizar señores"); // Imprime el objeto con los datos del formulario
 
@@ -53,7 +65,7 @@
             rutRepresentante: dataObject.rutRepresentantep,
             razonSocial: dataObject.razonSocialp,
             direccionFacturacion: dataObject.direccionFacturacionp,
-            id_medios: dataObject.id_mediosp,
+            id_medios: dataObject['id_medios[]'],
             id_region: dataObject.id_regionp,
             id_comuna: dataObject.id_comunap,
             telCelular: dataObject.telCelularp,
@@ -67,60 +79,108 @@
     // Función para enviar el formulario
     async function submitForm3(event) {
         event.preventDefault(); // Evita la recarga de la página
+    
+        const formData = getFormData6();
+        const idProveedor = document.querySelector('input[name="idprooo"]').value;
+    
+        const proveedorData = {
+            nombreIdentificador: formData.nombreIdentificador,
+            nombreProveedor: formData.nombreProveedor,
+            nombreFantasia: formData.nombreFantasia,
+            rutProveedor: formData.rutProveedor,
+            giroProveedor: formData.giroProveedor,
+            nombreRepresentante: formData.nombreRepresentante,
+            rutRepresentante: formData.rutRepresentante,
+            razonSocial: formData.razonSocial,
+            direccionFacturacion: formData.direccionFacturacion,
+            id_region: formData.id_region,
+            id_comuna: formData.id_comuna,
+            telCelular: formData.telCelular,
+            telFijo: formData.telFijo,
+            email: formData.email || null,
+            bonificacion_ano: formData.bonificacion_ano,
+            escala_rango: formData.escala_rango,
+        };
 
-        let bodyContent = JSON.stringify(getFormData3());
-        console.log(bodyContent, "holacon");
 
-        let idProveedor = document.querySelector('input[name="idprooo"]').value;
-
-        let headersList = {
+        const headersList = {
             "Content-Type": "application/json",
             "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc",
             "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc"
         };
-
+    
         try {
-            let response = await fetch(`https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Proveedores?id_proveedor=eq.${idProveedor}`, {
+            // Actualizar el proveedor
+            const response = await fetch(`https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Proveedores?id_proveedor=eq.${idProveedor}`, {
                 method: "PATCH",
-                body: bodyContent,
+                body: JSON.stringify(proveedorData),
                 headers: headersList
             });
-
+            console.log(response, "proveedor in");
+            console.log(proveedorData, "proveedor data");
             if (response.ok) {
-                alert("Actualización correcta");
-                location.reload();
+                // Eliminar registros antiguos de proveedor_medios asociados al id_proveedor
+                const deleteResponse = await fetch(`https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/proveedor_medios?id_proveedor=eq.${idProveedor}`, {
+                    method: "DELETE",
+                    headers: headersList
+                });
+    
+                if (deleteResponse.ok) {
+                    // Registrar los nuevos medios asociados
+                    if (formData.id_medios.length > 0) {
+                        const proveedorMediosData = formData.id_medios.map(id_medio => ({
+                            id_proveedor: idProveedor,
+                            id_medio: id_medio
+                        }));
+    
+                        const insertResponse = await fetch("https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/proveedor_medios", {
+                            method: "POST",
+                            body: JSON.stringify(proveedorMediosData),
+                            headers: headersList
+                        });
+    
+                        if (insertResponse.ok) {
+                            mostrarExito('Actualización correctos');
+                            $('#actualizarProveedor').modal('hide');
+                            $('#formactualizarproveedor')[0].reset();
+                            location.reload();
+                        } else {
+                            const errorData = await insertResponse.text();
+                            console.error("Error en proveedor_medios:", errorData);
+                            alert("Error al registrar los medios, intente nuevamente");
+                        }
+                    } else {
+                        mostrarExito('Actualización correctos');
+                        $('#actualizarProveedor').modal('hide');
+                        $('#formactualizarproveedor')[0].reset();
+                        location.reload();
+                    }
+                } else {
+                    const errorData = await deleteResponse.text();
+                    console.error("Error al eliminar proveedor_medios:", errorData);
+                    alert("Error al eliminar los medios antiguos, intente nuevamente");
+                }
             } else {
-                let errorData = await response.json();
+                const errorData = await response.json();
                 console.error("Error:", errorData);
-                alert("Error, intentelo nuevamente");
+                alert("Error al actualizar el proveedor, intente nuevamente");
             }
         } catch (error) {
             console.error("Error de red:", error);
             alert("Error de red, intentelo nuevamente");
         }
     }
-    function updateMediosDropdown(idMedios) {
-        const dropdown = document.querySelector('#dropdown1');
-        if (!dropdown) {
-            console.error('Dropdown no encontrado.');
-            return;
-        }
     
-        const checkboxes = dropdown.querySelectorAll('.dropdown-content input[type="checkbox"]');
-        const selectedOptionsContainer = dropdown.querySelector('.selected-options'); // Asegúrate de que exista en tu HTML
-        
-        // Limpiar el contenedor de opciones seleccionadas
-        selectedOptionsContainer.innerHTML = '';
-    
-        checkboxes.forEach(checkbox => {
-            if (idMedios.includes(parseInt(checkbox.value))) {
-                checkbox.checked = true;
-            } else {
-                checkbox.checked = false;
-            }
+    function mostrarExito(mensaje) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: mensaje,
+            showConfirmButton: false,
+            timer: 1500
         });
-    
-    
     }
+    
+    
     // Asigna el evento de envío al formulario de actualizar proveedor
     document.getElementById('formactualizarproveedor').addEventListener('submit', submitForm3);

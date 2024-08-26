@@ -96,9 +96,7 @@ async function loadClienteDataView(button) {
                 }
             });
 
-            // Abre el modal
-            var modal = new bootstrap.Modal(document.getElementById('actualizarclienteView'));
-            modal.show();
+          
         } else {
             console.error("No se encontraron datos para el cliente con ID:", idCliente);
             alert(`No se encontraron datos para el cliente con ID: ${idCliente}`);
