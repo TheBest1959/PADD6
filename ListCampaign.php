@@ -9,6 +9,11 @@ include 'querys/qcampaign.php';
 include 'componentes/header.php';
 include 'componentes/sidebar.php';
 ?>
+
+<?php
+$absolutePath = dirname(__FILE__);
+echo $absolutePath;
+?>
 <div class="main-content">
     <section class="section">
         <div class="section-body">
@@ -21,7 +26,7 @@ include 'componentes/sidebar.php';
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-striped" id="table-1">
+                                <table class="table table-striped" id="tablaExportadora">
                                     <thead>
                                         <tr>
                                             <th>ID</th>

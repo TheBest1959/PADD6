@@ -1,7 +1,7 @@
 function loadsoportepro(button) {
     var idSoporte = button.getAttribute('data-id-soporte');
     var soporte = getSoporteData(idSoporte);
-
+   
     if (soporte) {
         console.log('Datos del soporte:', soporte);
         console.log(soporte.nombreIdentficiador,"Holaa");
@@ -27,6 +27,7 @@ function loadsoportepro(button) {
         console.log("No se encontró el proveedor con ID:", idSoporte);
     }
 }
+
 
 function getFormData4() {
     const formData = new FormData(document.getElementById('formularioactualizarSoporteProv'));
