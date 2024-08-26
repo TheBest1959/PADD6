@@ -52,7 +52,7 @@ function mostrarMediosSeleccionados(mediosIds) {
             mediosDetalles.forEach(detalle => {
                 if (mediosIds.includes(detalle.id)) {
                     const span = document.createElement('span');
-                    span.classList.add('medio-item');
+                    span.classList.add('selected-option');
                     span.textContent = detalle.NombredelMedio;
                     span.setAttribute('data-medio-id', detalle.id);
                     span.onclick = () => {
@@ -277,9 +277,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 Swal.fire({
                     title: '¡Éxito!',
                     text: 'El soporte y los medios han sido actualizados correctamente.',
-                    icon: 'success',
-                    timer: 1500, // El alert se cerrará después de 1.5 segundos
-                    showConfirmButton: false // No muestra el botón de confirmación
+                    icon: 'success'
                 }).then(() => {
                     // Recargar la página después de que el usuario cierre la alerta
                     window.location.reload();

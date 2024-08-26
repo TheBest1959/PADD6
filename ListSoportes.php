@@ -64,7 +64,8 @@ function e($string) {
                                                     <a class="btn btn-primary micono" href="views/viewSoportes.php?id_soporte=<?= e($soporte['id_soporte']) ?>" data-toggle="tooltip" title="Ver Soporte">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
-                                                    <a class="btn btn-success micono" data-bs-toggle="modal" data-bs-target="#actualizar_soportes" data-id-soporte="<?= e($soporte['id_soporte']) ?>" onclick="obtenerDatos(<?= e($soporte['id_soporte']) ?>)">
+                                
+                                                    <a class="btn btn-success micono" data-bs-toggle="modal" data-bs-target="#actualizar_soportes"   data-id-soporte="<?= e($soporte['id_soporte']) ?>" onclick="obtenerDatos(<?= e($soporte['id_soporte']) ?>)">
                                                         <i class="fas fa-pencil-alt"></i>
                                                     </a>
                                                 </td>

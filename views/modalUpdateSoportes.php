@@ -1,3 +1,4 @@
+
 <div class="modal fade" id="actualizar_soportes" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -67,11 +68,32 @@
                             </div>
                         </div>
                         <div class="row">
+
+                        
                             <div class="col-12 mb-3">
-                                <label class="form-label" for="codigo">Medios</label>
+
+                            
+                            <!-- <label class="labelforms" for="codigo">Medios</label> -->
+                            <!-- <div class="medio-soporte"></div> -->
+                                    <div id="dropdown1" class="dropdown-medios input-group dropdown" >
+                                        <div class="sell input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                        </div>
+                                        <div class="selected-options" onclick="toggleDropdown()" style="display:flex !important;"></div>
+                                        <button type="button" class="dropdown-button" style="font-size:14px; padding: 7px 20px !important; display:none;">Select Medios</button>
+                                        <div class="dropdown-content">
+                                            <?php foreach ($medios as $medio) : ?>
+                                                <label>
+                                                    <input type="checkbox" name="id_medios[]" value="<?php echo $medio['id']; ?>">
+                                                    <?php echo $medio['NombredelMedio']; ?>
+                                                </label>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                <!-- <label class="form-label" for="codigo">Medios</label>
                                 <div class="medio-soporte"></div>
                                 <label class="form-label" for="codigo">Seleccionar medios</label>
-                                <div id="select-medios"></div>
+                                <div id="select-medios"></div> -->
                             </div>
                         </div>
                     </div>
@@ -190,3 +212,5 @@
         border: solid;
     }
 </style>
+
+<script src="/assets/js/getmedios.js"></script>
