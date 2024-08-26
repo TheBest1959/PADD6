@@ -22,9 +22,12 @@
             document.querySelector('input[name="emailp"]').value = proveedor.email;
             document.querySelector('input[name="bonificacion_anop"]').value = proveedor.bonificacion_ano;
             document.querySelector('input[name="escala_rangop"]').value = proveedor.escala_rango;
- if (idMedios && Array.isArray(idMedios)) {
-            updateMediosDropdown(idMedios);
-        }
+            if (idMedios && Array.isArray(idMedios)) {
+                // Concatenar los idMedios en una cadena separada por comas
+                var idMediosString = idMedios.join(',');
+                document.querySelector('input[name="idmedios"]').value = idMediosString;
+                updateMediosDropdown(idMedios);
+            }
         
         } else {
             console.log("No se encontró el proveedor con ID:", idProveedor);
@@ -38,8 +41,16 @@
         // Convertir FormData a objeto para imprimirlo
         const dataObject = {};
         formData.forEach((value, key) => {
-            dataObject[key] = value;
+            if (key === 'id_medios[]') {
+                if (!dataObject[key]) {
+                    dataObject[key] = [];
+                }
+                dataObject[key].push(value);
+            } else {
+                dataObject[key] = value;
+            }
         });
+
 
         console.log(dataObject, "aqui el actualizar señores"); // Imprime el objeto con los datos del formulario
 
@@ -53,7 +64,7 @@
             rutRepresentante: dataObject.rutRepresentantep,
             razonSocial: dataObject.razonSocialp,
             direccionFacturacion: dataObject.direccionFacturacionp,
-            id_medios: dataObject.id_mediosp,
+            id_medios: dataObject['id_medios[]'],
             id_region: dataObject.id_regionp,
             id_comuna: dataObject.id_comunap,
             telCelular: dataObject.telCelularp,
@@ -68,14 +79,30 @@
     async function submitForm3(event) {
         event.preventDefault(); // Evita la recarga de la página
     
-        // Obtener los datos del formulario
-        let formData = getFormData3();
-        let bodyContent = JSON.stringify(formData);
-        console.log(bodyContent, "holacon");
+        const formData = getFormData3();
+        const idProveedor = document.querySelector('input[name="idprooo"]').value;
     
-        let idProveedor = document.querySelector('input[name="idprooo"]').value;
-    
-        let headersList = {
+        const proveedorData = {
+            nombreIdentificador: formData.nombreIdentificador,
+            nombreProveedor: formData.nombreProveedor,
+            nombreFantasia: formData.nombreFantasia,
+            rutProveedor: formData.rutProveedor,
+            giroProveedor: formData.giroProveedor,
+            nombreRepresentante: formData.nombreRepresentante,
+            rutRepresentante: formData.rutRepresentante,
+            razonSocial: formData.razonSocial,
+            direccionFacturacion: formData.direccionFacturacion,
+            id_region: formData.id_region,
+            id_comuna: formData.id_comuna,
+            telCelular: formData.telCelular,
+            telFijo: formData.telFijo,
+            email: formData.email || null,
+            bonificacion_ano: formData.bonificacion_ano,
+            escala_rango: formData.escala_rango,
+        };
+
+
+        const headersList = {
             "Content-Type": "application/json",
             "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc",
             "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc"
@@ -83,89 +110,65 @@
     
         try {
             // Actualizar el proveedor
-            let response = await fetch(`https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Proveedores?id_proveedor=eq.${idProveedor}`, {
+            const response = await fetch(`https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Proveedores?id_proveedor=eq.${idProveedor}`, {
                 method: "PATCH",
-                body: bodyContent,
+                body: JSON.stringify(proveedorData),
                 headers: headersList
             });
     
             if (response.ok) {
-                let responseText = await response.text(); // Obtén el texto de la respuesta
+                // Eliminar registros antiguos de proveedor_medios asociados al id_proveedor
+                const deleteResponse = await fetch(`https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/proveedor_medios?id_proveedor=eq.${idProveedor}`, {
+                    method: "DELETE",
+                    headers: headersList
+                });
     
-                if (responseText) {
-                    let updatedData = JSON.parse(responseText); // Parsea solo si hay contenido
-                    console.log("Datos actualizados:", updatedData);
+                if (deleteResponse.ok) {
+                    // Registrar los nuevos medios asociados
+                    if (formData.id_medios.length > 0) {
+                        const proveedorMediosData = formData.id_medios.map(id_medio => ({
+                            id_proveedor: idProveedor,
+                            id_medio: id_medio
+                        }));
     
-                    // Actualiza los campos de la tarjeta con los nuevos datos
-                    document.querySelector('.card-body .nombreProveedor').textContent = updatedData.nombreProveedor;
-                    document.querySelector('.card-body .nombreFantasia').textContent = updatedData.nombreFantasia;
-                    document.querySelector('.card-body .razonSocial').textContent = updatedData.razonSocial;
-                    document.querySelector('.card-body .giroProveedor').textContent = updatedData.giroProveedor;
-                    document.querySelector('.card-body .direccionFacturacion').textContent = updatedData.direccionFacturacion;
-                } else {
-                    console.warn("No se recibió ningún dato actualizado en la respuesta.");
-                }
+                        const insertResponse = await fetch("https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/proveedor_medios", {
+                            method: "POST",
+                            body: JSON.stringify(proveedorMediosData),
+                            headers: headersList
+                        });
     
-                mostrarExito('¡Actualización correcta!');
-                $('#actualizarProveedor').modal('hide');
-                $('#formualarioSoporteProv')[0].reset();
-                location.reload();
-
-                // Continuar con la actualización de medios si hay datos en formData.id_medios
-                if (formData.id_medios && formData.id_medios.length > 0) {
-                    const proveedorMediosData = formData.id_medios.map(id_medio => ({
-                        id_proveedor: idProveedor, // Usar el ID existente
-                        id_medio: id_medio
-                    }));
-    
-                    let responseProveedorMedios = await fetch("https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/proveedor_medios", {
-                        method: "POST",
-                        body: JSON.stringify(proveedorMediosData),
-                        headers: headersList
-                    });
-    
-                    if (responseProveedorMedios.ok) {
-                        console.log("Medios actualizados correctamente");
+                        if (insertResponse.ok) {
+                            mostrarExito('Actualización correctos');
+                            $('#actualizarProveedor').modal('hide');
+                            $('#formactualizarproveedor')[0].reset();
+                            location.reload();
+                        } else {
+                            const errorData = await insertResponse.text();
+                            console.error("Error en proveedor_medios:", errorData);
+                            alert("Error al registrar los medios, intente nuevamente");
+                        }
                     } else {
-                        console.error("Error al actualizar los medios:", await responseProveedorMedios.json());
+                        mostrarExito('Actualización correctos');
+                        $('#actualizarProveedor').modal('hide');
+                        $('#formactualizarproveedor')[0].reset();
+                        location.reload();
                     }
+                } else {
+                    const errorData = await deleteResponse.text();
+                    console.error("Error al eliminar proveedor_medios:", errorData);
+                    alert("Error al eliminar los medios antiguos, intente nuevamente");
                 }
-    
             } else {
-                let errorData = await response.json();
+                const errorData = await response.json();
                 console.error("Error:", errorData);
-                alert("Error, intentelo nuevamente");
+                alert("Error al actualizar el proveedor, intente nuevamente");
             }
         } catch (error) {
             console.error("Error de red:", error);
             alert("Error de red, intentelo nuevamente");
         }
     }
-    function updateMediosDropdown(idMedios) {
-        const dropdown = document.querySelector('#dropdown1');
-        if (!dropdown) {
-            console.error('Dropdown no encontrado.');
-            return;
-        }
     
-        const checkboxes = dropdown.querySelectorAll('.dropdown-content input[type="checkbox"]');
-        const selectedOptionsContainer = dropdown.querySelector('.selected-options'); // Asegúrate de que exista en tu HTML
-        
-        // Limpiar el contenedor de opciones seleccionadas
-        selectedOptionsContainer.innerHTML = '';
-    
-        checkboxes.forEach(checkbox => {
-            if (idMedios.includes(parseInt(checkbox.value))) {
-                checkbox.checked = true;
-            } else {
-                checkbox.checked = false;
-            }
-        });
-    
-    
-    }
-    
-
     function mostrarExito(mensaje) {
         Swal.fire({
             icon: 'success',

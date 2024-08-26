@@ -409,20 +409,21 @@ include 'componentes/sidebar.php';
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="codigo">Nombre Identificador</label>
+                                    <label for="codigo" class="labelforms">Nombre Identificador</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="far fa-user-circle"></i></span>
                                         </div>
                                         <input type="hidden" name="idprooo">
+                                        <input type="hidden"  name="idmedios">
                                         <input class="form-control" placeholder="Nombre Identificador" name="nombreIdentificadorp">
                                     </div>
                                     <label class="labelforms" for="codigo">Medios</label>
-                                    <div id="dropdown1" class="input-group dropdown" >
+                                    <div id="dropdown1" class="dropdown-medios input-group dropdown" >
                                         <div class="sell input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                                         </div>
-                                        <div class="selected-options" onclick="toggleDropdown()"></div>
+                                        <div class="selected-options" onclick="toggleDropdown()"><span class="selected-option" data-value="3">INTERNET<button>x</button></span></div>
                                         <button type="button" class="dropdown-button" style="font-size:14px; padding: 7px 20px !important; display:none;">Select Medios</button>
                                         <div class="dropdown-content">
                                             <?php foreach ($medios as $medio) : ?>
@@ -436,14 +437,14 @@ include 'componentes/sidebar.php';
                                     <label class="labelforms" for="codigo">Nombre de Proveedor</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-user"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-person"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Nombre de Proveedor" name="nombreProveedorp">
                                     </div>
                                     <label class="labelforms" for="codigo">Nombre Representante</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-user"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-person"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Nombre Representante" name="nombreRepresentantep">
                                     </div>
@@ -507,7 +508,7 @@ include 'componentes/sidebar.php';
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
                                         </div>
-                                        <select class="sesel form-select" name="id_regionp" id="region" required>
+                                        <select class="sesel region-select form-select" name="id_regionp" id="region" required>
                                             <?php foreach ($regiones as $regione) : ?>
                                                 <option value="<?php echo $regione['id']; ?>"><?php echo $regione['nombreRegion']; ?></option>
                                             <?php endforeach; ?>
@@ -545,7 +546,7 @@ include 'componentes/sidebar.php';
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
                                         </div>
-                                        <select class="sesel form-select" name="id_comunap" id="comuna" required>
+                                        <select class="sesel comuna-select form-select" name="id_comunap" id="comuna" required>
                                             <?php foreach ($comunas as $comuna) : ?>
                                                 <option value="<?php echo $comuna['id_comuna']; ?>" data-region="<?php echo $comuna['id_region']; ?>">
                                                     <?php echo $comuna['nombreComuna']; ?>
