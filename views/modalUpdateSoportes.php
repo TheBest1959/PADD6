@@ -15,7 +15,7 @@
                                     <label class="labelforms" for="codigo">Nombre Identificador</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-user-circle"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-person-circle"></i></span>
                                         </div>
                                         <input type="hidden" name="id_soporte" id="id_soporte" value="">
                                         <input type="hidden" name="id_proveedor">
@@ -23,11 +23,10 @@
                                         <input class="form-control" placeholder="Nombre Identificador" name="nombreIdentficiador">
                                     </div>
 
-
                                     <label class="labelforms" for="codigo">Nombre Representante</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-user-circle"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-person-circle"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Nombre Representante" name="nombreRepresentante">
                                     </div>
@@ -42,7 +41,7 @@
 
                                     <label for="rutSoporte" class="labelforms">Rut Soporte</label>
                                     <div class="input-group">
-                                        <span class="input-group-text"><i class="far fa-address-card"></i></span>
+                                        <span class="input-group-text"><i class="bi bi-credit-card-2-front"></i></span>
                                         <input type="text" class="form-control" placeholder="Rut Soporte" id="rutSoporte" name="rutSoporte" required>
                                         <div class="custom-tooltip" id="rutSoporte-tooltip"></div>
                                     </div>
@@ -50,21 +49,21 @@
                                     <label class="labelforms" for="codigo">Giro Soporte</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-suitcase"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-briefcase"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Giro Proveedor" name="giroProveedorx">
                                     </div>
                                     <label class="labelforms" for="codigo">Nombre de Fantasía</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-hand-spock"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-hand-thumbs-up"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Nombre de Fantasía" name="nombreFantasia">
                                     </div>
 
                                     <label for="rutRepresentantex" class="labelforms">Rut Representante</label>
                                     <div class="input-group">
-                                        <span class="input-group-text"><i class="far fa-address-card"></i></span>
+                                        <span class="input-group-text"><i class="bi bi-credit-card-2-front"></i></span>
                                         <input type="text" class="form-control" placeholder="Rut Representante" id="rutRepresentantex" name="rutRepresentantex" required>
                                         <div class="custom-tooltip" id="rutRepresentantex-tooltip"></div>
                                     </div>
@@ -81,14 +80,14 @@
                                     <label for="codigo">Razón Social</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-bullseye"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-bullseye"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Razón Social" name="razonSocialx">
                                     </div>
                                     <label class="labelforms" for="codigo">Región</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
                                         </div>
                                         <select class="sesel form-select" name="id_regionx" id="regionx" required>
                                             <?php foreach ($regiones as $regione) : ?>
@@ -99,14 +98,14 @@
 
                                     <label for="telCelularx" class="labelforms">Teléfono celular</label>
                                     <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                        <input type="text" class="phone-input form-control" placeholder="Rut Soporte" id="telCelularx" name="telCelularx" required>
+                                        <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                        <input type="text" class="phone-input form-control" placeholder="Teléfono celular" id="telCelularx" name="telCelularx" required>
                                         <div class="custom-tooltip" id="telCelularx-tooltip"></div>
                                     </div>
 
                                     <label for="emailx" class="labelforms">Email</label>
                                     <div class="input-group">
-                                        <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                                         <input type="text" class="form-control email-input" placeholder="Email" id="emailx" name="emailx" required>
                                         <div class="custom-tooltip" id="emailx-tooltip"></div>
                                     </div>
@@ -118,14 +117,14 @@
                                     <label for="codigo">Dirección Facturación</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-building"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-building"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Dirección Facturación" name="direccionx">
                                     </div>
                                     <label class="labelforms" for="codigo">Comuna</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
                                         </div>
                                         <select class="sesel form-select" name="id_comunax" id="comunax" required>
                                             <?php foreach ($comunas as $comuna) : ?>
@@ -138,7 +137,7 @@
 
                                     <label for="telFijox" class="labelforms">Teléfono Fijo</label>
                                     <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                        <span class="input-group-text"><i class="bi bi-telephone"></i></span>
                                         <input type="text" class="phone-input form-control" placeholder="Teléfono fijo" id="telFijox" name="telFijox" required>
                                         <div class="custom-tooltip" id="telFijox-tooltip"></div>
                                     </div>
@@ -150,12 +149,12 @@
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="codigo">Bonifiación por año %</label>
+                                    <label for="codigo">Bonificación por año %</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
                                         </div>
-                                        <input class="form-control" placeholder="Bonifiación por año %" name="bonificacion_anox">
+                                        <input class="form-control" placeholder="Bonificación por año %" name="bonificacion_anox">
                                     </div>
                                 </div>
                             </div>
@@ -164,7 +163,7 @@
                                     <label for="codigo">Escala de rango</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-chart-bar"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-bar-chart-line"></i></span>
                                         </div>
                                         <input class="form-control" placeholder="Escala de rango" name="escala_rangox">
                                     </div>
@@ -184,16 +183,13 @@
     </div>
 </div>
 
-
 <style>
     .medio-soporte {
         margin: 30px 0px;
     }
 
     .medio-soporte .medio-item {
-
         border-radius: 30px;
-
         padding: 5px 10px;
         border: solid;
     }
