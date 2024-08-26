@@ -78,7 +78,7 @@
           </div>
           <div class="row">
             <div class="col-md-12 mb-3">
-              <label for="estado" class="form-label">Estado del Contrato</label>
+              <label for="estado" class="form-label">Estado del Contrato Nuevo</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-toggle-on"></i></span>
                 <select class="form-select" id="estado" name="estado" required>
