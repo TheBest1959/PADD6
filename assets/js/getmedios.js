@@ -85,6 +85,7 @@ function setupDropdown(dropdownId) {
 }
 
 // Inicializa los dropdowns
+
 ['dropdown5', 'dropdown6', 'dropdown1', 'dropdown2', 'dropdown3', 'dropdown4', 'dropdown7'].forEach(id => setupDropdown(id));
 
 
@@ -160,3 +161,5 @@ function updateMediosDropdown(idMedios) {
         }
     });
 }
+
+

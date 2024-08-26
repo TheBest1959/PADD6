@@ -1,7 +1,7 @@
 function loadsoportepro(button) {
     var idSoporte = button.getAttribute('data-id-soporte');
     var soporte = getSoporteData(idSoporte);
-
+   
     if (soporte) {
         // Llenar los campos del modal con los datos del soporte
         document.querySelector('input[name="rutProveedorx"]').value = soporte.id_proveedor;
