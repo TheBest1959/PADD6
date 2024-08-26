@@ -50,7 +50,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     soporteSelect.appendChild(option);
                 });
             } else {
-                console.warn("No se encontraron soportes no vinculados.");
+                var option = document.createElement('option');
+                option.textContent = 'No se encontraron soportes vinculados';
+                soporteSelect.appendChild(option); // Añadir la opción al select
             }
         })
         .catch(error => console.error("Error al obtener soportes:", error));
@@ -173,8 +175,10 @@ async function submitFormSoporte2(event) {
     const formData = getFormDataSoporte();
     const nuevoIdSoporte = await obtenerNuevoIdSoporte(); // Obtener el nuevo ID
     const idProveedor = formData.id_proveedor; 
-    console.log(idProveedor,"Holaaa");
+    console.log(idProveedor, "Holaaa");
+
     let soporteData;
+
     if (formData.revision === "on") {
         // Usar los datos del proveedor
         soporteData = {
@@ -197,7 +201,6 @@ async function submitFormSoporte2(event) {
             bonificacion_ano: formData.bonificacion_ano,
             escala: formData.escala_rango
         };
-
     } else {
         // Usar los datos ingresados manualmente
         soporteData = {
@@ -220,7 +223,6 @@ async function submitFormSoporte2(event) {
             bonificacion_ano: formData.bonificacion_ano,
             escala: formData.escala_rango
         };
-  
     }
 
     try {
@@ -229,58 +231,66 @@ async function submitFormSoporte2(event) {
             method: "POST",
             body: JSON.stringify(soporteData),
             headers: {
-                "Content-Type": "application/json",
+               "Content-Type": "application/json",
                 "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc",
         "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc"
-            }
+           }
         });
-        console.log(responseSoporte,"soporte agregado se supone");
+
         if (responseSoporte.ok) {
             console.log("Soporte registrado correctamente");
 
-            // Continuar con el registro de medios
-            const soporteMediosData = formData['id_medios[]'].map(id_medio => ({
-                id_soporte: nuevoIdSoporte, // Usar el ID generado
-                id_medio: id_medio
-            }));
-            console.log(soporteMediosData,"medios");
-            let responseSoporteMedios = await fetch("https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/soporte_medios", {
-                method: "POST",
-                body: JSON.stringify(soporteMediosData),
-                headers: {
-                    "Content-Type": "application/json",
-                    "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc",
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc"
-                }
-            });
-
-            if (responseSoporteMedios.ok) {
-
-                  // Continuar con el registro de medios
-                  const soporteProveedor = {
+            // Continuar con el registro de medios si existen
+            if (formData['id_medios[]']) {
+                const soporteMediosData = formData['id_medios[]'].map(id_medio => ({
                     id_soporte: nuevoIdSoporte, // Usar el ID generado
-                    id_proveedor: formData.id_proveedor // Asegúrate de que formData contiene id_proveedor
-                };
+                    id_medio: id_medio
+                }));
 
-            let responseSoporteMedios = await fetch("https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/proveedor_soporte", {
+                if (soporteMediosData.length > 0) {
+                    let responseSoporteMedios = await fetch("https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/soporte_medios", {
+                        method: "POST",
+                        body: JSON.stringify(soporteMediosData),
+                        headers: {
+                         "Content-Type": "application/json",
+                "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc",
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc"
+           }
+                    });
+
+                    if (!responseSoporteMedios.ok) {
+                        const errorData = await responseSoporteMedios.text(); // Obtener respuesta como texto
+                        console.error("Error en soporte_medios:", errorData);
+                        alert("Error al registrar los medios, intente nuevamente");
+                    }
+                }
+            }
+
+            // Registrar en la tabla proveedor_soporte
+            const soporteProveedor = {
+                id_soporte: nuevoIdSoporte, // Usar el ID generado
+                id_proveedor: formData.id_proveedor // Asegúrate de que formData contiene id_proveedor
+            };
+
+            let responseSoporteProveedor = await fetch("https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/proveedor_soporte", {
                 method: "POST",
                 body: JSON.stringify(soporteProveedor),
                 headers: {
-                    "Content-Type": "application/json",
-                    "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc",
+                  "Content-Type": "application/json",
+                "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc",
         "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc"
-                }
-
+           }
             });
 
-            mostrarExito('¡Soporte agregado exitosamente!');
-            $('#agregarSoportessss').modal('hide');
-            $('#formualarioSoporteProv')[0].reset();
-            refreshTable(idProveedor);
+            if (responseSoporteProveedor.ok) {
+                mostrarExito('¡Soporte agregado exitosamente!');
+                $('#agregarSoportessss').modal('hide');
+                $('#formualarioSoporteProv')[0].reset();
+                refreshTable(idProveedor);
             } else {
-                const errorData = await responseSoporteMedios.text(); // Obtener respuesta como texto
-                console.error("Error en soporte_medios:", errorData);
-                alert("Error al registrar los medios, intente nuevamente");
+                const errorData = await responseSoporteProveedor.text(); // Obtener respuesta como texto
+                console.error("Error en proveedor_soporte:", errorData);
+                alert("Error al registrar el soporte-proveedor, intente nuevamente");
             }
         } else {
             const errorData = await responseSoporte.text(); // Obtener respuesta como texto
@@ -288,11 +298,10 @@ async function submitFormSoporte2(event) {
             alert("Error al registrar el soporte, intente nuevamente");
         }
     } catch (error) {
-        console.error("Error en la solicitud:", error);
-        alert("Error en la solicitud, intente nuevamente");
+        console.error("Error:", error);
+        alert("Ocurrió un error al intentar registrar el soporte. Intente nuevamente.");
     }
 }
-
 function refreshTable(proveedorId) {
     if (proveedorId) {
         fetch(`/get_soportes.php?proveedor_id=${proveedorId}`)

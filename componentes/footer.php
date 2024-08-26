@@ -17,8 +17,9 @@
   <!-- Custom JS File -->
   <script src="<?php echo $ruta; ?>assets/js/custom.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
-     <!--<script src="assets/js/formulariomultipass.js"></script>
+  <script src="<?php echo $ruta; ?>assets/bundles/bootstrap/js/bootstrap.min.js"></script>
+  <!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+<script src="assets/js/formulariomultipass.js"></script>
    JS Libraies -->
    
    <script src="<?php echo $ruta; ?>assets/bundles/datatables/datatables.min.js"></script>

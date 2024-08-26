@@ -21,11 +21,14 @@
     }
     
     // Obtener datos+
+    $soportes = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Soportes?select=*');
     $agencias = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Agencias?select=*');
     $clientes = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Clientes?select=*');
     $tiposCliente = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/TipoCliente?select=*');
     $regiones = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Region?select=*');
     $comunas = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/Comunas?select=*');
+    $formatoComision = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/formatoComision?select=*');
+    $tipoMoneda = makeRequest('https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/TipoMoneda?select=*');
        
     // Crear arrays asociativos para búsqueda rápida
     $tiposClienteMap = array_column($tiposCliente, 'nombreTipoCliente', 'id_tyipoCliente');
@@ -36,9 +39,22 @@
 foreach ($clientes as $cliente) {
     $clientesMap[$cliente['id_cliente']] = $cliente;    
 }
+$soportesMap = [];
+foreach ($soportes as $soporte) {
+    $soportesMap[$soporte['id_soporte']] = $soporte;
+}
 
 $tipoclientesMap2 = [];
 foreach ($tiposCliente as $tipocliente) {
     $tipoclientesMap[$tipocliente['id_tyipoCliente']] = $tipocliente;
 }
+$formatoComisionMap = [];
+foreach ($formatoComision as $comisionFormato) {
+    $formatoComisionMap[$comisionFormato['id_formatoComision']] = $comisionFormato;
+}
+$tipoMonedaMap = [];
+foreach ($tipoMoneda as $tipozMoneda) {
+    $tipoMonedaMap[$tipozMoneda['id_moneda']] = $tipozMoneda;
+}
+
 

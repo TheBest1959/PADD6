@@ -336,8 +336,21 @@ body{
   font-size: 13px !important;
 }
 
+.form-select {
+  height: 42px;
+}
+
 .cabeza {
   width: 100%;
   display: flex;
   justify-content: space-between;
+
+}
+.btn.btn-danger.micono {
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+}
+.btn.btn-success.micono {
+  margin-top: -2px;
+
 }
