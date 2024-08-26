@@ -347,3 +347,6 @@ body{
   padding-top: 3px !important;
   padding-bottom: 3px !important;
 }
+.btn.btn-success.micono {
+  margin-top: -2px;
+}

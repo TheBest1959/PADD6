@@ -13,8 +13,7 @@ $nombre = $_SESSION['user_name'];
 
 
 
-
-$ruta = 'https://redesigned-space-disco-69rqjvwv4jxvc45j5-3000.app.github.dev/';
+$ruta = 'https://refactored-space-guacamole-r4rqv4jjq7wxfwpvx-3000.app.github.dev/';
 
 
 
@@ -38,7 +37,7 @@ $current_file = basename($_SERVER['PHP_SELF']);
   <link rel="stylesheet" href="<?php echo $ruta; ?>assets/css/app.min.css">
   <!-- Template CSS -->
   <link rel="stylesheet" href="<?php echo $ruta; ?>assets/css/formulario.css">
-  <link rel="stylesheet" href="<?php echo $ruta; ?>assets/bundles&/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="<?php echo $ruta; ?>assets/bundles/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/fontawesome.min.css">
 

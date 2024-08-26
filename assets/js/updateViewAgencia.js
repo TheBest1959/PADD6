@@ -5,12 +5,11 @@
 
     // Función para obtener los datos del formulario
     function getFormData() {
-        const formData = new FormData(document.getElementById('formularioactualizar'));
+        const formData = new FormData(document.getElementById('formularioactualizar23'));
         const dataObject = {};
         formData.forEach((value, key) => {
             dataObject[key] = value;
         });
-        console.log(dataObject, "hola");
         return {
             RazonSocial: dataObject.razonSocial,
             NombreDeFantasia: dataObject.nombreFantasia,
@@ -19,7 +18,7 @@
             NombreRepresentanteLegal: dataObject.nombreRepresentanteLegal,
             Comuna: dataObject.id_comuna,
             Email: dataObject.email || null,
-            estado: false,
+            estado: true, // Asumimos que la agencia está activa al actualizarla
             NombreIdentificador: dataObject.nombreIdentificador,
             telCelular: dataObject.telCelular,
             telFijo: dataObject.telFijo,
@@ -33,7 +32,6 @@
     async function submitForm(event) {
         event.preventDefault();
         let bodyContent = JSON.stringify(getFormData());
-        console.log(bodyContent, "holacon");
         let idAgencia = document.querySelector('input[name="id_agencia"]').value;
         let headersList = {
             "Content-Type": "application/json",
