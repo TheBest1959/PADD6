@@ -110,33 +110,30 @@ async function submitForm3(event) {
             }),
             headers: headersList
         });
-
+    
         if (response.ok) {
             // Eliminar registros antiguos de soporte_medios asociados al id_soporte
             const deleteResponse = await fetch(`https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/soporte_medios?id_soporte=eq.${idSoporte}`, {
                 method: "DELETE",
                 headers: headersList
             });
-
+    
             if (deleteResponse.ok) {
-                // Registrar los nuevos medios asociados
-                if (formData.id_medios.length > 0) {
+                // Verificar si hay id_medios para registrar
+                if (Array.isArray(formData.id_medios) && formData.id_medios.length > 0) {
                     const soporteMediosData = formData.id_medios.map(id_medio => ({
                         id_soporte: idSoporte,
                         id_medio: id_medio
                     }));
-
+    
                     const insertResponse = await fetch("https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/soporte_medios", {
                         method: "POST",
                         body: JSON.stringify(soporteMediosData),
                         headers: headersList
                     });
-
+    
                     if (insertResponse.ok) {
                         mostrarExito('Soporte actualizado correctamente');
-                        $('#actualizarSoporte').modal('hide');
-                        $('#formularioactualizarSoporte')[0].reset();
-                        location.reload();
                     } else {
                         const errorData = await insertResponse.text();
                         console.error("Error en soporte_medios:", errorData);
@@ -144,10 +141,12 @@ async function submitForm3(event) {
                     }
                 } else {
                     mostrarExito('Soporte actualizado correctamente');
-                    $('#actualizarSoporte').modal('hide');
-                    $('#formularioactualizarSoporte')[0].reset();
-                    location.reload();
                 }
+    
+                $('#actualizarSoporte').modal('hide');
+                $('#formularioactualizarSoporte')[0].reset();
+                showLoading();
+                location.reload();
             } else {
                 const errorData = await deleteResponse.text();
                 console.error("Error al eliminar soporte_medios:", errorData);
@@ -163,7 +162,20 @@ async function submitForm3(event) {
         alert("Error de red, intentelo nuevamente");
     }
 }
-
+function showLoading() {
+    let loadingElement = document.getElementById('custom-loading');
+    if (!loadingElement) {
+        loadingElement = document.createElement('div');
+        loadingElement.id = 'custom-loading';
+        loadingElement.innerHTML = `
+            <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
+                <img src="/assets/img/loading.gif" alt="Cargando..." style="width: 220px; height: 135px;">
+            </div>
+        `;
+        document.body.appendChild(loadingElement);
+    }
+    loadingElement.style.display = 'block';
+}
 
 function mostrarExito(mensaje) {
     Swal.fire({
