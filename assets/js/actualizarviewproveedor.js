@@ -115,44 +115,43 @@
                 body: JSON.stringify(proveedorData),
                 headers: headersList
             });
-    
+        
             if (response.ok) {
                 // Eliminar registros antiguos de proveedor_medios asociados al id_proveedor
                 const deleteResponse = await fetch(`https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/proveedor_medios?id_proveedor=eq.${idProveedor}`, {
                     method: "DELETE",
                     headers: headersList
                 });
-    
+        
                 if (deleteResponse.ok) {
-                    // Registrar los nuevos medios asociados
-                    if (formData.id_medios.length > 0) {
+                    // Verificar si hay id_medios para registrar
+                    if (Array.isArray(formData.id_medios) && formData.id_medios.length > 0) {
                         const proveedorMediosData = formData.id_medios.map(id_medio => ({
                             id_proveedor: idProveedor,
                             id_medio: id_medio
                         }));
-    
+        
                         const insertResponse = await fetch("https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/proveedor_medios", {
                             method: "POST",
                             body: JSON.stringify(proveedorMediosData),
                             headers: headersList
                         });
-    
+        
                         if (insertResponse.ok) {
-                            mostrarExito('Actualización correctos');
-                            $('#actualizarProveedor').modal('hide');
-                            $('#formactualizarproveedor')[0].reset();
-                            location.reload();
+                            mostrarExito('Actualización correcta');
                         } else {
                             const errorData = await insertResponse.text();
                             console.error("Error en proveedor_medios:", errorData);
                             alert("Error al registrar los medios, intente nuevamente");
                         }
                     } else {
-                        mostrarExito('Actualización correctos');
-                        $('#actualizarProveedor').modal('hide');
-                        $('#formactualizarproveedor')[0].reset();
-                        location.reload();
+                        mostrarExito('Actualización correcta');
                     }
+        
+                    $('#actualizarProveedor').modal('hide');
+                    $('#formactualizarproveedor')[0].reset();
+                    showLoading();
+                    location.reload();
                 } else {
                     const errorData = await deleteResponse.text();
                     console.error("Error al eliminar proveedor_medios:", errorData);
@@ -167,6 +166,20 @@
             console.error("Error de red:", error);
             alert("Error de red, intentelo nuevamente");
         }
+    }
+    function showLoading() {
+        let loadingElement = document.getElementById('custom-loading');
+        if (!loadingElement) {
+            loadingElement = document.createElement('div');
+            loadingElement.id = 'custom-loading';
+            loadingElement.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
+                    <img src="/assets/img/loading.gif" alt="Cargando..." style="width: 220px; height: 135px;">
+                </div>
+            `;
+            document.body.appendChild(loadingElement);
+        }
+        loadingElement.style.display = 'block';
     }
     
     function mostrarExito(mensaje) {

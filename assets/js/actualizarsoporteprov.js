@@ -138,8 +138,9 @@ async function submitForm3(event) {
             headers: headersList
         });
         console.log("Respuesta del servidor PATCH:", response);
-        console.log(soporteData,"data soporte ctm");
-        console.log(idSoporte,"data soporte ctm2");
+        console.log(soporteData, "data soporte");
+        console.log(idSoporte, "data soporte");
+    
         if (response.ok) {
             // Eliminar registros antiguos de soporte_medios asociados al id_soporte
             const deleteResponse = await fetch(`https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/soporte_medios?id_soporte=eq.${idSoporte}`, {
@@ -147,25 +148,28 @@ async function submitForm3(event) {
                 headers: headersList
             });
             console.log("Respuesta del servidor DELETE:", deleteResponse);
+    
             if (deleteResponse.ok) {
-                // Registrar los nuevos medios asociados
-                if (formData.id_medios.length > 0) {
+                // Registrar los nuevos medios asociados si formData.id_medios no está vacío, indefinido o nulo
+                if (formData.id_medios && formData.id_medios.length > 0) {
                     const soporteMediosData = formData.id_medios.map(id_medio => ({
                         id_soporte: idSoporte,
                         id_medio: id_medio
                     }));
-
+    
                     const insertResponse = await fetch("https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/soporte_medios", {
                         method: "POST",
                         body: JSON.stringify(soporteMediosData),
                         headers: headersList
                     });
                     console.log("Respuesta del servidor POST:", insertResponse);
-                    console.log(soporteMediosData,"data soporte");
+                    console.log(soporteMediosData, "data soporte");
+    
                     if (insertResponse.ok) {
                         mostrarExito('Soporte actualizado correctamente');
                         $('#actualizarsoporte22').modal('hide');
                         $('#formularioactualizarSoporteProv')[0].reset();
+                        showLoading();
                         location.reload();
                     } else {
                         const errorData = await insertResponse.text();
@@ -173,9 +177,13 @@ async function submitForm3(event) {
                         alert("Error al registrar los medios, intente nuevamente");
                     }
                 } else {
+                    // Si no hay medios para registrar, simplemente mostrar éxito
                     mostrarExito('Soporte actualizado correctamente');
                     $('#actualizarsoporte22').modal('hide');
-                    $('#formularioactualizarSoporteProv')[0].reset();
+                                        $('#formularioactualizarSoporteProv')[0].reset();
+                    // Mostrar el GIF de carga
+                    showLoading();
+
                     location.reload();
                 }
             } else {
@@ -192,6 +200,22 @@ async function submitForm3(event) {
         console.error("Error de red:", error);
         alert("Error de red, intentelo nuevamente");
     }
+}
+
+
+function showLoading() {
+    let loadingElement = document.getElementById('custom-loading');
+    if (!loadingElement) {
+        loadingElement = document.createElement('div');
+        loadingElement.id = 'custom-loading';
+        loadingElement.innerHTML = `
+            <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
+                <img src="/assets/img/loading.gif" alt="Cargando..." style="width: 220px; height: 135px;">
+            </div>
+        `;
+        document.body.appendChild(loadingElement);
+    }
+    loadingElement.style.display = 'block';
 }
 function refreshTable(proveedorId) {
     if (proveedorId) {

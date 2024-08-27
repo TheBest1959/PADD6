@@ -98,15 +98,15 @@ async function submitForm2(event) {
             headers: {
                 "Content-Type": "application/json",
                 "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc",
-   "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc"
-        }
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc"
+            }
         });
     
         if (responseProveedor.ok) {
             console.log("Proveedor registrado correctamente");
     
             // Continuar con el registro de medios si hay datos
-            if (formData.id_medios.length > 0) {
+            if (Array.isArray(formData.id_medios) && formData.id_medios.length > 0) {
                 const proveedorMediosData = formData.id_medios.map(id_medio => ({
                     id_proveedor: nuevoIdProveedor, // Usar el ID generado
                     id_medio: id_medio
@@ -118,40 +118,33 @@ async function submitForm2(event) {
                     headers: {
                         "Content-Type": "application/json",
                         "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc",
-           "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc"
-               }
+                        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWp4emp3aHhvdHBkZnpjcGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNzEwOTMsImV4cCI6MjAzNTg0NzA5M30.Vh4XAp1X6eJlEtqNNzYIoIuTPEweat14VQc9-InHhXc"
+                    }
                 });
     
                 if (responseProveedorMedios.ok) {
-                    mostrarExito('Comisión agregada correctamente');
-                    $('#agregarProveedor').modal('hide');
-                    $('#formularioAgregarProveedor')[0].reset();
-                    // Asegurarse de que la tabla se haya actualizado
-                    location.reload();
+                    mostrarExito('Proveedor y medios registrados correctamente');
                 } else {
-                    const errorData = await responseProveedorMedios.text(); // Obtener respuesta como texto
+                    const errorData = await responseProveedorMedios.text();
                     console.error("Error en proveedor_medios:", errorData);
                     alert("Error al registrar los medios, intente nuevamente");
                 }
             } else {
                 // No hay medios para registrar, solo completa el proceso
                 mostrarExito('Proveedor registrado correctamente');
-                $('#agregarProveedor').modal('hide');
-                $('#formularioAgregarProveedor')[0].reset();
-                // Asegurarse de que la tabla se haya actualizado
-                location.reload();
             }
+    
+            $('#agregarProveedor').modal('hide');
+            $('#formularioAgregarProveedor')[0].reset();
+            location.reload(); // Asegurarse de que la tabla se haya actualizado
         } else {
-            const errorData = await responseProveedor.text(); // Obtener respuesta como texto
+            const errorData = await responseProveedor.text();
             console.error("Error en proveedor:", errorData);
             alert("Error al registrar el proveedor, intente nuevamente");
         }
     } catch (error) {
-        mostrarExito('Proveedor registrado correctamente');
-        $('#agregarProveedor').modal('hide');
-        $('#formularioAgregarProveedor')[0].reset();
-        // Asegurarse de que la tabla se haya actualizado
-        location.reload();
+        console.error("Error de red:", error);
+        alert("Error de red, intente nuevamente");
     }
 }
 function refreshTable() {
