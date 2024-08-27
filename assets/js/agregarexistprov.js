@@ -86,6 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (response.ok) {
                 mostrarExito('Soporte agregado correctamente!');
                 $('#agregarsoporteprov').modal('hide');
+                showLoading()
                 location.reload();
                 try {
                     return JSON.parse(text); // Intenta parsear el texto como JSON

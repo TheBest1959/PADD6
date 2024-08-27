@@ -161,9 +161,7 @@ function loadProveedorData(button) {
             mostrarExito('Actualización correcta');
             $('#actualizarProveedor').modal('hide');
             $('#formactualizarproveedor')[0].reset();
-
             showLoading();
-
             location.reload();
             
         } catch (error) {
@@ -172,7 +170,16 @@ function loadProveedorData(button) {
         }
     }
     
-
+    function mostrarExito(mensaje) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: mensaje,
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }
+    
     function showLoading() {
         let loadingElement = document.getElementById('custom-loading');
         if (!loadingElement) {
@@ -187,17 +194,5 @@ function loadProveedorData(button) {
         }
         loadingElement.style.display = 'block';
     }
-
-    function mostrarExito(mensaje) {
-        Swal.fire({
-            icon: 'success',
-            title: 'Éxito',
-            text: mensaje,
-            showConfirmButton: false,
-            timer: 1500
-        });
-    }
-    
-    
     // Asigna el evento de envío al formulario de actualizar proveedor
     document.getElementById('formactualizarproveedor').addEventListener('submit', submitForm3);
