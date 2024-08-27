@@ -42,6 +42,74 @@ if (!$agencia) {
 }
 ?>
 
+<style>
+       .is-invalid {
+        border-color: #dc3545 !important;
+    }
+    .custom-tooltip {
+        position: absolute;
+        background-color: #dc3545;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+    }
+    .custom-tooltip::before {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #dc3545 transparent transparent transparent;
+    }
+    .input-wrapper {
+        position: relative;
+    }
+
+    .expand-icon {
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+    .expand-icon.open {
+        transform: rotate(90deg);
+    }
+    .fade-in {
+        animation: fadeIn 0.1s;
+    }
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+    .child-row {
+        background-color: #f8f9fa;
+        overflow: hidden;
+       
+    }
+    .child-row.show {
+        max-height: 1000px; /* Ajusta este valor según sea necesario */
+    }
+    .expand-icon.fas.fa-angle-down, .expand-icon.fas.fa-angle-right {
+  font-size: 17px !important;
+}
+.sorting_1 {
+  text-align: center !important;
+}
+.fas.fa-globe.mediow {
+  color: #EF4D36;
+  font-size: 20px;
+}
+.dist_marketing-btn-icon__AWP8I {
+  color: red;
+  width: 20px;
+}
+</style>
+
 <div class="main-content">
  <nav aria-label="breadcrumb">
                       <ol class="breadcrumb">
@@ -78,6 +146,9 @@ if (!$agencia) {
                                     Nombre Identificador: <?php echo $agencia['NombreIdentificador']; ?>
                                 </div>
                                 <div class="w-100 d-sm-none"></div>
+                                <div class="theditar"><button type="button" class="btn btn-danger micono ver-agencia-btn novedad" data-bs-toggle="modal" data-bs-target="#actualizaragencia" data-idagencia="<?php echo $idAgencia ?>">
+    <i class="fas fa-pencil"></i> Editar datos
+</button></div>
                             </div>
                         </div>
                     </div>
@@ -104,11 +175,7 @@ if (!$agencia) {
                     <li class="nav-item">
                         <a class="nav-link" id="facturacion-tab" data-bs-toggle="tab" href="#facturacion" role="tab" aria-controls="facturacion" aria-selected="false">Datos de Facturación</a>
                     </li>
-                     <div class="agregar2">
-                     <button type="button" class="btn btn-success micono ver-agencia-btn" data-bs-toggle="modal" data-bs-target="#actualizaragencia" data-idagencia="<?php echo $idAgencia ?>">
-    <i class="fas fa-eye"></i> Actualizar
-</button>
-                </div>
+                    
                 </ul>
                 <div class="tab-content" id="myTabContent">
                     <!-- Datos Generales -->
@@ -231,6 +298,7 @@ if (!$agencia) {
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-card-text"></i></span>
                                 <input type="text" class="form-control" id="rut" name="rut" required>
+                                <div class="custom-tooltip" id="rut-tooltip"></div>
                             </div>
                         </div>
                     </div>
@@ -256,6 +324,7 @@ if (!$agencia) {
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-card-text"></i></span>
                                 <input type="text" class="form-control" id="rutRepresentante" name="rutRepresentante" required>
+                                <div class="custom-tooltip" id="rutRepresentante-tooltip"></div>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -297,21 +366,25 @@ if (!$agencia) {
                             <label for="telCelular" class="form-label">Teléfono Celular</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-phone"></i></span>
-                                <input type="tel" class="form-control" id="telCelular" name="telCelular" required>
+                                <input type="tel" class="form-control phone-input" id="telCelular" name="telCelular" required>
+                                <div class="custom-tooltip" id="telCelular-tooltip"></div>
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="telFijo" class="form-label">Teléfono Fijo</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                                <input type="tel" class="form-control" id="telFijo" name="telFijo" required>
+                                <input type="tel" class="form-control phone-input" id="telFijo" name="telFijo" required>
+                                <div class="custom-tooltip" id="telFijo-tooltip"></div>
+                                
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="email" class="form-label">Email</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                <input type="email" class="form-control" id="email" name="email" required>
+                                <input type="email" class="form-control email-input" id="email" name="email" required>
+                                <div class="custom-tooltip" id="email-tooltip"></div>
                             </div>
                         </div>
                     </div>
@@ -434,7 +507,116 @@ document.addEventListener('DOMContentLoaded', function() {
     AgencyManager.init();
 });
 </script>
-<script src="<?php echo $ruta; ?>assets/js/updateViewAgencia.js"></script>
+
+
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() { 
+    function showError(input, message) {
+        input.classList.add('is-invalid');
+        var tooltip = document.getElementById(input.id + '-tooltip');
+        tooltip.textContent = message;
+        tooltip.style.opacity = '1';
+        positionTooltip(input, tooltip);
+    }
+
+    function hideError(input) {
+        input.classList.remove('is-invalid');
+        var tooltip = document.getElementById(input.id + '-tooltip');
+        tooltip.style.opacity = '0';
+    }
+    function positionTooltip(input, tooltip) {
+        var rect = input.getBoundingClientRect();
+        tooltip.style.left = '10px';
+        tooltip.style.top = -(tooltip.offsetHeight + 5) + 'px';
+    }
+    var Fn = {
+        validaRut: function(rutCompleto) {
+            if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test(rutCompleto)) return false;
+            var tmp = rutCompleto.split('-');
+            var digv = tmp[1];
+            var rut = tmp[0];
+            if (digv == 'K') digv = 'k';
+            return (Fn.dv(rut) == digv);
+        },
+        dv: function(T) {
+            var M = 0, S = 1;
+            for (; T; T = Math.floor(T / 10)) S = (S + T % 10 * (9 - M++ % 6)) % 11;
+            return S ? S - 1 : 'k';
+        }
+    };
+    function validaPhoneChileno(phone) {
+        // Patrón para teléfonos chilenos
+        // Acepta formatos: +56912345678, 912345678, 221234567
+        var phonePattern = /^(\+?56|0)?([2-9]\d{8}|[2-9]\d{7})$/;
+        return phonePattern.test(phone);
+    }
+
+    // Validación en tiempo real para RUTs
+    var rutInputs = document.querySelectorAll('#rut, #rutRepresentante, #rutx, #rutRepresentantex, #telCelularx, #telFijox, #emailx');
+    rutInputs.forEach(function(input) {
+        input.addEventListener('input', function() {
+            if (this.value === "") {
+                hideError(this);
+            } else if (!Fn.validaRut(this.value)) {
+                showError(this, "RUT INVALIDO - DEBES INGRESAR SIN PUNTOS Y CON GUIÓN");
+            } else {
+                hideError(this);
+            }
+        });
+    });
+ 
+
+   // Validación en tiempo real para Email
+   var emailInputs = document.querySelectorAll('.email-input');
+var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+emailInputs.forEach(function(emailInput) {
+    emailInput.addEventListener('input', function() {
+        if (this.value === "") {
+            hideError(this);
+        } else if (!emailPattern.test(this.value)) {
+            showError(this, "EMAIL INCORRECTO");
+        } else {
+            hideError(this);
+        }
+    });
+});
+
+      // Validación en tiempo real para teléfonos
+      var phoneInputs = document.querySelectorAll('.phone-input');
+phoneInputs.forEach(function(input) {
+    input.addEventListener('input', function() {
+        if (this.value === "") {
+            hideError(this);
+        } else if (!validaPhoneChileno(this.value)) {
+            showError(this, "NÚMERO DE TELÉFONO NO VÁLIDO");
+        } else {
+            hideError(this);
+        }
+    });
+});
+
+
+});
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="<?php echo $ruta; ?>assets/js/updateViewAgencia2.js"></script>
 <script src="../assets/js/actualizarviewagen.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../assets/js/eliminaragencia.js"></script>
