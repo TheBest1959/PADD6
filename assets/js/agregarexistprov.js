@@ -101,13 +101,28 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("Soporte registrado exitosamente:", data);
         // Puedes mostrar un mensaje de éxito o cerrar el modal aquí
         $('#agregarsoporteprov').modal('hide');
+        showLoading();
+        location.reload();
     })
     .catch(error => {
         console.error("Error al registrar el soporte:", error.message);
         // Puedes mostrar un mensaje de error aquí
     });
 });
-
+function showLoading() {
+    let loadingElement = document.getElementById('custom-loading');
+    if (!loadingElement) {
+        loadingElement = document.createElement('div');
+        loadingElement.id = 'custom-loading';
+        loadingElement.innerHTML = `
+            <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
+                <img src="/assets/img/loading.gif" alt="Cargando..." style="width: 220px; height: 135px;">
+            </div>
+        `;
+        document.body.appendChild(loadingElement);
+    }
+    loadingElement.style.display = 'block';
+}
 function mostrarExito(mensaje) {
     Swal.fire({
         icon: 'success',

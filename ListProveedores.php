@@ -211,7 +211,7 @@ include 'componentes/sidebar.php';
                                     <label class="labelforms" for="codigo">Medios</label>
                                     <div id="dropdown7" class="input-group dropdown" >
                                         <div class="sell input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                            <span class="input-group-text"><i class="bi bi-tags"></i></span>
                                         </div>
                                         <div class="selected-options" onclick="toggleDropdown()"></div>
                                         <button type="button" class="dropdown-button" style="font-size:14px; padding: 7px 20px !important; display:none;">Select Medios</button>
