@@ -122,28 +122,45 @@ async function submitForm3(event) {
                 method: "DELETE",
                 headers: headersList
             });
-    
-            if (deleteResponse.ok) {
-                // Verificar si hay id_medios para registrar
-                if (Array.isArray(formData.id_medios) && formData.id_medios.length > 0) {
-                    const proveedorMediosData = formData.id_medios.map(id_medio => ({
-                        id_proveedor: idProveedor,
-                        id_medio: id_medio
-                    }));
-    
-                    const insertResponse = await fetch("https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/proveedor_medios", {
-                        method: "POST",
-                        body: JSON.stringify(proveedorMediosData),
-                        headers: headersList
-                    });
-    
-                    if (insertResponse.ok) {
-                        mostrarExito('Actualización correcta');
+
+        
+            if (response.ok) {
+                // Eliminar registros antiguos de proveedor_medios asociados al id_proveedor
+                const deleteResponse = await fetch(`https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/proveedor_medios?id_proveedor=eq.${idProveedor}`, {
+                    method: "DELETE",
+                    headers: headersList
+                });
+        
+                if (deleteResponse.ok) {
+                    // Verificar si hay id_medios para registrar
+                    if (Array.isArray(formData.id_medios) && formData.id_medios.length > 0) {
+                        const proveedorMediosData = formData.id_medios.map(id_medio => ({
+                            id_proveedor: idProveedor,
+                            id_medio: id_medio
+                        }));
+        
+                        const insertResponse = await fetch("https://ekyjxzjwhxotpdfzcpfq.supabase.co/rest/v1/proveedor_medios", {
+                            method: "POST",
+                            body: JSON.stringify(proveedorMediosData),
+                            headers: headersList
+                        });
+        
+                        if (insertResponse.ok) {
+                            mostrarExito('Actualización correcta');
+                        } else {
+                            const errorData = await insertResponse.text();
+                            console.error("Error en proveedor_medios:", errorData);
+                            alert("Error al registrar los medios, intente nuevamente");
+                        }
                     } else {
-                        const errorData = await insertResponse.text();
-                        console.error("Error en proveedor_medios:", errorData);
-                        alert("Error al registrar los medios, intente nuevamente");
+                        mostrarExito('Actualización correcta');
+
                     }
+        
+                    $('#actualizarProveedor').modal('hide');
+                    $('#formactualizarproveedor')[0].reset();
+                    showLoading();
+                    location.reload();
                 } else {
                     mostrarExito('Actualización correcta');
                 }
@@ -166,30 +183,28 @@ async function submitForm3(event) {
         console.error("Error de red:", error);
         alert("Error de red, intentelo nuevamente");
     }
-}
-function showLoading() {
-    let loadingElement = document.getElementById('custom-loading');
-    if (!loadingElement) {
-        loadingElement = document.createElement('div');
-        loadingElement.id = 'custom-loading';
-        loadingElement.innerHTML = `
-            <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
-                <img src="/assets/img/loading.gif" alt="Cargando..." style="width: 220px; height: 135px;">
-            </div>
-        `;
-        document.body.appendChild(loadingElement);
+ function showLoading() {
+        let loadingElement = document.getElementById('custom-loading');
+        if (!loadingElement) {
+            loadingElement = document.createElement('div');
+            loadingElement.id = 'custom-loading';
+            loadingElement.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
+                    <img src="/assets/img/loading.gif" alt="Cargando..." style="width: 220px; height: 135px;">
+                </div>
+            `;
+            document.body.appendChild(loadingElement);
+        }
+        loadingElement.style.display = 'block';
     }
-    loadingElement.style.display = 'block';
-}
-
-function mostrarExito(mensaje) {
-    Swal.fire({
-        icon: 'success',
-        title: 'Éxito',
-        text: mensaje,
-        showConfirmButton: false,
-        timer: 1500
-    });
-}
+    
+    function mostrarExito(mensaje) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: mensaje,
+            showConfirmButton: false,
+            timer: 1500
+        });
 // Asigna el evento de envío al formulario de actualizar proveedor
 document.getElementById('formactualizarproveedor').addEventListener('submit', submitForm3);

@@ -136,7 +136,9 @@ async function submitForm2(event) {
     
             $('#agregarProveedor').modal('hide');
             $('#formularioAgregarProveedor')[0].reset();
+
             showLoading();
+
             location.reload(); // Asegurarse de que la tabla se haya actualizado
         } else {
             const errorData = await responseProveedor.text();

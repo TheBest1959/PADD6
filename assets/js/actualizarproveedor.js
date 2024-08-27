@@ -161,7 +161,9 @@ function loadProveedorData(button) {
             mostrarExito('Actualización correcta');
             $('#actualizarProveedor').modal('hide');
             $('#formactualizarproveedor')[0].reset();
+
             showLoading();
+
             location.reload();
             
         } catch (error) {
